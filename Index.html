@@ -6,8 +6,8 @@
     <title>The Other Side - Ghost Tracker</title>
     <style>
         :root {
-            --bg-dark: #000000; --bg-panel: #000000; --bg-card: #000000;
-            --text-main: #e0e0e0; --text-dim: #a0a0a0; --accent: #bb86fc;
+            --bg-dark: #000000; --bg-panel: #000000; --bg-card: #252525;
+            --text-main: #e0e0e0; --text-dim: #ffffff; --accent: #bb86fc;
             --border: #333; --select-green: #00e676; --danger-red: #ff4444;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -33,24 +33,24 @@
         .content-area { flex: 1; padding: 20px; overflow-y: auto; background: #000000; display: flex; flex-direction: column; }
         .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; }
         .instruction-bar { 
-            background: #000000; border: 1px solid #333; padding: 10px; margin-bottom: 20px; 
-            text-align: center; color: #aaa; font-size: 0.85rem; border-radius: 4px; font-weight: 600;
+            background: #1e1e1e; border: 1px solid #333; padding: 10px; margin-bottom: 20px; 
+            text-align: center; color: #ffffff; font-size: 0.85rem; border-radius: 4px; font-weight: 600;
         }
         .instruction-bar span { color: var(--accent); }
 
         /* CONTROLS */
         .reset-all-btn {
-            width: 100%; padding: 12px; margin-bottom: 20px; background: #000000; border: 1px solid var(--border); color: #ff6b6b;
+            width: 100%; padding: 12px; margin-bottom: 20px; background: #2c2c2c; border: 1px solid var(--border); color: #ff6b6b;
             font-weight: bold; cursor: pointer; border-radius: 6px; transition: 0.2s; text-transform: uppercase; font-size: 0.9rem; min-height: 44px;
         }
-        .reset-all-btn:hover { background: #111111; border-color: #ff4444; }
+        .reset-all-btn:hover { background: #333; border-color: #ff4444; }
 
         .toggle-box {
-            width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 6px; background: #000000; border: 1px solid var(--border);
-            color: var(--text-dim); cursor: pointer; text-align: left; font-size: 0.9rem; font-weight: 600;
+            width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 6px; background: #2c2c2c; border: 1px solid var(--border);
+            color: #ffffff; cursor: pointer; text-align: left; font-size: 0.9rem; font-weight: 600;
             transition: all 0.2s; user-select: none; position: relative; min-height: 44px;
         }
-        .toggle-box:hover { background: #111111; border-color: #555; }
+        .toggle-box:hover { background: #333; border-color: #555; }
         .toggle-box[data-state="0"]::after { content: ""; position: absolute; right: 12px; font-size: 0.7rem; opacity: 0.5; }
 
         /* DYNAMIC STATES */
@@ -90,12 +90,12 @@
 
         /* TIMER STYLES */
         .timer-container {
-            background: #000000; border: 1px solid #333; border-radius: 6px; padding: 15px;
+            background: #1e1e1e; border: 1px solid #333; border-radius: 6px; padding: 15px;
             display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
         }
         .timer-display {
             font-family: 'Consolas', 'Monaco', monospace; font-size: 2rem; color: var(--accent);
-            text-align: center; background: #000000; padding: 10px; border-radius: 4px; border: 1px solid #222;
+            text-align: center; background: #121212; padding: 10px; border-radius: 4px; border: 1px solid #222;
             letter-spacing: 2px;
         }
         .timer-controls { display: flex; gap: 8px; }
@@ -103,55 +103,55 @@
             flex: 1; padding: 10px; border-radius: 4px; border: 1px solid #333; cursor: pointer;
             font-weight: bold; text-transform: uppercase; font-size: 0.8rem; transition: 0.2s;
         }
-        .btn-start { background: #000000; color: var(--select-green); border-color: #2a5a3a; }
-        .btn-start:hover { background: #111111; }
-        .btn-stop { background: #000000; color: var(--danger-red); border-color: #5a2a2a; display: none; }
-        .btn-stop:hover { background: #111111; }
-        .btn-reset { background: #000000; color: var(--text-dim); }
-        .btn-reset:hover { background: #111111; color: white; }
+        .btn-start { background: #2c2c2c; color: var(--select-green); border-color: #2a5a3a; }
+        .btn-start:hover { background: #333; }
+        .btn-stop { background: #2c2c2c; color: var(--danger-red); border-color: #5a2a2a; display: none; }
+        .btn-stop:hover { background: #333; }
+        .btn-reset { background: #2c2c2c; color: var(--text-dim); }
+        .btn-reset:hover { background: #333; color: white; }
 
         /* EVIDENCE & GHOST CARDS */
         .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .ev-btn {
-            padding: 12px; background: #000000; border: 1px solid #333; color: #aaa;
+            padding: 12px; background: #2c2c2c; border: 1px solid #333; color: #ffffff;
             border-radius: 4px; cursor: pointer; text-align: center; font-size: 0.85rem;
             transition: 0.2s; user-select: none; font-weight: 600; min-height: 44px; display: flex; align-items: center; justify-content: center;
         }
-        .ev-btn:hover { background: #111111; }
+        .ev-btn:hover { background: #333; }
         .ev-btn[data-ev="EMF"].active { background: rgba(255, 68, 68, 0.2); border-color: #ff4444; color: #ff4444; } 
         .ev-btn[data-ev="Audio"].active { background: rgba(255, 165, 0, 0.2); border-color: #ffa500; color: #ffa500; } 
         .ev-btn[data-ev="UV"].active { background: rgba(188, 19, 254, 0.2); border-color: #bc13fe; color: #bc13fe; } 
         .ev-btn[data-ev="Writing"].active { background: rgba(0, 255, 255, 0.2); border-color: #00ffff; color: #00ffff; } 
         .ev-btn[data-ev="Freezing"].active { background: rgba(68, 170, 255, 0.2); border-color: #44aaff; color: #44aaff; } 
         .ev-btn[data-ev="Radiation"].active { background: rgba(50, 205, 50, 0.2); border-color: #32cd32; color: #32cd32; } 
-        .ev-btn.excluded { background: rgba(40, 40, 40, 0.5) !important; border-color: #444 !important; color: #555 !important; text-decoration: line-through; opacity: 0.6; }
+        .ev-btn.excluded { background: rgba(40, 40, 40, 0.5) !important; border-color: #444 !important; color: #ffffff !important; text-decoration: line-through; opacity: 0.6; }
 
         .ghost-card {
             background: var(--bg-card); border-radius: 8px; padding: 15px; border: 2px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: opacity 0.2s, border-color 0.2s; position: relative;
         }
         .ghost-card:hover { border-color: #555; }
-        .ghost-card.eliminated { opacity: 0.4; border-color: var(--danger-red); background: #000000; }
+        .ghost-card.eliminated { opacity: 0.4; border-color: var(--danger-red); background: #1a1a1a; }
         .ghost-card.eliminated::before { content: "X"; position: absolute; top: 10px; right: 15px; color: var(--danger-red); font-weight: bold; font-size: 1.5rem; z-index: 2; }
         .ghost-card.selected { border-color: var(--select-green); background: rgba(0, 230, 118, 0.05); box-shadow: 0 0 15px rgba(0, 230, 118, 0.2); }
-        .ghost-card.ruled-out { opacity: 0.3; filter: grayscale(100%); border-color: #222; background: #000000; pointer-events: none; }
+        .ghost-card.ruled-out { opacity: 0.3; filter: grayscale(100%); border-color: #222; background: #1a1a1a; pointer-events: none; }
         
         .reference-card { cursor: default; border-color: var(--accent) !important; background: rgba(187, 134, 252, 0.05); }
 
         /* OVERLAY REMINDER */
         .select-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; z-index: 10; flex-direction: column; justify-content: center; align-items: center; text-align: center; animation: pulse 2s infinite; pointer-events: none; }
         .ghost-card.selected .select-overlay { display: flex; }
-        .overlay-text { color: var(--select-green); font-weight: 900; font-size: 1.1rem; text-transform: uppercase; border: 2px solid var(--select-green); padding: 10px; background: #000000; letter-spacing: 1px; }
+        .overlay-text { color: var(--select-green); font-weight: 900; font-size: 1.1rem; text-transform: uppercase; border: 2px solid var(--select-green); padding: 10px; background: #252525; letter-spacing: 1px; }
         @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
         .ghost-name { font-size: 1.2rem; font-weight: bold; color: white; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         .ghost-lore { font-size: 0.8rem; color: #888; font-style: italic; line-height: 1.3; margin-bottom: 5px; }
-        .ghost-behavior { font-size: 0.85rem; color: #ddd; line-height: 1.4; border-top: 1px dashed #333; padding-top: 8px; }
+        .ghost-behavior { font-size: 0.85rem; color: #ffffff; line-height: 1.4; border-top: 1px dashed #333; padding-top: 8px; }
         .behavior-point { display: block; margin-bottom: 4px; position: relative; padding-left: 12px; }
         .behavior-point::before { content: "•"; position: absolute; left: 0; color: var(--accent); }
 
         .evidence-items { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
-        .evidence-tag { font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; background: #000000; color: #ddd; border: 1px solid #444; }
+        .evidence-tag { font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; background: #333; color: #ffffff; border: 1px solid #444; }
         
         .evidence-tag.match[data-ev="EMF"] { border-color: #ff4444; color: white; background: rgba(255, 68, 68, 0.2); }
         .evidence-tag.match[data-ev="Audio"] { border-color: #ffa500; color: white; background: rgba(255, 165, 0, 0.2); }
@@ -161,7 +161,7 @@
         .evidence-tag.match[data-ev="Radiation"] { border-color: #32cd32; color: white; background: rgba(50, 205, 50, 0.2); }
 
         .stats-container { margin-top: auto; padding-top: 10px; border-top: 1px dashed #444; }
-        .stat-item { margin-bottom: 8px; font-size: 0.75rem; color: #ccc; display: flex; justify-content: space-between; }
+        .stat-item { margin-bottom: 8px; font-size: 0.75rem; color: #ffffff; display: flex; justify-content: space-between; }
         .stat-val { font-weight: bold; }
 
         ::-webkit-scrollbar { width: 6px; }
@@ -182,7 +182,7 @@
         }
         
         .footer-link {
-            font-size: 0.7rem; color: #666; text-align: center; margin-top: 20px; margin-bottom: 10px;
+            font-size: 0.7rem; color: #ffffff; text-align: center; margin-top: 20px; margin-bottom: 10px;
         }
         .footer-link a { color: var(--accent); text-decoration: none; font-weight: bold; }
         .footer-link a:hover { text-decoration: underline; }
@@ -225,19 +225,19 @@
 
                 <div class="sidebar-section">
                     <h3>Stats</h3>
-                    <select id="speed-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#000000; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; margin-bottom: 8px; min-height: 44px;">
+                    <select id="speed-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#2c2c2c; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; margin-bottom: 8px; min-height: 44px;">
                         <option value="all">Any Base Speed</option>
                         <option value="Normal">Normal</option>
                         <option value="Fast">Fast</option>
                     </select>
-                    <select id="losspeed-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#000000; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; margin-bottom: 8px; min-height: 44px;">
+                    <select id="losspeed-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#2c2c2c; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; margin-bottom: 8px; min-height: 44px;">
                         <option value="all">Any LOS Speed</option>
                         <option value="Slow">Slow</option>
                         <option value="Normal">Normal</option>
                         <option value="Medium">Medium</option>
                         <option value="Fast">Fast</option>
                     </select>
-                    <select id="los-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#000000; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; min-height: 44px;">
+                    <select id="los-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#2c2c2c; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; min-height: 44px;">
                         <option value="all">Any LOS Range</option>
                         <option value="Low">Low</option>
                         <option value="Normal">Normal</option>
@@ -252,7 +252,7 @@
 
         <div class="content-area">
             <div class="instruction-bar">
-                <span>Left Click:</span> Highlight Ghost | <span>Right Click:</span> Eliminate Ghost
+                <span>Left Click / Tap:</span> Highlight Ghost | <span>Right Click / Hold:</span> Eliminate Ghost
             </div>
             <div class="ghost-grid" id="ghostGrid"></div>
         </div>
@@ -450,7 +450,7 @@
 
             if(list.length === 0) { 
                 const msg = document.createElement('div');
-                msg.style.color = "#666";
+                msg.style.color = "#ffffff";
                 msg.style.textAlign = "center";
                 msg.style.padding = "20px";
                 msg.style.gridColumn = "1 / -1";
