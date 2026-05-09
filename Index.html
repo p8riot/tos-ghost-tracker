@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Other Side - Ghost Tracker</title>
+    <style>
+        :root {
+            --bg-dark: #000000; --bg-panel: #000000; --bg-card: #000000;
+            --text-main: #e0e0e0; --text-dim: #a0a0a0; --accent: #bb86fc;
+            --border: #333; --select-green: #00e676; --danger-red: #ff4444;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; touch-action: manipulation; }
+
+        header { 
+            background: var(--bg-panel); padding: 15px 20px; border-bottom: 1px solid var(--border); 
+            display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            flex-shrink: 0; z-index: 10;
+        }
+        h1 { font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 5px; }
+
+        .main-content { display: flex; flex: 1; overflow: hidden; }
+
+        /* SIDEBAR */
+        .sidebar { width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-scroll { padding: 20px; overflow-y: auto; flex: 1; }
+        .sidebar-section { margin-bottom: 30px; }
+        .sidebar-section h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+
+        /* CONTENT */
+        .content-area { flex: 1; padding: 20px; overflow-y: auto; background: #000000; display: flex; flex-direction: column; }
+        .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; }
+        .instruction-bar { 
+            background: #000000; border: 1px solid #333; padding: 10px; margin-bottom: 20px; 
+            text-align: center; color: #aaa; font-size: 0.85rem; border-radius: 4px; font-weight: 600;
+        }
+        .instruction-bar span { color: var(--accent); }
+
+        /* CONTROLS */
+        .reset-all-btn {
+            width: 100%; padding: 12px; margin-bottom: 20px; background: #000000; border: 1px solid var(--border); color: #ff6b6b;
+            font-weight: bold; cursor: pointer; border-radius: 6px; transition: 0.2s; text-transform: uppercase; font-size: 0.9rem; min-height: 44px;
+        }
+        .reset-all-btn:hover { background: #111111; border-color: #ff4444; }
+
+        .toggle-box {
+            width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 6px; background: #000000; border: 1px solid var(--border);
+            color: var(--text-dim); cursor: pointer; text-align: left; font-size: 0.9rem; font-weight: 600;
+            transition: all 0.2s; user-select: none; position: relative; min-height: 44px;
+        }
+        .toggle-box:hover { background: #111111; border-color: #555; }
+        .toggle-box[data-state="0"]::after { content: ""; position: absolute; right: 12px; font-size: 0.7rem; opacity: 0.5; }
+
+        /* DYNAMIC STATES */
+        .toggle-box.breaker[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; color: #4ecdc4; }
+        .toggle-box.breaker[data-state="1"]::after { content: "CAN USE"; opacity: 1; }
+        .toggle-box.breaker[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
+        .toggle-box.breaker[data-state="2"]::after { content: "CANNOT USE"; opacity: 1; }
+
+        .toggle-box.candle[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
+        .toggle-box.candle[data-state="1"]::after { content: "EXTINGUISH"; color: #ff4444; opacity: 1; }
+        .toggle-box.candle[data-state="2"] { background: rgba(163, 154, 230, 0.15); border-color: #a39ae6; color: #a39ae6; }
+        .toggle-box.candle[data-state="2"]::after { content: "IGNORES"; opacity: 1; }
+
+        .toggle-box.lights[data-state="1"], .toggle-box.radio[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
+        .toggle-box.lights[data-state="1"]::after, .toggle-box.radio[data-state="1"]::after { content: "TURNS OFF"; color: #ff4444; opacity: 1; }
+        .toggle-box.lights[data-state="2"], .toggle-box.radio[data-state="2"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; color: #ffd700; }
+        .toggle-box.lights[data-state="2"]::after, .toggle-box.radio[data-state="2"]::after { content: "TURNS ON"; opacity: 1; }
+        .toggle-box.lights[data-state="3"], .toggle-box.radio[data-state="3"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
+        .toggle-box.lights[data-state="3"]::after, .toggle-box.radio[data-state="3"]::after { content: "BOTH"; opacity: 1; }
+        .toggle-box.lights[data-state="4"], .toggle-box.radio[data-state="4"] { background: rgba(163, 154, 230, 0.15); border-color: #a39ae6; color: #a39ae6; }
+        .toggle-box.lights[data-state="4"]::after, .toggle-box.radio[data-state="4"]::after { content: "IGNORES"; opacity: 1; }
+
+        .toggle-box.holy[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
+        .toggle-box.holy[data-state="1"]::after { content: "NORMAL (3s)"; opacity: 1; }
+        .toggle-box.holy[data-state="2"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; color: #4ecdc4; }
+        .toggle-box.holy[data-state="2"]::after { content: "EFFECTIVE (5s)"; opacity: 1; }
+
+        .toggle-box.action[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; color: #4ecdc4; }
+        .toggle-box.action[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
+
+        .toggle-box.doors[data-state="1"]::after { content: "CLOSES"; opacity: 1; }
+        .toggle-box.doors[data-state="2"]::after { content: "NEVER CLOSES"; opacity: 1; }
+        .toggle-box.flx[data-state="1"]::after { content: "INTERACTS"; opacity: 1; }
+        .toggle-box.flx[data-state="2"]::after { content: "IGNORES"; opacity: 1; }
+        .toggle-box.manifest[data-state="1"]::after { content: "FULL BODY"; opacity: 1; }
+        .toggle-box.manifest[data-state="2"]::after { content: "SHADOW ONLY"; opacity: 1; }
+
+        /* TIMER STYLES */
+        .timer-container {
+            background: #000000; border: 1px solid #333; border-radius: 6px; padding: 15px;
+            display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
+        }
+        .timer-display {
+            font-family: 'Consolas', 'Monaco', monospace; font-size: 2rem; color: var(--accent);
+            text-align: center; background: #000000; padding: 10px; border-radius: 4px; border: 1px solid #222;
+            letter-spacing: 2px;
+        }
+        .timer-controls { display: flex; gap: 8px; }
+        .timer-btn {
+            flex: 1; padding: 10px; border-radius: 4px; border: 1px solid #333; cursor: pointer;
+            font-weight: bold; text-transform: uppercase; font-size: 0.8rem; transition: 0.2s;
+        }
+        .btn-start { background: #000000; color: var(--select-green); border-color: #2a5a3a; }
+        .btn-start:hover { background: #111111; }
+        .btn-stop { background: #000000; color: var(--danger-red); border-color: #5a2a2a; display: none; }
+        .btn-stop:hover { background: #111111; }
+        .btn-reset { background: #000000; color: var(--text-dim); }
+        .btn-reset:hover { background: #111111; color: white; }
+
+        /* EVIDENCE & GHOST CARDS */
+        .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .ev-btn {
+            padding: 12px; background: #000000; border: 1px solid #333; color: #aaa;
+            border-radius: 4px; cursor: pointer; text-align: center; font-size: 0.85rem;
+            transition: 0.2s; user-select: none; font-weight: 600; min-height: 44px; display: flex; align-items: center; justify-content: center;
+        }
+        .ev-btn:hover { background: #111111; }
+        .ev-btn[data-ev="EMF"].active { background: rgba(255, 68, 68, 0.2); border-color: #ff4444; color: #ff4444; } 
+        .ev-btn[data-ev="Audio"].active { background: rgba(255, 165, 0, 0.2); border-color: #ffa500; color: #ffa500; } 
+        .ev-btn[data-ev="UV"].active { background: rgba(188, 19, 254, 0.2); border-color: #bc13fe; color: #bc13fe; } 
+        .ev-btn[data-ev="Writing"].active { background: rgba(0, 255, 255, 0.2); border-color: #00ffff; color: #00ffff; } 
+        .ev-btn[data-ev="Freezing"].active { background: rgba(68, 170, 255, 0.2); border-color: #44aaff; color: #44aaff; } 
+        .ev-btn[data-ev="Radiation"].active { background: rgba(50, 205, 50, 0.2); border-color: #32cd32; color: #32cd32; } 
+        .ev-btn.excluded { background: rgba(40, 40, 40, 0.5) !important; border-color: #444 !important; color: #555 !important; text-decoration: line-through; opacity: 0.6; }
+
+        .ghost-card {
+            background: var(--bg-card); border-radius: 8px; padding: 15px; border: 2px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: opacity 0.2s, border-color 0.2s; position: relative;
+        }
+        .ghost-card:hover { border-color: #555; }
+        .ghost-card.eliminated { opacity: 0.4; border-color: var(--danger-red); background: #000000; }
+        .ghost-card.eliminated::before { content: "X"; position: absolute; top: 10px; right: 15px; color: var(--danger-red); font-weight: bold; font-size: 1.5rem; z-index: 2; }
+        .ghost-card.selected { border-color: var(--select-green); background: rgba(0, 230, 118, 0.05); box-shadow: 0 0 15px rgba(0, 230, 118, 0.2); }
+        .ghost-card.ruled-out { opacity: 0.3; filter: grayscale(100%); border-color: #222; background: #000000; pointer-events: none; }
+        
+        .reference-card { cursor: default; border-color: var(--accent) !important; background: rgba(187, 134, 252, 0.05); }
+
+        /* OVERLAY REMINDER */
+        .select-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; z-index: 10; flex-direction: column; justify-content: center; align-items: center; text-align: center; animation: pulse 2s infinite; pointer-events: none; }
+        .ghost-card.selected .select-overlay { display: flex; }
+        .overlay-text { color: var(--select-green); font-weight: 900; font-size: 1.1rem; text-transform: uppercase; border: 2px solid var(--select-green); padding: 10px; background: #000000; letter-spacing: 1px; }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
+
+        .ghost-name { font-size: 1.2rem; font-weight: bold; color: white; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .ghost-lore { font-size: 0.8rem; color: #888; font-style: italic; line-height: 1.3; margin-bottom: 5px; }
+        .ghost-behavior { font-size: 0.85rem; color: #ddd; line-height: 1.4; border-top: 1px dashed #333; padding-top: 8px; }
+        .behavior-point { display: block; margin-bottom: 4px; position: relative; padding-left: 12px; }
+        .behavior-point::before { content: "•"; position: absolute; left: 0; color: var(--accent); }
+
+        .evidence-items { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+        .evidence-tag { font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; background: #000000; color: #ddd; border: 1px solid #444; }
+        
+        .evidence-tag.match[data-ev="EMF"] { border-color: #ff4444; color: white; background: rgba(255, 68, 68, 0.2); }
+        .evidence-tag.match[data-ev="Audio"] { border-color: #ffa500; color: white; background: rgba(255, 165, 0, 0.2); }
+        .evidence-tag.match[data-ev="UV"] { border-color: #bc13fe; color: white; background: rgba(188, 19, 254, 0.2); }
+        .evidence-tag.match[data-ev="Writing"] { border-color: #00ffff; color: white; background: rgba(0, 255, 255, 0.2); }
+        .evidence-tag.match[data-ev="Freezing"] { border-color: #44aaff; color: white; background: rgba(68, 170, 255, 0.2); }
+        .evidence-tag.match[data-ev="Radiation"] { border-color: #32cd32; color: white; background: rgba(50, 205, 50, 0.2); }
+
+        .stats-container { margin-top: auto; padding-top: 10px; border-top: 1px dashed #444; }
+        .stat-item { margin-bottom: 8px; font-size: 0.75rem; color: #ccc; display: flex; justify-content: space-between; }
+        .stat-val { font-weight: bold; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+        @media screen and (max-width: 768px) {
+            body { height: auto; overflow-y: auto; }
+            .main-content { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 2px solid var(--border); padding-bottom: 20px; }
+            .sidebar-scroll { padding: 15px; overflow: visible; }
+            .content-area { padding: 15px; overflow: visible; }
+            .ghost-grid { grid-template-columns: 1fr; }
+            .evidence-grid { gap: 5px; }
+            .ev-btn { padding: 15px 5px; font-size: 0.9rem; }
+            .sidebar-section { margin-bottom: 20px; }
+            .toggle-box { padding: 15px; font-size: 1rem; }
+        }
+        
+        .footer-link {
+            font-size: 0.7rem; color: #666; text-align: center; margin-top: 20px; margin-bottom: 10px;
+        }
+        .footer-link a { color: var(--accent); text-decoration: none; font-weight: bold; }
+        .footer-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <header><h1>The Other Side - Ghost Tracker</h1></header>
+
+    <div class="main-content">
+        <div class="sidebar">
+            <div class="sidebar-scroll">
+                <button class="reset-all-btn" onclick="resetAll()">Reset Filters</button>
+
+                <div class="sidebar-section">
+                    <h3>Evidence</h3>
+                    <div class="evidence-grid" id="evidence-container"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Behaviors</h3>
+                    <div class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="3" onclick="cycleState(this)">Breaker Box - </div>
+                    <div class="toggle-box candle" id="btn-candle" data-state="0" data-max="3" onclick="cycleState(this)">Candle Interaction - </div>
+                    <div class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)">Door Interaction - </div>
+                    <div class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)">FLX-POD Interaction - </div>
+                    <div class="toggle-box holy" id="btn-holy" data-state="0" data-max="3" onclick="cycleState(this)">Holy Spray - </div>
+                    <div class="toggle-box lights" id="btn-lights" data-state="0" data-max="5" onclick="cycleState(this)">Light Switch - </div>
+                    <div class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)">Manifestation - </div>
+                    <div class="toggle-box radio" id="btn-radio" data-state="0" data-max="5" onclick="cycleState(this)">Radio Interaction - </div>
+
+                    <div class="timer-container">
+                        <div class="timer-display" id="timerDisplay">00:00</div>
+                        <div class="timer-controls">
+                            <button class="timer-btn btn-start" id="btnStart" onclick="startTimer()">Start</button>
+                            <button class="timer-btn btn-stop" id="btnStop" onclick="stopTimer()">Stop</button>
+                            <button class="timer-btn btn-reset" onclick="resetTimer()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Stats</h3>
+                    <select id="speed-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#000000; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; margin-bottom: 8px; min-height: 44px;">
+                        <option value="all">Any Base Speed</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Fast">Fast</option>
+                    </select>
+                    <select id="losspeed-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#000000; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; margin-bottom: 8px; min-height: 44px;">
+                        <option value="all">Any LOS Speed</option>
+                        <option value="Slow">Slow</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Fast">Fast</option>
+                    </select>
+                    <select id="los-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#000000; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; min-height: 44px;">
+                        <option value="all">Any LOS Range</option>
+                        <option value="Low">Low</option>
+                        <option value="Normal">Normal</option>
+                        <option value="High">High</option>
+                        <option value="Very High">Very High</option>
+                    </select>
+                </div>
+                <div class="footer-link"><a href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank">Unofficial Wiki</a> - Created by nena</div>
+                <div class="footer-link">Unofficial Ghost Tracker - Created by <a href="https://linktr.ee/p8riot" target="_blank">p8riot</a></div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="instruction-bar">
+                <span>Left Click:</span> Highlight Ghost | <span>Right Click:</span> Eliminate Ghost
+            </div>
+            <div class="ghost-grid" id="ghostGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const ghosts = [
+            { name: "Banshee", ev: ["Audio", "EMF", "Radiation"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Banshee is a chilling presence tied to omens of death, amplifying fear through its signature piercing screams and erratic electrical interference. Investigators close with death claim to hear the Banshee's cries.", desc: ["Can extinguish candles.", "Causes electrical interferences.", "May scream on Spirit Box / Boom Box / Radios.", "Screams may be heard on electronics when heart rate >120bpm."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Bhoot", ev: ["Freezing", "Radiation", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Bhoot is a tormented soul, bound to the place of its suffering and fueled by a need for vengeance. Investigators report experiencing intense cold when the Bhoot is nearing.", desc: ["Can extinguish candles.", "Increased hunt cooldown.", "Room gets cold before hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "long-cooldown", "spray-normal"] },
+            { name: "Demon", ev: ["Radiation", "UV", "Writing"], speed: "Fast", losspeed: "Slow", los: "Low", hw: "More Effective (5s)", lore: "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.", desc: ["Can extinguish candles.", "Holy Spray stops hunt for 2 minutes (forced hunt after time lapses).", "Hunts at 90.2 BPM (40 second cooldown).", "Leaves hot temps on touched objects."], tags: ["extinguish", "lights-off", "lights-on", "doors", "radio-on", "radio-off", "short-cooldown", "spray-more"] },
+            { name: "Doppelganger", ev: ["Audio", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Low", hw: "Normal (3s)", lore: "The Doppelganger is a deceptive spirit, often tricking its intended targets. Investigators report feeling alone moments before the ghost hunts. Where does it go?", desc: ["Can extinguish candles.", "Returns to favorite room before hunt.", "Shorter distance LOS."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Iblis", ev: ["Audio", "Freezing", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".", desc: ["Can extinguish candles.", "Increases speed slightly.", "Shapeshifts during hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Phantom", ev: ["Audio", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Phantom is a sinister entity born from pure darkness, operating in silence and shadows. Investigators report frequent radio frequency interruptions, though they've never seen the phantom in full-form, only in the shadows.", desc: ["Ignores candles.", "Ignores FLX-POD.", "No manifest events (More shadow events).", "Turns off radios (never on)."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-off", "no-radio-on", "shadow-only", "spray-normal"] },
+            { name: "Poltergeist", ev: ["EMF", "Radiation", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Poltergeist is a chaotic and mischievous entity, notorious for its disruptive presence. Investigators report that this ghost thrives on manipulating the environment - throwing more objects than any other spirit.", desc: ["Can extinguish candles.", "Increases speed slightly.", "Throws multiple objects."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Revenant", ev: ["EMF", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Revenant is a relentless, high-threat entity known for its aggressive presence. Investigators report that being hunted by one feels like literal suffocation, making it harder to outrun.", desc: ["Can extinguish candles.", "Stamina drains faster when targeted (permanent once targeted)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Shura", ev: ["EMF", "Freezing", "Writing"], speed: "Fast", losspeed: "Fast", los: "High", hw: "Normal (3s)", lore: "The Shura is a cursed spirit of pure rage, trapped between worlds by a fate even the underworld rejects. Fueled by violence, investigators warn of their aggression, speed, and keen eyes.", desc: ["Can extinguish candles.", "Harder to break LOS (High Range).", "Increases speed.", "Shorter cooldown."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "short-cooldown", "spray-normal"] },
+            { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Fast", los: "Normal", hw: "Normal (3s)", lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses.", "Distressed sounds near player during hunt.", "Ignores candles.", "Ignores FLX-POD.", "Increased hunt cooldown."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "long-cooldown", "spray-normal"] },
+            { name: "Strigoi", ev: ["Freezing", "UV", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Strigoi is a restless, undead spirit drawn from old legends - believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.", desc: ["Actively raises heart rate (drains sanity) while in the same room.", "Ignores candles.", "Increases speed slightly.", "Shadow events only.", "Turns on radios (never off)."], tags: ["candles-ignore", "lights-on", "lights-off", "doors", "radio-on", "no-radio-off", "shadow-only", "spray-normal"] },
+            { name: "Tantalus", ev: ["EMF", "Freezing", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.", desc: ["Can extinguish candles.", "Ignores FLX-POD.", "Increases speed slightly.", "Never closes / slams doors (except hunt)."], tags: ["extinguish", "flx-ignore", "no-doors", "lights-on", "lights-off", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Spray stops hunt for 90 seconds (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "no-lights-on", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
+            { name: "The Echo", ev: ["Freezing", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Echo is a passive, residual spirit. Investigators report an eerily silent atmosphere, with lights never being affected by this ghost.", desc: ["Can't use main breaker (only individual, except post-hunt).", "Ignores candles.", "Ignores FLX-POD.", "Ignores lights and radios."], tags: ["candles-ignore", "lights-ignore", "radio-ignore", "flx-ignore", "no-lights-on", "doors", "no-radios", "no-breaker", "spray-normal"] },
+            { name: "The Forgotten", ev: ["EMF", "Radiation", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Forgotten has a nearly silent presence. Passive, cold, and elusive, as if it's barely there at all. Investigators report minimal activity, no defining behavior, and a feeling of safety - until the Forgotten strikes.", desc: ["Can extinguish candles.", "Hardest to ID (no evidence).", "Ignores FLX-POD.", "Increases speed slightly."], tags: ["extinguish", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Wewe Gombel", ev: ["EMF", "Freezing", "Radiation"], speed: "Normal", losspeed: "Fast", los: "Normal", hw: "More Effective (5s)", lore: "The Wewe Gombel is a vengeful and malicious spirit, rooted in folklore as an unforgiving force that punishes those it deems deserving. Investigators report this ghost as incredibly fast, deeming Holy Water a necessity when having an encounter.", desc: ["Can extinguish candles.", "Increases speed drastically.", "Lights OFF only (Can't use main breaker, except post-hunt).", "Short cooldown."], tags: ["extinguish", "lights-off", "no-lights-on", "doors", "radio-on", "radio-off", "no-breaker", "short-cooldown", "spray-more"] },
+            { name: "Wisp", ev: ["Audio", "Freezing", "Radiation"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "More Effective (5s)", lore: "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.", desc: ["Holy Spray stops hunt for 2 minutes (forced hunt after time lapses).", "Ignores candles.", "Increases speed slightly.", "Lights ON only (never off / frequent)."], tags: ["candles-ignore", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
+            { name: "Wraith", ev: ["Audio", "Freezing", "UV"], speed: "Fast", losspeed: "Fast", los: "Very High", hw: "More Effective (5s)", lore: "The Wraith is a swift and vengeful entity, fueled by deep sorrow and rage. Investigators report them as incredibly fast entities, and report feeling targeted. You'll want Holy Water on hand for this ghost.", desc: ["Breaks LOS easily.", "Can extinguish candles.", "No feet (floating).", "Targets specific player."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-more"] }
+        ];
+
+        const evidenceTypes = ["Audio", "EMF", "Freezing", "Radiation", "UV", "Writing"];
+        let activeEvidence = new Set(), excludedEvidence = new Set(), eliminatedGhosts = new Set(), selectedGhost = null;
+        
+        let timerInterval = null;
+        let seconds = 0;
+        let isRunning = false;
+
+        window.onload = function() {
+            const container = document.getElementById('evidence-container');
+            evidenceTypes.forEach(ev => {
+                const btn = document.createElement('div');
+                btn.className = 'ev-btn';
+                btn.innerText = ev;
+                btn.setAttribute('data-ev', ev);
+                btn.onclick = () => toggleEvidence(btn, ev);
+                container.appendChild(btn);
+            });
+            loadData();
+            filterGhosts();
+        };
+
+        function toggleSelection(name) {
+            if (selectedGhost === name) selectedGhost = null;
+            else { selectedGhost = name; eliminatedGhosts.delete(name); }
+            saveData();
+            filterGhosts();
+        }
+
+        function toggleElimination(name) {
+            if(eliminatedGhosts.has(name)) eliminatedGhosts.delete(name);
+            else { eliminatedGhosts.add(name); if(selectedGhost === name) selectedGhost = null; }
+            saveData();
+            filterGhosts();
+        }
+
+        function toggleEvidence(btn, type) {
+            if(activeEvidence.has(type)) {
+                activeEvidence.delete(type); excludedEvidence.add(type);
+                btn.classList.remove('active'); btn.classList.add('excluded');
+            } else if(excludedEvidence.has(type)) {
+                excludedEvidence.delete(type); btn.classList.remove('excluded');
+            } else {
+                activeEvidence.add(type); btn.classList.add('active');
+            }
+            saveData();
+            filterGhosts();
+        }
+
+        function cycleState(btn) {
+            const max = parseInt(btn.getAttribute('data-max'));
+            let current = parseInt(btn.dataset.state);
+            btn.dataset.state = (current + 1) % max;
+            saveData();
+            filterGhosts();
+        }
+
+        function resetAll() {
+            if(confirm("Reset all filters and evidence?")) {
+                activeEvidence.clear(); excludedEvidence.clear(); eliminatedGhosts.clear(); selectedGhost = null;
+                document.querySelectorAll('.ev-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('excluded'); });
+                document.querySelectorAll('.toggle-box').forEach(b => b.dataset.state = 0);
+                document.getElementById('speed-select').value = "all";
+                document.getElementById('losspeed-select').value = "all";
+                document.getElementById('los-select').value = "all";
+                saveData();
+                filterGhosts();
+            }
+        }
+
+        function startTimer() {
+            if(isRunning) return;
+            isRunning = true;
+            document.getElementById('btnStart').style.display = 'none';
+            document.getElementById('btnStop').style.display = 'inline-block';
+            timerInterval = setInterval(() => {
+                seconds++;
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if(!isRunning) return;
+            isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('btnStart').style.display = 'inline-block';
+            document.getElementById('btnStop').style.display = 'none';
+        }
+
+        function resetTimer() {
+            stopTimer();
+            seconds = 0;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+        }
+
+        function filterGhosts() {
+            const speed = document.getElementById('speed-select').value;
+            const losspeed = document.getElementById('losspeed-select').value;
+            const los = document.getElementById('los-select').value;
+            const states = {};
+            document.querySelectorAll('.toggle-box').forEach(b => states[b.id.replace('btn-','')] = parseInt(b.dataset.state));
+
+            let matches = [], nonMatches = [];
+
+            ghosts.forEach(g => {
+                let match = true;
+                for (let e of activeEvidence) if (!g.ev.includes(e)) match = false;
+                for (let e of excludedEvidence) if (g.ev.includes(e)) match = false;
+                if (speed !== "all" && g.speed !== speed) match = false;
+                if (losspeed !== "all" && g.losspeed !== losspeed) match = false;
+                if (los !== "all" && g.los !== los) match = false;
+                
+                if (states.candle === 1 && !g.tags.includes('extinguish')) match = false;
+                if (states.candle === 2 && !g.tags.includes('candles-ignore')) match = false;
+                
+                if (states.lights === 1 && !g.tags.includes('lights-off')) match = false;
+                if (states.lights === 2 && !g.tags.includes('lights-on')) match = false;
+                if (states.lights === 3 && (!g.tags.includes('lights-on') || !g.tags.includes('lights-off'))) match = false;
+                if (states.lights === 4 && !g.tags.includes('lights-ignore')) match = false;
+
+                if (states.radio === 1 && !g.tags.includes('radio-off')) match = false;
+                if (states.radio === 2 && !g.tags.includes('radio-on')) match = false;
+                if (states.radio === 3 && (!g.tags.includes('radio-on') || !g.tags.includes('radio-off'))) match = false;
+                if (states.radio === 4 && !g.tags.includes('radio-ignore')) match = false;
+
+                if (states.holy === 1 && !g.tags.includes('spray-normal')) match = false;
+                if (states.holy === 2 && !g.tags.includes('spray-more')) match = false;
+
+                if (states.doors === 1 && g.tags.includes('no-doors')) match = false;
+                if (states.doors === 2 && !g.tags.includes('no-doors')) match = false;
+                if (states.flx === 1 && g.tags.includes('flx-ignore')) match = false;
+                if (states.flx === 2 && !g.tags.includes('flx-ignore')) match = false;
+                if (states.breaker === 1 && g.tags.includes('no-breaker')) match = false;
+                if (states.breaker === 2 && !g.tags.includes('no-breaker')) match = false;
+                if (states.manifest === 1 && g.tags.includes('shadow-only')) match = false;
+                if (states.manifest === 2 && !g.tags.includes('shadow-only')) match = false;
+
+                match ? matches.push(g) : nonMatches.push(g);
+            });
+
+            const validSet = new Set(matches.map(g => g.name));
+            renderGhosts([...matches, ...nonMatches], validSet);
+        }
+
+        function renderGhosts(list, validSet) {
+            const grid = document.getElementById('ghostGrid');
+            grid.innerHTML = "";
+
+            const refCard = document.createElement('div');
+            refCard.className = "ghost-card reference-card";
+            refCard.innerHTML = `
+                <div class="ghost-name" style="color: var(--accent); border-bottom: 1px solid var(--border);">Notes</div>
+                <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                    <span class="behavior-point">Hearing heartbeat = Ghost sees you. RUN!</span>
+                    <span class="behavior-point">Phone can safely be used during hunt. Turn off all other electronics you're carrying.</span>
+                    <span class="behavior-point">Ghosts will have a favorite room but they can leave evidence anywhere inside the location.</span>
+                    <span class="behavior-point">Forced hunts from Holy Spray (Demon, Tariaksuq, Wisp) execute at the specified time if any player is inside the location. Forced hunts pause the regular hunt cooldown. If no players are inside, the forced hunt is skipped and normal cooldown resumes.</span>
+                    <span class="behavior-point">The hunt threshold for all ghosts (except Demon) is 104 BPM. This threshold is the average BPM of all players inside the location. Players outside the location with a low heart rate do not help prevent a hunt.</span>
+                    <span class="behavior-point">placeholder</span>
+                </div>
+            `;
+            grid.appendChild(refCard);
+
+            if(list.length === 0) { 
+                const msg = document.createElement('div');
+                msg.style.color = "#666";
+                msg.style.textAlign = "center";
+                msg.style.padding = "20px";
+                msg.style.gridColumn = "1 / -1";
+                msg.innerText = "No ghosts found.";
+                grid.appendChild(msg);
+                return; 
+            }
+
+            list.forEach(g => {
+                const isSelected = selectedGhost === g.name;
+                const isEliminated = eliminatedGhosts.has(g.name);
+                const isRuledOut = !validSet.has(g.name);
+                
+                let classes = "ghost-card";
+                if(isEliminated) classes += " eliminated";
+                if(isSelected) classes += " selected";
+                if(isRuledOut) classes += " ruled-out";
+
+                let evTags = g.ev.map(e => `<span class="evidence-tag ${activeEvidence.has(e) ? 'match' : ''}" data-ev="${e}">${e}</span>`).join('');
+                let descHTML = g.desc.map(d => `<span class="behavior-point">${d}</span>`).join('');
+                
+                const speedC = g.speed === 'Fast' ? '#ff4444' : g.speed === 'Variable' ? '#bb86fc' : '#32cd32';
+                const losspeedC = g.losspeed === 'Slow' ? '#44aaff' : g.losspeed === 'Normal' ? '#32cd32' : g.losspeed === 'Medium' ? '#ffd700' : '#ff4444';
+                const losC = g.los === 'Low' ? '#ffd700' : g.los === 'High' ? '#ff4444' : g.los === 'Very High' ? '#8b0000' : '#32cd32';
+                const hwC = g.hw.includes('More') ? '#4ecdc4' : '#32cd32';
+
+                const card = document.createElement('div');
+                card.className = classes;
+                card.onclick = () => toggleSelection(g.name);
+                card.oncontextmenu = (e) => { e.preventDefault(); toggleElimination(g.name); };
+                
+                card.innerHTML = `
+                    <div class="select-overlay"><div class="overlay-text">⚠ Select In Game ⚠</div></div>
+                    <div class="ghost-name">${g.name}</div>
+                    <div class="ghost-lore">${g.lore}</div>
+                    <div class="ghost-behavior">${descHTML}</div>
+                    <div class="evidence-items">${evTags}</div>
+                    <div class="stats-container">
+                        <div class="stat-item"><span>Base Speed</span> <span class="stat-val" style="color:${speedC}">${g.speed}</span></div>
+                        <div class="stat-item"><span>LOS Speed</span> <span class="stat-val" style="color:${losspeedC}">${g.losspeed}</span></div>
+                        <div class="stat-item"><span>LOS Range</span> <span class="stat-val" style="color:${losC}">${g.los}</span></div>
+                        <div class="stat-item"><span>Holy Spray</span> <span class="stat-val" style="color:${hwC}">${g.hw}</span></div>
+                    </div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function saveData() {
+            const data = {
+                active: Array.from(activeEvidence),
+                excluded: Array.from(excludedEvidence),
+                eliminated: Array.from(eliminatedGhosts),
+                selected: selectedGhost,
+                states: {}
+            };
+            document.querySelectorAll('.toggle-box').forEach(b => data.states[b.id] = b.dataset.state);
+            localStorage.setItem('tos_ghost_tracker_v3', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const raw = localStorage.getItem('tos_ghost_tracker_v3');
+            if(!raw) return;
+            try {
+                const data = JSON.parse(raw);
+                activeEvidence = new Set(data.active);
+                excludedEvidence = new Set(data.excluded);
+                eliminatedGhosts = new Set(data.eliminated);
+                selectedGhost = data.selected;
+
+                document.querySelectorAll('.ev-btn').forEach(btn => {
+                    if(activeEvidence.has(btn.innerText)) btn.classList.add('active');
+                    if(excludedEvidence.has(btn.innerText)) btn.classList.add('excluded');
+                });
+
+                if(data.states) {
+                    for(const [id, val] of Object.entries(data.states)) {
+                        const el = document.getElementById(id);
+                        if(el) el.dataset.state = val;
+                    }
+                }
+            } catch(e) {}
+        }
+    </script>
+</body>
+</html>
