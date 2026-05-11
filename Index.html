@@ -76,7 +76,7 @@
         .toggle-box.holy[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
         .toggle-box.holy[data-state="1"]::after { content: "NORMAL (3s)"; opacity: 1; }
         .toggle-box.holy[data-state="2"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; color: #4ecdc4; }
-        .toggle-box.holy[data-state="2"]::after { content: "EFFECTIVE (5s)"; opacity: 1; }
+        .toggle-box.holy[data-state="2"]::after { content: "MORE EFFECTIVE (5s)"; opacity: 1; }
 
         .toggle-box.action[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; color: #4ecdc4; }
         .toggle-box.action[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
@@ -87,6 +87,29 @@
         .toggle-box.flx[data-state="2"]::after { content: "IGNORES"; opacity: 1; }
         .toggle-box.manifest[data-state="1"]::after { content: "FULL BODY"; opacity: 1; }
         .toggle-box.manifest[data-state="2"]::after { content: "SHADOW ONLY"; opacity: 1; }
+
+        .toggle-box.bspeed[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
+        .toggle-box.bspeed[data-state="1"]::after { content: "NORMAL"; opacity: 1; }
+        .toggle-box.bspeed[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
+        .toggle-box.bspeed[data-state="2"]::after { content: "FAST"; opacity: 1; }
+
+        .toggle-box.losspeed[data-state="1"] { background: rgba(68, 170, 255, 0.15); border-color: #44aaff; color: #44aaff; }
+        .toggle-box.losspeed[data-state="1"]::after { content: "SLOW"; opacity: 1; }
+        .toggle-box.losspeed[data-state="2"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
+        .toggle-box.losspeed[data-state="2"]::after { content: "NORMAL"; opacity: 1; }
+        .toggle-box.losspeed[data-state="3"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; color: #ffd700; }
+        .toggle-box.losspeed[data-state="3"]::after { content: "MEDIUM"; opacity: 1; }
+        .toggle-box.losspeed[data-state="4"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
+        .toggle-box.losspeed[data-state="4"]::after { content: "FAST"; opacity: 1; }
+
+        .toggle-box.losrange[data-state="1"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; color: #ffd700; }
+        .toggle-box.losrange[data-state="1"]::after { content: "LOW"; opacity: 1; }
+        .toggle-box.losrange[data-state="2"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
+        .toggle-box.losrange[data-state="2"]::after { content: "NORMAL"; opacity: 1; }
+        .toggle-box.losrange[data-state="3"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
+        .toggle-box.losrange[data-state="3"]::after { content: "HIGH"; opacity: 1; }
+        .toggle-box.losrange[data-state="4"] { background: rgba(139, 0, 0, 0.15); border-color: #ff4444; color: #ff4444; }
+        .toggle-box.losrange[data-state="4"]::after { content: "VERY HIGH"; opacity: 1; }
 
         /* TIMER STYLES */
         .timer-container {
@@ -190,7 +213,7 @@
 </head>
 <body>
 
-    <header><h1>The Other Side - Ghost Tracker</h1></header>
+    <header><h1>The Other Side - Ghost Tracker (Identify Mode)</h1></header>
 
     <div class="main-content">
         <div class="sidebar">
@@ -204,12 +227,15 @@
 
                 <div class="sidebar-section">
                     <h3>Behaviors</h3>
+                    <div class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="3" onclick="cycleState(this)">Base Speed - </div>
                     <div class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="3" onclick="cycleState(this)">Breaker Box - </div>
                     <div class="toggle-box candle" id="btn-candle" data-state="0" data-max="3" onclick="cycleState(this)">Candle Interaction - </div>
                     <div class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)">Door Interaction - </div>
                     <div class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)">FLX-POD Interaction - </div>
-                    <div class="toggle-box holy" id="btn-holy" data-state="0" data-max="3" onclick="cycleState(this)">Holy Spray - </div>
+                    <div class="toggle-box holy" id="btn-holy" data-state="0" data-max="3" onclick="cycleState(this)">Holy Water - </div>
                     <div class="toggle-box lights" id="btn-lights" data-state="0" data-max="5" onclick="cycleState(this)">Light Switch - </div>
+                    <div class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="5" onclick="cycleState(this)">Line of Sight Range - </div>
+                    <div class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="5" onclick="cycleState(this)">Line of Sight Speed - </div>
                     <div class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)">Manifestation - </div>
                     <div class="toggle-box radio" id="btn-radio" data-state="0" data-max="5" onclick="cycleState(this)">Radio Interaction - </div>
 
@@ -223,28 +249,6 @@
                     </div>
                 </div>
 
-                <div class="sidebar-section">
-                    <h3>Stats</h3>
-                    <select id="speed-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#2c2c2c; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; margin-bottom: 8px; min-height: 44px;">
-                        <option value="all">Any Base Speed</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Fast">Fast</option>
-                    </select>
-                    <select id="losspeed-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#2c2c2c; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; margin-bottom: 8px; min-height: 44px;">
-                        <option value="all">Any LOS Speed</option>
-                        <option value="Slow">Slow</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Fast">Fast</option>
-                    </select>
-                    <select id="los-select" onchange="filterGhosts()" style="width:100%; padding:12px; background:#2c2c2c; color:white; border:1px solid #333; border-radius:4px; font-size:1rem; min-height: 44px;">
-                        <option value="all">Any LOS Range</option>
-                        <option value="Low">Low</option>
-                        <option value="Normal">Normal</option>
-                        <option value="High">High</option>
-                        <option value="Very High">Very High</option>
-                    </select>
-                </div>
                 <div class="footer-link"><a href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank">Unofficial Wiki</a> - Created by nena</div>
                 <div class="footer-link">Unofficial Ghost Tracker - Created by <a href="https://linktr.ee/p8riot" target="_blank">p8riot</a></div>
             </div>
@@ -262,7 +266,7 @@
         const ghosts = [
             { name: "Banshee", ev: ["Audio", "EMF", "Radiation"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Banshee is a chilling presence tied to omens of death, amplifying fear through its signature piercing screams and erratic electrical interference. Investigators close with death claim to hear the Banshee's cries.", desc: ["Can extinguish candles.", "Causes electrical interferences.", "May scream on Spirit Box / Boom Box / Radios.", "Screams may be heard on electronics when heart rate >120bpm."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Bhoot", ev: ["Freezing", "Radiation", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Bhoot is a tormented soul, bound to the place of its suffering and fueled by a need for vengeance. Investigators report experiencing intense cold when the Bhoot is nearing.", desc: ["Can extinguish candles.", "Increased hunt cooldown.", "Room gets cold before hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "long-cooldown", "spray-normal"] },
-            { name: "Demon", ev: ["Radiation", "UV", "Writing"], speed: "Fast", losspeed: "Slow", los: "Low", hw: "More Effective (5s)", lore: "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.", desc: ["Can extinguish candles.", "Holy Spray stops hunt for 2 minutes (forced hunt after time lapses).", "Hunts at 90.2 BPM (40 second cooldown).", "Leaves hot temps on touched objects."], tags: ["extinguish", "lights-off", "lights-on", "doors", "radio-on", "radio-off", "short-cooldown", "spray-more"] },
+            { name: "Demon", ev: ["Radiation", "UV", "Writing"], speed: "Fast", losspeed: "Slow", los: "Low", hw: "More Effective (5s)", lore: "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.", desc: ["Can extinguish candles.", "Holy Water stops hunt for 2 minutes (forced hunt after time lapses).", "Hunts at 90.2 BPM (40 second cooldown).", "Leaves hot temps on touched objects."], tags: ["extinguish", "lights-off", "lights-on", "doors", "radio-on", "radio-off", "short-cooldown", "spray-more"] },
             { name: "Doppelganger", ev: ["Audio", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Low", hw: "Normal (3s)", lore: "The Doppelganger is a deceptive spirit, often tricking its intended targets. Investigators report feeling alone moments before the ghost hunts. Where does it go?", desc: ["Can extinguish candles.", "Returns to favorite room before hunt.", "Shorter distance LOS."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Iblis", ev: ["Audio", "Freezing", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".", desc: ["Can extinguish candles.", "Increases speed slightly.", "Shapeshifts during hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Phantom", ev: ["Audio", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Phantom is a sinister entity born from pure darkness, operating in silence and shadows. Investigators report frequent radio frequency interruptions, though they've never seen the phantom in full-form, only in the shadows.", desc: ["Ignores candles.", "Ignores FLX-POD.", "No manifest events (More shadow events).", "Turns off radios (never on)."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-off", "no-radio-on", "shadow-only", "spray-normal"] },
@@ -272,11 +276,11 @@
             { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Fast", los: "Normal", hw: "Normal (3s)", lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses.", "Distressed sounds near player during hunt.", "Ignores candles.", "Ignores FLX-POD.", "Increased hunt cooldown."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "long-cooldown", "spray-normal"] },
             { name: "Strigoi", ev: ["Freezing", "UV", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Strigoi is a restless, undead spirit drawn from old legends - believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.", desc: ["Actively raises heart rate (drains sanity) while in the same room.", "Ignores candles.", "Increases speed slightly.", "Shadow events only.", "Turns on radios (never off)."], tags: ["candles-ignore", "lights-on", "lights-off", "doors", "radio-on", "no-radio-off", "shadow-only", "spray-normal"] },
             { name: "Tantalus", ev: ["EMF", "Freezing", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.", desc: ["Can extinguish candles.", "Ignores FLX-POD.", "Increases speed slightly.", "Never closes / slams doors (except hunt)."], tags: ["extinguish", "flx-ignore", "no-doors", "lights-on", "lights-off", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Spray stops hunt for 90 seconds (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "no-lights-on", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
+            { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Water stops hunt for 90 seconds (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "no-lights-on", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
             { name: "The Echo", ev: ["Freezing", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", lore: "The Echo is a passive, residual spirit. Investigators report an eerily silent atmosphere, with lights never being affected by this ghost.", desc: ["Can't use main breaker (only individual, except post-hunt).", "Ignores candles.", "Ignores FLX-POD.", "Ignores lights and radios."], tags: ["candles-ignore", "lights-ignore", "radio-ignore", "flx-ignore", "no-lights-on", "doors", "no-radios", "no-breaker", "spray-normal"] },
             { name: "The Forgotten", ev: ["EMF", "Radiation", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", lore: "The Forgotten has a nearly silent presence. Passive, cold, and elusive, as if it's barely there at all. Investigators report minimal activity, no defining behavior, and a feeling of safety - until the Forgotten strikes.", desc: ["Can extinguish candles.", "Hardest to ID (no evidence).", "Ignores FLX-POD.", "Increases speed slightly."], tags: ["extinguish", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Wewe Gombel", ev: ["EMF", "Freezing", "Radiation"], speed: "Normal", losspeed: "Fast", los: "Normal", hw: "More Effective (5s)", lore: "The Wewe Gombel is a vengeful and malicious spirit, rooted in folklore as an unforgiving force that punishes those it deems deserving. Investigators report this ghost as incredibly fast, deeming Holy Water a necessity when having an encounter.", desc: ["Can extinguish candles.", "Increases speed drastically.", "Lights OFF only (Can't use main breaker, except post-hunt).", "Short cooldown."], tags: ["extinguish", "lights-off", "no-lights-on", "doors", "radio-on", "radio-off", "no-breaker", "short-cooldown", "spray-more"] },
-            { name: "Wisp", ev: ["Audio", "Freezing", "Radiation"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "More Effective (5s)", lore: "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.", desc: ["Holy Spray stops hunt for 2 minutes (forced hunt after time lapses).", "Ignores candles.", "Increases speed slightly.", "Lights ON only (never off / frequent)."], tags: ["candles-ignore", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
+            { name: "Wisp", ev: ["Audio", "Freezing", "Radiation"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "More Effective (5s)", lore: "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.", desc: ["Holy Water stops hunt for 2 minutes (forced hunt after time lapses).", "Ignores candles.", "Increases speed slightly.", "Lights ON only (never off / frequent)."], tags: ["candles-ignore", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
             { name: "Wraith", ev: ["Audio", "Freezing", "UV"], speed: "Fast", losspeed: "Fast", los: "Very High", hw: "More Effective (5s)", lore: "The Wraith is a swift and vengeful entity, fueled by deep sorrow and rage. Investigators report them as incredibly fast entities, and report feeling targeted. You'll want Holy Water on hand for this ghost.", desc: ["Breaks LOS easily.", "Can extinguish candles.", "No feet (floating).", "Targets specific player."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-more"] }
         ];
 
@@ -341,9 +345,6 @@
                 activeEvidence.clear(); excludedEvidence.clear(); eliminatedGhosts.clear(); selectedGhost = null;
                 document.querySelectorAll('.ev-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('excluded'); });
                 document.querySelectorAll('.toggle-box').forEach(b => b.dataset.state = 0);
-                document.getElementById('speed-select').value = "all";
-                document.getElementById('losspeed-select').value = "all";
-                document.getElementById('los-select').value = "all";
                 saveData();
                 filterGhosts();
             }
@@ -381,9 +382,6 @@
         }
 
         function filterGhosts() {
-            const speed = document.getElementById('speed-select').value;
-            const losspeed = document.getElementById('losspeed-select').value;
-            const los = document.getElementById('los-select').value;
             const states = {};
             document.querySelectorAll('.toggle-box').forEach(b => states[b.id.replace('btn-','')] = parseInt(b.dataset.state));
 
@@ -393,9 +391,19 @@
                 let match = true;
                 for (let e of activeEvidence) if (!g.ev.includes(e)) match = false;
                 for (let e of excludedEvidence) if (g.ev.includes(e)) match = false;
-                if (speed !== "all" && g.speed !== speed) match = false;
-                if (losspeed !== "all" && g.losspeed !== losspeed) match = false;
-                if (los !== "all" && g.los !== los) match = false;
+                
+                if (states.bspeed === 1 && g.speed !== "Normal") match = false;
+                if (states.bspeed === 2 && g.speed !== "Fast") match = false;
+
+                if (states.losspeed === 1 && g.losspeed !== "Slow") match = false;
+                if (states.losspeed === 2 && g.losspeed !== "Normal") match = false;
+                if (states.losspeed === 3 && g.losspeed !== "Medium") match = false;
+                if (states.losspeed === 4 && g.losspeed !== "Fast") match = false;
+
+                if (states.losrange === 1 && g.los !== "Low") match = false;
+                if (states.losrange === 2 && g.los !== "Normal") match = false;
+                if (states.losrange === 3 && g.los !== "High") match = false;
+                if (states.losrange === 4 && g.los !== "Very High") match = false;
                 
                 if (states.candle === 1 && !g.tags.includes('extinguish')) match = false;
                 if (states.candle === 2 && !g.tags.includes('candles-ignore')) match = false;
@@ -438,12 +446,11 @@
             refCard.innerHTML = `
                 <div class="ghost-name" style="color: var(--accent); border-bottom: 1px solid var(--border);">Notes</div>
                 <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
-                    <span class="behavior-point">Hearing heartbeat = Ghost sees you. RUN!</span>
+                    <span class="behavior-point">Hearing heartbeat during hunt = Ghost sees you. RUN!</span>
                     <span class="behavior-point">Phone can safely be used during hunt. Turn off all other electronics you're carrying.</span>
-                    <span class="behavior-point">Ghosts will have a favorite room but they can leave evidence anywhere inside the location.</span>
-                    <span class="behavior-point">Forced hunts from Holy Spray (Demon, Tariaksuq, Wisp) execute at the specified time if any player is inside the location. Forced hunts pause the regular hunt cooldown. If no players are inside, the forced hunt is skipped and normal cooldown resumes.</span>
+                    <span class="behavior-point">Ghosts will have a favorite room but they can leave evidence anywhere inside the location. Infrasound Receiver has to be in favorite room to capture audio.</span>
+                    <span class="behavior-point">Forced hunts from Holy Water (Demon, Tariaksuq, Wisp) execute at the specified time if any player is inside the location. Forced hunts pause the regular hunt cooldown. If no players are inside, the forced hunt is skipped and normal cooldown resumes.</span>
                     <span class="behavior-point">The hunt threshold for all ghosts (except Demon) is 104 BPM. This threshold is the average BPM of all players inside the location. Players outside the location with a low heart rate do not help prevent a hunt.</span>
-                    <span class="behavior-point">placeholder</span>
                 </div>
             `;
             grid.appendChild(refCard);
@@ -490,9 +497,9 @@
                     <div class="evidence-items">${evTags}</div>
                     <div class="stats-container">
                         <div class="stat-item"><span>Base Speed</span> <span class="stat-val" style="color:${speedC}">${g.speed}</span></div>
-                        <div class="stat-item"><span>LOS Speed</span> <span class="stat-val" style="color:${losspeedC}">${g.losspeed}</span></div>
-                        <div class="stat-item"><span>LOS Range</span> <span class="stat-val" style="color:${losC}">${g.los}</span></div>
-                        <div class="stat-item"><span>Holy Spray</span> <span class="stat-val" style="color:${hwC}">${g.hw}</span></div>
+                        <div class="stat-item"><span>Line of Sight Speed</span> <span class="stat-val" style="color:${losspeedC}">${g.losspeed}</span></div>
+                        <div class="stat-item"><span>Line of Sight Range</span> <span class="stat-val" style="color:${losC}">${g.los}</span></div>
+                        <div class="stat-item"><span>Holy Water Effectiveness</span> <span class="stat-val" style="color:${hwC}">${g.hw}</span></div>
                     </div>`;
                 grid.appendChild(card);
             });
