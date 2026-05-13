@@ -160,6 +160,8 @@
         .ghost-card.ruled-out { opacity: 0.3; filter: grayscale(100%); border-color: #222; background: #1a1a1a; pointer-events: none; }
         
         .reference-card { cursor: default; border-color: var(--accent) !important; background: rgba(187, 134, 252, 0.05); }
+        
+        .phrase-tag { background: #2c2c2c; border: 1px solid #444; color: #e0e0e0; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; font-family: 'Consolas', monospace; user-select: text; display: inline-block; }
 
         /* OVERLAY REMINDER */
         .select-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; z-index: 10; flex-direction: column; justify-content: center; align-items: center; text-align: center; animation: pulse 2s infinite; pointer-events: none; }
@@ -213,12 +215,12 @@
 </head>
 <body>
 
-    <header><h1>The Other Side - Ghost Tracker (Identify Mode)</h1></header>
+    <header><h1>Paranormal Monitoring System Tracker</h1></header>
 
     <div class="main-content">
         <div class="sidebar">
             <div class="sidebar-scroll">
-                <button class="reset-all-btn" onclick="resetAll()">Reset Filters</button>
+                <button class="reset-all-btn" onclick="resetAll()">Reset</button>
 
                 <div class="sidebar-section">
                     <h3>Evidence</h3>
@@ -249,8 +251,8 @@
                     </div>
                 </div>
 
-                <div class="footer-link"><a href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank">Unofficial Wiki</a> - Created by nena</div>
-                <div class="footer-link">Unofficial Ghost Tracker - Created by <a href="https://linktr.ee/p8riot" target="_blank">p8riot</a></div>
+                <div class="footer-link">Unofficial <a href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank">Wiki</a> - Created by nena</div>
+                <div class="footer-link">Unofficial <a href="https://p8riot.github.io/tos-cleanse-assistant/cleanse.html" target="_blank">A.S.S. Profiler</a> and P.M.S. Tracker - Created by <a href="https://linktr.ee/p8riot" target="_blank">p8riot</a></div>
             </div>
         </div>
 
@@ -454,6 +456,51 @@
                 </div>
             `;
             grid.appendChild(refCard);
+
+            const sbCard = document.createElement('div');
+            sbCard.className = "ghost-card reference-card";
+            sbCard.innerHTML = `
+                <div class="ghost-name" style="color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 4px;">Spirit Box Phrases</div>
+                <div class="ghost-behavior" style="border-top: none; padding-top: 8px; display: flex; flex-wrap: wrap; justify-content: center; align-content: space-evenly; gap: 4px; flex: 1;">
+                    <span class="phrase-tag">HELLO</span>
+                    <span class="phrase-tag">BE SEEN</span>
+                    <span class="phrase-tag">HEAR US</span>
+                    <span class="phrase-tag">MANIFEST</span>
+                    <span class="phrase-tag">TALK NOW</span>
+                    <span class="phrase-tag">KNOCK ONCE</span>
+                    <span class="phrase-tag">MAKE NOISE</span>
+                    <span class="phrase-tag">TOUCH THIS</span>
+                    <span class="phrase-tag">WE SEE YOU</span>
+                    <span class="phrase-tag">ARE YOU OLD</span>
+                    <span class="phrase-tag">SPEAK TO US</span>
+                    <span class="phrase-tag">WHO'S THERE</span>
+                    <span class="phrase-tag">ARE YOU HERE</span>
+                    <span class="phrase-tag">CAN YOU TALK</span>
+                    <span class="phrase-tag">DO SOMETHING</span>
+                    <span class="phrase-tag">MAKE A SOUND</span>
+                    <span class="phrase-tag">ARE YOU ANGRY</span>
+                    <span class="phrase-tag">ARE YOU CLOSE</span>
+                    <span class="phrase-tag">ARE YOU YOUNG</span>
+                    <span class="phrase-tag">SHOW STRENGTH</span>
+                    <span class="phrase-tag">WHERE ARE YOU</span>
+                    <span class="phrase-tag">SHALL WE LEAVE</span>
+                    <span class="phrase-tag">GIVE US A SIGN</span>
+                    <span class="phrase-tag">HOW DID YOU DIE</span>
+                    <span class="phrase-tag">HOW OLD ARE YOU</span>
+                    <span class="phrase-tag">REVEAL YOURSELF</span>
+                    <span class="phrase-tag">SHOULD WE LEAVE</span>
+                    <span class="phrase-tag">ARE YOU FRIENDLY</span>
+                    <span class="phrase-tag">WHAT DO YOU WANT</span>
+                    <span class="phrase-tag">WHY ARE YOU HERE</span>
+                    <span class="phrase-tag">IS THIS YOUR HOME</span>
+                    <span class="phrase-tag">DO YOU WANT US HERE</span>
+                    <span class="phrase-tag">IS THERE ANYONE HERE</span>
+                    <span class="phrase-tag">IS THERE A GHOST HERE</span>
+                    <span class="phrase-tag">WHAT IS YOUR LOCATION</span>
+                    <span class="phrase-tag">DO YOU WANT TO HURT US</span>
+                </div>
+            `;
+            grid.appendChild(sbCard);
 
             if(list.length === 0) { 
                 const msg = document.createElement('div');
