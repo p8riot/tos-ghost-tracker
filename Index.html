@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Other Side - Ghost Tracker</title>
+    <title>Identify Assistant - The Other Side</title>
     <style>
         :root {
             --bg-dark: #000000; --bg-panel: #000000; --bg-card: #252525;
@@ -31,19 +31,28 @@
 
         /* CONTENT */
         .content-area { flex: 1; padding: 20px; overflow-y: auto; background: #000000; display: flex; flex-direction: column; }
-        .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; }
+        
         .instruction-bar { 
-            background: #1e1e1e; border: 1px solid #333; padding: 10px; margin-bottom: 20px; 
-            text-align: center; color: #ffffff; font-size: 0.85rem; border-radius: 4px; font-weight: 600;
+            background: #1e1e1e; border: 1px solid #333; padding: 8px 10px; margin-bottom: 20px; 
+            color: #ffffff; font-size: 0.85rem; border-radius: 4px; font-weight: 600;
+            position: relative; display: flex; align-items: center; justify-content: center; min-height: 40px;
         }
         .instruction-bar span { color: var(--accent); }
-
+        .instruction-text { text-align: center; flex: 1; }
+        
         /* CONTROLS */
-        .reset-all-btn {
-            width: 100%; padding: 12px; margin-bottom: 20px; background: #2c2c2c; border: 1px solid var(--border); color: #ff6b6b;
-            font-weight: bold; cursor: pointer; border-radius: 6px; transition: 0.2s; text-transform: uppercase; font-size: 0.9rem; min-height: 44px;
+        .reset-small-btn {
+            position: absolute; left: 8px;
+            background: #2c2c2c; border: 1px solid #444; color: #ff6b6b;
+            font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.2s;
+            text-transform: uppercase; font-size: 0.75rem; padding: 5px 12px;
         }
-        .reset-all-btn:hover { background: #333; border-color: #ff4444; }
+        .reset-small-btn:hover { background: #333; border-color: #ff4444; color: #ffffff; }
+
+        .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; }
+        
+        /* REFERENCE SECTION */
+        .reference-section-title { font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 10px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
 
         .toggle-box {
             width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 6px; background: #2c2c2c; border: 1px solid var(--border);
@@ -204,6 +213,8 @@
             .ev-btn { padding: 15px 5px; font-size: 0.9rem; }
             .sidebar-section { margin-bottom: 20px; }
             .toggle-box { padding: 15px; font-size: 1rem; }
+            .instruction-bar { flex-direction: column; padding: 10px; gap: 10px; }
+            .reset-small-btn { position: relative; left: auto; width: 100%; padding: 8px; }
         }
         
         .footer-link {
@@ -220,7 +231,6 @@
     <div class="main-content">
         <div class="sidebar">
             <div class="sidebar-scroll">
-                <button class="reset-all-btn" onclick="resetAll()">Reset</button>
 
                 <div class="sidebar-section">
                     <h3>Evidence</h3>
@@ -251,16 +261,76 @@
                     </div>
                 </div>
 
-                <div class="footer-link">Unofficial <a href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank">Wiki</a> - Created by nena</div>
-                <div class="footer-link">Unofficial <a href="https://p8riot.github.io/tos-cleanse-assistant/cleanse.html" target="_blank">A.S.S. Profiler</a> and P.M.S. Tracker - Created by <a href="https://linktr.ee/p8riot" target="_blank">p8riot</a></div>
+                <div class="footer-link">The Other Side <a href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank">Wiki</a> - Created by nena</div>
+                <div class="footer-link">P.M.S. Tracker (Identify Assitant) and <a href="https://p8riot.github.io/tos-cleanse-assistant/cleanse.html" target="_blank">A.S.S. Profiler</a> (Cleanse Assistant) - Created by <a href="https://linktr.ee/p8riot" target="_blank">p8riot</a></div>
             </div>
         </div>
 
         <div class="content-area">
             <div class="instruction-bar">
-                <span>Left Click / Tap:</span> Highlight Ghost | <span>Right Click / Hold:</span> Eliminate Ghost
+                <button class="reset-small-btn" onclick="resetAll()">Reset</button>
+                <div class="instruction-text">
+                    <span>Left Click / Tap:</span> Highlight Ghost | <span>Right Click / Hold:</span> Eliminate Ghost
+                </div>
             </div>
+            
             <div class="ghost-grid" id="ghostGrid"></div>
+            
+            <div class="reference-section-title">Reference Resources</div>
+            <div class="ghost-grid" id="referenceGrid">
+                <div class="ghost-card reference-card">
+                    <div class="ghost-name" style="color: var(--accent); border-bottom: 1px solid var(--border);">Notes</div>
+                    <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                        <span class="behavior-point">Hearing heartbeat during hunt = Ghost sees you. RUN!</span>
+                        <span class="behavior-point">Cellphone, including phone flashlight, can safely be used during hunt. Turn off or drop all other electronics you're carrying.</span>
+                        <span class="behavior-point">Ghosts will have a favorite room but they can leave evidence anywhere inside the location. Infrasound Receiver has to be in favorite room to capture audio.</span>
+                        <span class="behavior-point">Forced hunts from Holy Water (Demon, Tariaksuq, Wisp) execute at the specified time if any player is inside the location. Forced hunts pause the regular hunt cooldown. If no players are inside, the forced hunt is skipped and normal cooldown resumes.</span>
+                        <span class="behavior-point">The hunt threshold for all ghosts (except Demon) is 104 BPM. This threshold is the average BPM of all players inside the location. Players outside the location with a low heart rate do not help prevent a hunt.</span>
+                    </div>
+                </div>
+
+                <div class="ghost-card reference-card">
+                    <div class="ghost-name" style="color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 4px;">Spirit Box Phrases</div>
+                    <div class="ghost-behavior" style="border-top: none; padding-top: 8px; display: flex; flex-wrap: wrap; justify-content: center; align-content: space-evenly; gap: 4px; flex: 1;">
+                        <span class="phrase-tag">HELLO</span>
+                        <span class="phrase-tag">BE SEEN</span>
+                        <span class="phrase-tag">HEAR US</span>
+                        <span class="phrase-tag">MANIFEST</span>
+                        <span class="phrase-tag">TALK NOW</span>
+                        <span class="phrase-tag">KNOCK ONCE</span>
+                        <span class="phrase-tag">MAKE NOISE</span>
+                        <span class="phrase-tag">TOUCH THIS</span>
+                        <span class="phrase-tag">WE SEE YOU</span>
+                        <span class="phrase-tag">ARE YOU OLD</span>
+                        <span class="phrase-tag">SPEAK TO US</span>
+                        <span class="phrase-tag">WHO'S THERE</span>
+                        <span class="phrase-tag">ARE YOU HERE</span>
+                        <span class="phrase-tag">CAN YOU TALK</span>
+                        <span class="phrase-tag">DO SOMETHING</span>
+                        <span class="phrase-tag">MAKE A SOUND</span>
+                        <span class="phrase-tag">ARE YOU ANGRY</span>
+                        <span class="phrase-tag">ARE YOU CLOSE</span>
+                        <span class="phrase-tag">ARE YOU YOUNG</span>
+                        <span class="phrase-tag">SHOW STRENGTH</span>
+                        <span class="phrase-tag">WHERE ARE YOU</span>
+                        <span class="phrase-tag">SHALL WE LEAVE</span>
+                        <span class="phrase-tag">GIVE US A SIGN</span>
+                        <span class="phrase-tag">HOW DID YOU DIE</span>
+                        <span class="phrase-tag">HOW OLD ARE YOU</span>
+                        <span class="phrase-tag">REVEAL YOURSELF</span>
+                        <span class="phrase-tag">SHOULD WE LEAVE</span>
+                        <span class="phrase-tag">ARE YOU FRIENDLY</span>
+                        <span class="phrase-tag">WHAT DO YOU WANT</span>
+                        <span class="phrase-tag">WHY ARE YOU HERE</span>
+                        <span class="phrase-tag">IS THIS YOUR HOME</span>
+                        <span class="phrase-tag">DO YOU WANT US HERE</span>
+                        <span class="phrase-tag">IS THERE ANYONE HERE</span>
+                        <span class="phrase-tag">IS THERE A GHOST HERE</span>
+                        <span class="phrase-tag">WHAT IS YOUR LOCATION</span>
+                        <span class="phrase-tag">DO YOU WANT TO HURT US</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -343,13 +413,11 @@
         }
 
         function resetAll() {
-            if(confirm("Reset all filters and evidence?")) {
-                activeEvidence.clear(); excludedEvidence.clear(); eliminatedGhosts.clear(); selectedGhost = null;
-                document.querySelectorAll('.ev-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('excluded'); });
-                document.querySelectorAll('.toggle-box').forEach(b => b.dataset.state = 0);
-                saveData();
-                filterGhosts();
-            }
+            activeEvidence.clear(); excludedEvidence.clear(); eliminatedGhosts.clear(); selectedGhost = null;
+            document.querySelectorAll('.ev-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('excluded'); });
+            document.querySelectorAll('.toggle-box').forEach(b => b.dataset.state = 0);
+            saveData();
+            filterGhosts();
         }
 
         function startTimer() {
@@ -435,6 +503,16 @@
                 match ? matches.push(g) : nonMatches.push(g);
             });
 
+            matches.sort((a, b) => {
+                const aEliminated = eliminatedGhosts.has(a.name);
+                const bEliminated = eliminatedGhosts.has(b.name);
+                
+                if (aEliminated && !bEliminated) return 1;
+                if (!aEliminated && bEliminated) return -1;
+                
+                return a.name.localeCompare(b.name);
+            });
+
             const validSet = new Set(matches.map(g => g.name));
             renderGhosts([...matches, ...nonMatches], validSet);
         }
@@ -442,65 +520,6 @@
         function renderGhosts(list, validSet) {
             const grid = document.getElementById('ghostGrid');
             grid.innerHTML = "";
-
-            const refCard = document.createElement('div');
-            refCard.className = "ghost-card reference-card";
-            refCard.innerHTML = `
-                <div class="ghost-name" style="color: var(--accent); border-bottom: 1px solid var(--border);">Notes</div>
-                <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
-                    <span class="behavior-point">Hearing heartbeat during hunt = Ghost sees you. RUN!</span>
-                    <span class="behavior-point">Phone can safely be used during hunt. Turn off all other electronics you're carrying.</span>
-                    <span class="behavior-point">Ghosts will have a favorite room but they can leave evidence anywhere inside the location. Infrasound Receiver has to be in favorite room to capture audio.</span>
-                    <span class="behavior-point">Forced hunts from Holy Water (Demon, Tariaksuq, Wisp) execute at the specified time if any player is inside the location. Forced hunts pause the regular hunt cooldown. If no players are inside, the forced hunt is skipped and normal cooldown resumes.</span>
-                    <span class="behavior-point">The hunt threshold for all ghosts (except Demon) is 104 BPM. This threshold is the average BPM of all players inside the location. Players outside the location with a low heart rate do not help prevent a hunt.</span>
-                </div>
-            `;
-            grid.appendChild(refCard);
-
-            const sbCard = document.createElement('div');
-            sbCard.className = "ghost-card reference-card";
-            sbCard.innerHTML = `
-                <div class="ghost-name" style="color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 4px;">Spirit Box Phrases</div>
-                <div class="ghost-behavior" style="border-top: none; padding-top: 8px; display: flex; flex-wrap: wrap; justify-content: center; align-content: space-evenly; gap: 4px; flex: 1;">
-                    <span class="phrase-tag">HELLO</span>
-                    <span class="phrase-tag">BE SEEN</span>
-                    <span class="phrase-tag">HEAR US</span>
-                    <span class="phrase-tag">MANIFEST</span>
-                    <span class="phrase-tag">TALK NOW</span>
-                    <span class="phrase-tag">KNOCK ONCE</span>
-                    <span class="phrase-tag">MAKE NOISE</span>
-                    <span class="phrase-tag">TOUCH THIS</span>
-                    <span class="phrase-tag">WE SEE YOU</span>
-                    <span class="phrase-tag">ARE YOU OLD</span>
-                    <span class="phrase-tag">SPEAK TO US</span>
-                    <span class="phrase-tag">WHO'S THERE</span>
-                    <span class="phrase-tag">ARE YOU HERE</span>
-                    <span class="phrase-tag">CAN YOU TALK</span>
-                    <span class="phrase-tag">DO SOMETHING</span>
-                    <span class="phrase-tag">MAKE A SOUND</span>
-                    <span class="phrase-tag">ARE YOU ANGRY</span>
-                    <span class="phrase-tag">ARE YOU CLOSE</span>
-                    <span class="phrase-tag">ARE YOU YOUNG</span>
-                    <span class="phrase-tag">SHOW STRENGTH</span>
-                    <span class="phrase-tag">WHERE ARE YOU</span>
-                    <span class="phrase-tag">SHALL WE LEAVE</span>
-                    <span class="phrase-tag">GIVE US A SIGN</span>
-                    <span class="phrase-tag">HOW DID YOU DIE</span>
-                    <span class="phrase-tag">HOW OLD ARE YOU</span>
-                    <span class="phrase-tag">REVEAL YOURSELF</span>
-                    <span class="phrase-tag">SHOULD WE LEAVE</span>
-                    <span class="phrase-tag">ARE YOU FRIENDLY</span>
-                    <span class="phrase-tag">WHAT DO YOU WANT</span>
-                    <span class="phrase-tag">WHY ARE YOU HERE</span>
-                    <span class="phrase-tag">IS THIS YOUR HOME</span>
-                    <span class="phrase-tag">DO YOU WANT US HERE</span>
-                    <span class="phrase-tag">IS THERE ANYONE HERE</span>
-                    <span class="phrase-tag">IS THERE A GHOST HERE</span>
-                    <span class="phrase-tag">WHAT IS YOUR LOCATION</span>
-                    <span class="phrase-tag">DO YOU WANT TO HURT US</span>
-                </div>
-            `;
-            grid.appendChild(sbCard);
 
             if(list.length === 0) { 
                 const msg = document.createElement('div');
