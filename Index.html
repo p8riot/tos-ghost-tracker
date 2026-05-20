@@ -174,7 +174,10 @@
         .ghost-card.selected { border-color: var(--select-green); background: rgba(0, 230, 118, 0.05); box-shadow: 0 0 15px rgba(0, 230, 118, 0.2); }
         .ghost-card.ruled-out { opacity: 0.3; filter: grayscale(100%); border-color: #222; background: #1a1a1a; pointer-events: none; }
         
-        .reference-card { cursor: default; border-color: var(--accent) !important; background: rgba(187, 134, 252, 0.05); }
+        .ref-card-uv { cursor: default; border-color: #bc13fe !important; background: rgba(188, 19, 254, 0.05); }
+        .ref-card-freeze { cursor: default; border-color: #44aaff !important; background: rgba(68, 170, 255, 0.05); }
+        .ref-card-audio { cursor: default; border-color: #ffa500 !important; background: rgba(255, 165, 0, 0.05); }
+        .ref-card-emf { cursor: default; border-color: #ff4444 !important; background: rgba(255, 68, 68, 0.05); }
         
         .phrase-tag { background: #2c2c2c; border: 1px solid #444; color: #e0e0e0; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; font-family: 'Consolas', monospace; user-select: text; display: inline-block; }
 
@@ -290,9 +293,10 @@
             
             <div class="reference-section-title">Reference Resources</div>
             <div class="ghost-grid" id="referenceGrid">
-                <div class="ghost-card reference-card">
+                
+                <div class="ghost-card ref-card-uv">
                     <div class="ghost-header">
-                        <div class="ghost-name" style="color: var(--accent);">Notes</div>
+                        <div class="ghost-name" style="color: #bc13fe;">Notes</div>
                     </div>
                     <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
                         <span class="behavior-point">Hearing heartbeat during hunt = Ghost sees you. RUN!</span>
@@ -303,9 +307,9 @@
                     </div>
                 </div>
 
-                <div class="ghost-card reference-card">
+                <div class="ghost-card ref-card-freeze">
                     <div class="ghost-header">
-                        <div class="ghost-name" style="color: var(--accent);">Spirit Box Phrases</div>
+                        <div class="ghost-name" style="color: #44aaff;">Spirit Box Phrases</div>
                     </div>
                     <div class="ghost-behavior" style="border-top: none; padding-top: 8px; display: flex; flex-wrap: wrap; justify-content: center; align-content: space-evenly; gap: 4px; flex: 1;">
                         <span class="phrase-tag">HELLO</span>
@@ -346,6 +350,38 @@
                         <span class="phrase-tag">DO YOU WANT TO HURT US</span>
                     </div>
                 </div>
+
+                <div class="ghost-card ref-card-audio">
+                    <div class="ghost-header">
+                        <div class="ghost-name" style="color: #ffa500;">Skia Unique Audio Responses</div>
+                    </div>
+                    <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                        <span class="behavior-point">“That wasn't very friendly”</span>
+                        <span class="behavior-point">“I don't wanna do any of this“</span>
+                        <span class="behavior-point">“Don’t be afraid, it will be over soon”</span>
+                        <span class="behavior-point">“I don’t want to hurt you”</span>
+                        <span class="behavior-point">“Hm. I’m very sorry, dear stranger”</span>
+                        <span class="behavior-point">"You have to be quiet"</span>
+                        
+                        <span style="font-style: italic; color: #888;">(Provided by the Wiki. Not 100% Confirmed)</span>
+                    </div>
+                </div>
+
+                <div class="ghost-card ref-card-emf">
+                    <div class="ghost-header">
+                        <div class="ghost-name" style="color: #ff4444;">Iblis Shapeshifting Information</div>
+                    </div>
+                    <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                        <span class="behavior-point"><strong>St. Joseph’s Orphanage (Henry)</strong> <strong>Normal model:</strong> Dirty face, white eyes and red eye bags, dirty plaid baby blue shirt, dark gray Scottish overalls, dark blue knee socks and brown leather shoes. <strong>Shapeshift cosmetics:</strong> Clean face, blue eyes, clean plaid baby blue shirt, dark gray Scottish overalls, dark blue knee socks and brown leather shoes.</span>
+                        <span class="behavior-point"><strong>Abaddon Hallows (Abigail)</strong> Only ghost model that has only 1 change. <strong>Normal model:</strong> Black habit and white collar. <strong>Shapeshift cosmetics:</strong> Red habit and black collar.</span>
+                        <span class="behavior-point"><strong>Summerhill Psychiatric Institution (Stevie)</strong> <strong>Normal model:</strong> White straight jacket dress, with brown leather belts. <strong>Shapeshift cosmetics:</strong> Black straight jacket dress, with red leather belts // Red straight jacket dress, with black leather belts.</span>
+                        <span class="behavior-point"><strong>Stone Manor Plantation (Victoria)</strong> <strong>Normal model:</strong> Dark purple flower crown, black dress, veiny décolleté and black mesh fingerless gloves. <strong>Shapeshift cosmetics:</strong> Red flower crown, red hair tips, bloody mouth, red ruffles on a black dress, translucent mesh fingerless gloves and red shoes // White flower crown, bloody mouth, white dress, white mesh fingerless gloves and white shoes.</span>
+                        <span class="behavior-point"><strong>317 Aspen Heights (Jennifer)</strong> <strong>Normal model:</strong> Black hair, black jacket, white crop top, cropped 3/4 white gym pants and black sneakers. Gray face, eyes and lips. <strong>Shapeshift cosmetics:</strong> Red hair, red jacket, red top, cropped 3/4 pink gym pants and red shoelaces // Red hair, blue jacket, blue top, cropped 3/4 gray gym pants and blue shoelaces</span>
+                        <span class="behavior-point"><strong>1205 Cedar Street (Jebediah)</strong> <strong>Normal model:</strong> White t-shirt and dark blue pants and bloody mouth and cheeks. <strong>Shapeshift cosmetics:</strong> White tank top with dark pants, bloody elbows and left mouth side showing teeth // Striped gray shirt and dark pants, bloody right eye and chest area.</span>
+                        <span class="behavior-point"><strong>12 Ravenwood Lane (Gary)</strong> <strong>Normal model:</strong> White polka dot jester hat and pants, with white face makeup, bloody spots on face, arms and upper body. <strong>Shapeshift cosmetics:</strong> Green jester hat and green plaid pants, with different makeup // Beige polka dot jester hat and pants, with no makeup.</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -356,12 +392,12 @@
             { name: "Bhoot", ev: ["Freezing", "Radiation", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Long (90s)", cd_val: 3, lore: "The Bhoot is a tormented soul, bound to the place of its suffering and fueled by a need for vengeance. Investigators report experiencing intense cold when the Bhoot is nearing.", desc: ["Can extinguish candles.", "Increased hunt cooldown.", "Room gets cold before hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "long-cooldown", "spray-normal"] },
             { name: "Demon", ev: ["Radiation", "UV", "Writing"], speed: "Fast", losspeed: "Slow", los: "Low", hw: "More Effective (5s)", cooldown: "Short (40s) / 2m (sprayed)", cd_val: 1, lore: "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.", desc: ["Can extinguish candles.", "Holy Water stops hunt for 2 minutes (forced hunt after time lapses).", "Hunts at 90.2 BPM (40 second cooldown).", "Leaves hot temps on touched objects."], tags: ["extinguish", "lights-off", "lights-on", "doors", "radio-on", "radio-off", "short-cooldown", "spray-more"] },
             { name: "Doppelganger", ev: ["Audio", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Low", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Doppelganger is a deceptive spirit, often tricking its intended targets. Investigators report feeling alone moments before the ghost hunts. Where does it go?", desc: ["Can extinguish candles.", "Returns to favorite room before hunt.", "Easier to break LOS (Low Range)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Iblis", ev: ["Audio", "Freezing", "Writing"], speed: "Fast", losspeed: "Moderate", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".", desc: ["Can extinguish candles.", "Increases speed slightly.", "Shapeshifts during hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Iblis", ev: ["Audio", "Freezing", "Writing"], speed: "Fast", losspeed: "Moderate", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".", desc: ["Can extinguish candles.", "Increases speed slightly.", "Shapeshifts during hunt. (See Reference Resources below)"], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Phantom", ev: ["Audio", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Phantom is a sinister entity born from pure darkness, operating in silence and shadows. Investigators report frequent radio frequency interruptions, though they've never seen the phantom in full-form, only in the shadows.", desc: ["Ignores candles.", "Ignores FLX-POD.", "No manifest events (More shadow events).", "Turns off radios (never on)."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-off", "no-radio-on", "shadow-only", "spray-normal"] },
             { name: "Poltergeist", ev: ["EMF", "Radiation", "Writing"], speed: "Fast", losspeed: "Moderate", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Poltergeist is a chaotic and mischievous entity, notorious for its disruptive presence. Investigators report that this ghost thrives on manipulating the environment, throwing more objects than any other spirit.", desc: ["Can extinguish candles.", "Increases speed slightly.", "Throws multiple objects."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Revenant", ev: ["EMF", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Revenant is a relentless, high-threat entity known for its aggressive presence. Investigators report that being hunted by one feels like literal suffocation, making it harder to outrun.", desc: ["Can extinguish candles.", "Stamina drains faster when targeted (permanent once targeted)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Shura", ev: ["EMF", "Freezing", "Writing"], speed: "Fast", losspeed: "Fast", los: "High", hw: "Normal (3s)", cooldown: "Short (40s)", cd_val: 1, lore: "The Shura is a cursed spirit of pure rage, trapped between worlds by a fate even the underworld rejects. Fueled by violence, investigators warn of their aggression, speed, and keen eyes.", desc: ["Can extinguish candles.", "Harder to break LOS (High Range).", "Increases speed.", "Shorter cooldown."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "short-cooldown", "spray-normal"] },
-            { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Fast", los: "Normal", hw: "Normal (3s)", cooldown: "High (90s)", cd_val: 3, lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses.", "Distressed sounds near player during hunt.", "Ignores candles.", "Ignores FLX-POD.", "Increased hunt cooldown."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "long-cooldown", "spray-normal"] },
+            { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Fast", los: "Normal", hw: "Normal (3s)", cooldown: "High (90s)", cd_val: 3, lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses. (See Reference Resources below)", "Distressed sounds near player during hunt.", "Ignores candles.", "Ignores FLX-POD.", "Increased hunt cooldown."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "long-cooldown", "spray-normal"] },
             { name: "Strigoi", ev: ["Freezing", "UV", "Writing"], speed: "Fast", losspeed: "Moderate", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Strigoi is a restless, undead spirit drawn from old legends, believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.", desc: ["Actively raises heart rate (drains sanity) while in the same room.", "Ignores candles.", "Increases speed slightly.", "Shadow events only.", "Turns on radios (never off)."], tags: ["candles-ignore", "lights-on", "lights-off", "doors", "radio-on", "no-radio-off", "shadow-only", "spray-normal"] },
             { name: "Tantalus", ev: ["EMF", "Freezing", "UV"], speed: "Fast", losspeed: "Moderate", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.", desc: ["Can extinguish candles.", "Ignores FLX-POD.", "Increases speed slightly.", "Never closes / slams doors (except hunt)."], tags: ["extinguish", "flx-ignore", "no-doors", "lights-on", "lights-off", "radio-on", "radio-off", "spray-normal"] },
             { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s) / 90s (sprayed)", cd_val: 2, lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Water stops hunt for 90 seconds (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "no-lights-on", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
@@ -558,6 +594,11 @@
                 'Moderate': 'Moderate (255cm/s)',
                 'Fast': 'Fast (285cm/s)'
             };
+            
+            const speedStrings = {
+                'Normal': 'Normal (235cm/s)',
+                'Fast': 'Fast (285cm/s)'
+            };
 
             list.forEach(g => {
                 const isSelected = selectedGhost === g.name;
@@ -573,6 +614,7 @@
                 let descHTML = g.desc.map(d => `<span class="behavior-point">${d}</span>`).join('');
                 
                 const speedC = g.speed === 'Fast' ? '#ff4444' : g.speed === 'Variable' ? '#bb86fc' : '#32cd32';
+                const displayBaseSpeed = speedStrings[g.speed] || g.speed;
                 const displayLosSpeed = losspeedStrings[g.losspeed] || g.losspeed;
                 const losspeedC = g.losspeed === 'Slow' ? '#44aaff' : g.losspeed === 'Normal' ? '#32cd32' : g.losspeed === 'Moderate' ? '#ffd700' : '#ff4444';
                 const cdC = g.cd_val === 1 ? '#ff4444' : g.cd_val === 2 ? '#32cd32' : '#44aaff';
@@ -593,7 +635,7 @@
                     <div class="ghost-lore">${g.lore}</div>
                     <div class="ghost-behavior">${descHTML}</div>
                     <div class="stats-container">
-                        <div class="stat-item"><span>Base Speed</span> <span class="stat-val" style="color:${speedC}">${g.speed}</span></div>
+                        <div class="stat-item"><span>Base Speed</span> <span class="stat-val" style="color:${speedC}">${displayBaseSpeed}</span></div>
                         <div class="stat-item"><span>Hunt Cooldown</span> <span class="stat-val" style="color:${cdC}">${g.cooldown}</span></div>
                         <div class="stat-item"><span>Line of Sight Speed</span> <span class="stat-val" style="color:${losspeedC}">${displayLosSpeed}</span></div>
                         <div class="stat-item"><span>Line of Sight Range</span> <span class="stat-val" style="color:${losC}">${g.los}</span></div>
