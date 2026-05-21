@@ -292,7 +292,7 @@
             <div class="ghost-grid" id="ghostGrid"></div>
             
             <div class="reference-section-title">Reference Resources</div>
-            <div class="ghost-grid" id="referenceGrid">
+            <div class="ghost-grid" id="referenceGrid" style="align-items: flex-start;">
                 
                 <div class="ghost-card ref-card-uv">
                     <div class="ghost-header">
@@ -589,15 +589,15 @@
             }
 
             const losspeedStrings = {
-                'Slow': 'Slow (200cm/s)',
-                'Normal': 'Normal (235cm/s)',
-                'Moderate': 'Moderate (255cm/s)',
-                'Fast': 'Fast (285cm/s)'
+                'Slow': 'Slow (2.0m/s | 0.85x)',
+                'Normal': 'Normal (2.35m/s | 1.0x)',
+                'Moderate': 'Moderate (2.55m/s | 1.09x)',
+                'Fast': 'Fast (2.85m/s | 1.21x)'
             };
             
             const speedStrings = {
-                'Normal': 'Normal (235cm/s)',
-                'Fast': 'Fast (285cm/s)'
+                'Normal': 'Normal (2.35m/s | 1.0x)',
+                'Fast': 'Fast (2.85m/s | 1.21x)'
             };
 
             list.forEach(g => {
