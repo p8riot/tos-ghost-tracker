@@ -91,7 +91,7 @@
 
         .toggle-box.doors[data-state="1"]::after { content: "CLOSES"; opacity: 1; }
         .toggle-box.doors[data-state="2"]::after { content: "NEVER CLOSES"; opacity: 1; }
-        .toggle-box.flx[data-state="1"]::after { content: "INTERACTS"; opacity: 1; }
+        .toggle-box.flx[data-state="1"]::after { content: "DEACTIVATES"; opacity: 1; }
         .toggle-box.flx[data-state="2"]::after { content: "IGNORES"; opacity: 1; }
         .toggle-box.manifest[data-state="1"]::after { content: "FULL BODY"; opacity: 1; }
         .toggle-box.manifest[data-state="2"]::after { content: "SHADOW ONLY"; opacity: 1; }
@@ -117,7 +117,7 @@
         .toggle-box.losspeed[data-state="4"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
         .toggle-box.losspeed[data-state="4"]::after { content: "FAST"; opacity: 1; }
         .toggle-box.losspeed[data-state="5"] { background: rgba(187, 134, 252, 0.15); border-color: #bb86fc; color: #bb86fc; }
-        .toggle-box.losspeed[data-state="5"]::after { content: "CUSTOM"; opacity: 1; }
+        .toggle-box.losspeed[data-state="5"]::after { content: "VARIABLE"; opacity: 1; }
 
         .toggle-box.losrange[data-state="1"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; color: #ffd700; }
         .toggle-box.losrange[data-state="1"]::after { content: "LOW"; opacity: 1; }
@@ -419,7 +419,7 @@
             { name: "Poltergeist", ev: ["EMF", "Radiation", "Writing"], speed: "Normal", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Poltergeist is a chaotic and mischievous entity, notorious for its disruptive presence. Investigators report that this ghost thrives on manipulating the environment, throwing more objects than any other spirit.", desc: ["Can extinguish candles.", "Increases speed slightly.", "Throws multiple objects."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Revenant", ev: ["EMF", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Revenant is a relentless, high-threat entity known for its aggressive presence. Investigators report that being hunted by one feels like literal suffocation, making it harder to outrun.", desc: ["Can extinguish candles.", "Stamina drains faster when targeted (permanent once targeted)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Shura", ev: ["EMF", "Freezing", "Writing"], speed: "Fast", losspeed: "Fast", los: "High", hw: "Normal (3s)", cooldown: "Short (40s)", cd_val: 1, lore: "The Shura is a cursed spirit of pure rage, trapped between worlds by a fate even the underworld rejects. Fueled by violence, investigators warn of their aggression, speed, and keen eyes.", desc: ["Can extinguish candles.", "Harder to break LOS (High Range).", "Increases speed.", "Shorter cooldown."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Custom", los: "Normal", hw: "Normal (3s)", cooldown: "High (90s)", cd_val: 3, lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses. (See Reference Resources below)", "Distressed sounds near player during hunt.", "Ignores candles.", "Ignores FLX-POD.", "Increased hunt cooldown.", "Line of sight speed slows from 3.10m/s down to 2.35m/s when closing within 2 meters of its target."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Variable", los: "Normal", hw: "Normal (3s)", cooldown: "High (90s)", cd_val: 3, lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses. (See Reference Resources below)", "Distressed sounds near player during hunt.", "Ignores candles.", "Ignores FLX-POD.", "Increased hunt cooldown.", "Line of sight speed slows from 3.10m/s down to 2.35m/s when closing within 2 meters of its target."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Strigoi", ev: ["Freezing", "UV", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Strigoi is a restless, undead spirit drawn from old legends, believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.", desc: ["Actively raises heart rate (drains sanity) while in the same room.", "Ignores candles.", "Increases speed slightly.", "Shadow events only.", "Turns on radios (never off)."], tags: ["candles-ignore", "lights-on", "lights-off", "doors", "radio-on", "shadow-only", "spray-normal"] },
             { name: "Tantalus", ev: ["EMF", "Freezing", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.", desc: ["Can extinguish candles.", "Ignores FLX-POD.", "Increases speed slightly.", "Never closes / slams doors (except hunt)."], tags: ["extinguish", "flx-ignore", "no-doors", "lights-on", "lights-off", "radio-on", "radio-off", "spray-normal"] },
             { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s) / 90s (sprayed)", cd_val: 2, lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Water stops hunt for 90 seconds (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
@@ -547,7 +547,7 @@
                 if (states.losspeed === 2 && g.losspeed !== "Normal") match = false;
                 if (states.losspeed === 3 && g.losspeed !== "Medium") match = false;
                 if (states.losspeed === 4 && g.losspeed !== "Fast") match = false;
-                if (states.losspeed === 5 && g.losspeed !== "Custom") match = false;
+                if (states.losspeed === 5 && g.losspeed !== "Variable") match = false;
 
                 if (states.losrange === 1 && g.los !== "Low") match = false;
                 if (states.losrange === 2 && g.los !== "Normal") match = false;
@@ -619,7 +619,7 @@
                 'Normal': 'Normal (2.50m/s)',
                 'Medium': 'Medium (2.70m/s)',
                 'Fast': 'Fast (3.10m/s)',
-                'Custom': 'Custom (3.10m/s ➔ 2.35m/s)'
+                'Variable': 'Variable (3.10m/s ➔ 2.35m/s)'
             };
             
             const speedStrings = {
@@ -643,7 +643,7 @@
                 const speedC = g.speed === 'Fast' ? '#ff4444' : g.speed === 'Variable' ? '#bb86fc' : '#32cd32';
                 const displayBaseSpeed = speedStrings[g.speed] || g.speed;
                 const displayLosSpeed = losspeedStrings[g.losspeed] || g.losspeed;
-                const losspeedC = g.losspeed === 'Slow' ? '#44aaff' : g.losspeed === 'Normal' ? '#32cd32' : g.losspeed === 'Medium' ? '#ffd700' : g.losspeed === 'Custom' ? '#bb86fc' : '#ff4444';
+                const losspeedC = g.losspeed === 'Slow' ? '#44aaff' : g.losspeed === 'Normal' ? '#32cd32' : g.losspeed === 'Medium' ? '#ffd700' : g.losspeed === 'Variable' ? '#bb86fc' : '#ff4444';
                 const cdC = g.cd_val === 1 ? '#ff4444' : g.cd_val === 2 ? '#32cd32' : '#44aaff';
                 const losC = g.los === 'Low' ? '#ffd700' : g.los === 'High' ? '#ff4444' : g.los === 'Very High' ? '#8b0000' : '#32cd32';
                 const hwC = g.hw.includes('More') ? '#4ecdc4' : '#32cd32';
