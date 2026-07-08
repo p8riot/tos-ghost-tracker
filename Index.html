@@ -50,8 +50,112 @@
         
         .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; }
         
-        /* REFERENCE SECTION */
-        .reference-section-title { font-size: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 10px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        /* REFERENCE OVERHAUL STYLES */
+        .reference-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+        }
+        .reference-header .reference-section-title {
+            font-size: 1rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin: 0; border: none; padding: 0;
+        }
+        .ref-toggle-container {
+            display: flex;
+            gap: 5px;
+            background: #1e1e1e;
+            padding: 3px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        .ref-mode-btn {
+            background: transparent;
+            border: none;
+            color: #888;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: 0.2s;
+        }
+        .ref-mode-btn.active {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Tabs Mode Configuration */
+        .reference-container.tabs-mode {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 40px;
+        }
+        .reference-container.tabs-mode .tabs-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .reference-container.tabs-mode .tabs-nav {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+        .tab-btn {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            color: #aaa;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            white-space: nowrap;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+        .tab-btn:hover {
+            background: #2c2c2c;
+            color: #fff;
+        }
+        .tab-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(187, 134, 252, 0.05);
+        }
+        .reference-container.tabs-mode .tabs-content .ghost-card {
+            display: none;
+            cursor: default;
+        }
+        .reference-container.tabs-mode .tabs-content .ghost-card.active-tab-panel {
+            display: flex;
+        }
+
+        /* Expand All Mode Configuration */
+        .reference-container.all-mode {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            padding-bottom: 40px;
+            align-items: flex-start;
+        }
+        .reference-container.all-mode .tabs-wrapper,
+        .reference-container.all-mode .tabs-content {
+            display: contents;
+        }
+        .reference-container.all-mode .tabs-nav {
+            display: none;
+        }
+        .reference-container.all-mode .tabs-content .ghost-card {
+            display: flex !important;
+        }
 
         .toggle-box {
             width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 6px; background: #2c2c2c; border: 1px solid var(--border);
@@ -236,6 +340,7 @@
             .sidebar-section { margin-bottom: 20px; }
             .toggle-box { padding: 15px; font-size: 1rem; }
             .instruction-bar { flex-direction: column; padding: 10px; gap: 10px; }
+            .reference-header { flex-direction: column; gap: 10px; align-items: flex-start; }
         }
         
         .footer-link {
@@ -300,107 +405,109 @@
             
             <div class="ghost-grid" id="ghostGrid"></div>
             
-            <div class="reference-section-title">Reference Resources</div>
-            <div class="ghost-grid" id="referenceGrid" style="align-items: flex-start;">
+            <!-- OVERHAULED REFERENCE SECTION CONTAINER -->
+            <div class="reference-header">
+                <div class="reference-section-title">Reference Resources</div>
+                <div class="ref-toggle-container">
+                    <button id="ref-btn-tabs" class="ref-mode-btn active" onclick="setRefMode('tabs')">Tabs View</button>
+                    <button id="ref-btn-all" class="ref-mode-btn" onclick="setRefMode('all')">Expand All</button>
+                </div>
+            </div>
+
+            <div class="reference-container tabs-mode" id="referenceContainer">
                 
-                <div class="ghost-card ref-card-uv">
-                    <div class="ghost-header">
-                        <div class="ghost-name" style="color: #bc13fe;">Notes</div>
+                <!-- DYNAMIC TAB WRAPPER -->
+                <div class="tabs-wrapper">
+                    <div class="tabs-nav">
+                        <button class="tab-btn active" onclick="switchTab(0)">Notes</button>
+                        <button class="tab-btn" onclick="switchTab(1)">Spirit Box Phrases</button>
+                        <button class="tab-btn" onclick="switchTab(2)">Skia Unique Audio</button>
+                        <button class="tab-btn" onclick="switchTab(3)">Heart Rate Status</button>
+                        <button class="tab-btn" onclick="switchTab(4)">Iblis Shapeshifting</button>
                     </div>
-                    <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
-                        <span class="behavior-point">Hearing heartbeat during hunt = Ghost sees you. RUN!</span>
-                        <span class="behavior-point">Cellphone, including phone flashlight, can safely be used during hunt. Turn off or drop all other electronics you're carrying.</span>
-                        <span class="behavior-point">Ghosts will have a favorite room but they can leave evidence anywhere inside the location. Infrasound Receiver has to be in favorite room to capture audio.</span>
-                        <span class="behavior-point">Sanctified Cross can only be flipped in favorite room.</span>
-                        <span class="behavior-point">Forced hunts from Holy Water (Demon, Tariaksuq, Wisp) execute at the specified time if any player is inside the location. Forced hunts pause the regular hunt cooldown. If no players are inside, the forced hunt is skipped and normal cooldown resumes.</span>
-                        <span class="behavior-point">The hunt threshold for all ghosts (except Demon) is 104 BPM. This threshold is the average BPM of all players inside the location. Players outside the location with a low heart rate do not help prevent a hunt.</span>
-                    </div>
-                </div>
+                    
+                    <div class="tabs-content">
+                        <!-- NOTES CARD INTEGRATED INSIDE THE TAB CLUSTER -->
+                        <div class="ghost-card ref-card-uv active-tab-panel">
+                            <div class="ghost-header">
+                                <div class="ghost-name" style="color: #bc13fe;">Notes</div>
+                            </div>
+                            <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                                <span class="behavior-point">Hearing heartbeat during hunt = Ghost sees you. RUN!</span>
+                                <span class="behavior-point">Full stamina run will give you 11 steps. Don't consume all stamina or it takes longer to regenerate. Take 10 steps, stop for 3 or 4 seconds (depending on how you count), sprint again. Revenant gives permanent debuff to stamina once targeted.</span>
+                                <span class="behavior-point">Cellphone, including phone flashlight, can safely be used during hunt. Turn off or drop all other electronics you're carrying.</span>
+                                <span class="behavior-point">Ghosts will have a favorite room but they can leave evidence anywhere inside the location. Infrasound Receiver has to be in favorite room to capture audio.</span>
+                                <span class="behavior-point">Sanctified Cross can only be flipped in favorite room.</span>
+                                <span class="behavior-point">Forced hunts from Holy Water (Demon, Tariaksuq, Wisp) execute at the specified time if any players are inside the location. Forced hunts pause the regular hunt cooldown. If no players are inside when timer expires, the forced hunt happens when a player enters the location.</span>
+                                <span class="behavior-point">The hunt threshold for all ghosts (except Demon) is 100 BPM. This threshold is the average BPM of all players inside the location. Players outside the location with a low heart rate do not help prevent a hunt.</span>
+                                <span class="behavior-point">TVs and alarm clocks do not count as Radio interaction. Old Tape Recorder and Gramophone do count as Radio interaction. Lights exploding count as lights off.</span>
+                            </div>
+                        </div>
 
-                <div class="ghost-card ref-card-freeze">
-                    <div class="ghost-header">
-                        <div class="ghost-name" style="color: #44aaff;">Spirit Box Phrases</div>
-                    </div>
-                    <div class="ghost-behavior" style="border-top: none; padding-top: 8px; display: flex; flex-wrap: wrap; justify-content: center; align-content: space-evenly; gap: 4px; flex: 1;">
-                        <span class="phrase-tag">HELLO</span>
-                        <span class="phrase-tag">BE SEEN</span>
-                        <span class="phrase-tag">HEAR US</span>
-                        <span class="phrase-tag">MANIFEST</span>
-                        <span class="phrase-tag">TALK NOW</span>
-                        <span class="phrase-tag">KNOCK ONCE</span>
-                        <span class="phrase-tag">MAKE NOISE</span>
-                        <span class="phrase-tag">TOUCH THIS</span>
-                        <span class="phrase-tag">WE SEE YOU</span>
-                        <span class="phrase-tag">ARE YOU OLD</span>
-                        <span class="phrase-tag">SPEAK TO US</span>
-                        <span class="phrase-tag">WHO'S THERE</span>
-                        <span class="phrase-tag">ARE YOU HERE</span>
-                        <span class="phrase-tag">CAN YOU TALK</span>
-                        <span class="phrase-tag">DO SOMETHING</span>
-                        <span class="phrase-tag">MAKE A SOUND</span>
-                        <span class="phrase-tag">ARE YOU ANGRY</span>
-                        <span class="phrase-tag">ARE YOU CLOSE</span>
-                        <span class="phrase-tag">ARE YOU YOUNG</span>
-                        <span class="phrase-tag">SHOW STRENGTH</span>
-                        <span class="phrase-tag">WHERE ARE YOU</span>
-                        <span class="phrase-tag">SHALL WE LEAVE</span>
-                        <span class="phrase-tag">GIVE US A SIGN</span>
-                        <span class="phrase-tag">HOW DID YOU DIE</span>
-                        <span class="phrase-tag">HOW OLD ARE YOU</span>
-                        <span class="phrase-tag">REVEAL YOURSELF</span>
-                        <span class="phrase-tag">SHOULD WE LEAVE</span>
-                        <span class="phrase-tag">ARE YOU FRIENDLY</span>
-                        <span class="phrase-tag">WHAT DO YOU WANT</span>
-                        <span class="phrase-tag">WHY ARE YOU HERE</span>
-                        <span class="phrase-tag">IS THIS YOUR HOME</span>
-                        <span class="phrase-tag">DO YOU WANT US HERE</span>
-                        <span class="phrase-tag">IS THERE ANYONE HERE</span>
-                        <span class="phrase-tag">IS THERE A GHOST HERE</span>
-                        <span class="phrase-tag">WHAT IS YOUR LOCATION</span>
-                        <span class="phrase-tag">DO YOU WANT TO HURT US</span>
-                    </div>
-                </div>
+                        <div class="ghost-card ref-card-freeze">
+                            <div class="ghost-header">
+                                <div class="ghost-name" style="color: #44aaff;">Spirit Box Phrases</div>
+                            </div>
+                            <div class="ghost-behavior" style="border-top: none; padding-top: 8px; display: flex; flex-wrap: wrap; justify-content: center; align-content: space-evenly; gap: 4px; flex: 1;">
+                                <span class="phrase-tag">HELLO</span> <span class="phrase-tag">BE SEEN</span> <span class="phrase-tag">HEAR US</span> <span class="phrase-tag">MANIFEST</span>
+                                <span class="phrase-tag">TALK NOW</span> <span class="phrase-tag">KNOCK ONCE</span> <span class="phrase-tag">MAKE NOISE</span> <span class="phrase-tag">TOUCH THIS</span>
+                                <span class="phrase-tag">WE SEE YOU</span> <span class="phrase-tag">ARE YOU OLD</span> <span class="phrase-tag">SPEAK TO US</span> <span class="phrase-tag">WHO'S THERE</span>
+                                <span class="phrase-tag">ARE YOU HERE</span> <span class="phrase-tag">CAN YOU TALK</span> <span class="phrase-tag">DO SOMETHING</span> <span class="phrase-tag">MAKE A SOUND</span>
+                                <span class="phrase-tag">ARE YOU ANGRY</span> <span class="phrase-tag">ARE YOU CLOSE</span> <span class="phrase-tag">ARE YOU YOUNG</span> <span class="phrase-tag">SHOW STRENGTH</span>
+                                <span class="phrase-tag">WHERE ARE YOU</span> <span class="phrase-tag">SHALL WE LEAVE</span> <span class="phrase-tag">GIVE US A SIGN</span> <span class="phrase-tag">HOW DID YOU DIE</span>
+                                <span class="phrase-tag">HOW OLD ARE YOU</span> <span class="phrase-tag">REVEAL YOURSELF</span> <span class="phrase-tag">SHOULD WE LEAVE</span> <span class="phrase-tag">ARE YOU FRIENDLY</span>
+                                <span class="phrase-tag">WHAT DO YOU WANT</span> <span class="phrase-tag">WHY ARE YOU HERE</span> <span class="phrase-tag">IS THIS YOUR HOME</span>
+                                <span class="phrase-tag">DO YOU WANT US HERE</span> <span class="phrase-tag">IS THERE ANYONE HERE</span>
+                                <span class="phrase-tag">IS THERE A GHOST HERE</span> <span class="phrase-tag">WHAT IS YOUR LOCATION</span>
+                                <span class="phrase-tag">DO YOU WANT TO HURT US</span>
+                            </div>
+                        </div>
 
-                <div class="ghost-card ref-card-audio">
-                    <div class="ghost-header">
-                        <div class="ghost-name" style="color: #ffa500;">Skia Unique Audio Responses</div>
-                    </div>
-                    <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
-                        <span class="behavior-point">“That wasn't very friendly”</span>
-                        <span class="behavior-point">“I don't wanna do any of this“</span>
-                        <span class="behavior-point">“Don’t be afraid, it will be over soon”</span>
-                        <span class="behavior-point">“I don’t want to hurt you”</span>
-                        <span class="behavior-point">“Hm. I’m very sorry, dear stranger”</span>
-                        <span class="behavior-point">"You have to be quiet"</span>
-                        
-                        <span style="font-style: italic; color: #888;">(Provided by the Wiki. Not 100% Confirmed)</span>
-                    </div>
-                </div>
+                        <div class="ghost-card ref-card-audio">
+                            <div class="ghost-header">
+                                <div class="ghost-name" style="color: #ffa500;">Skia Unique Audio Responses</div>
+                            </div>
+                            <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                                <span class="behavior-point">“That wasn't very friendly.”</span>
+                                <span class="behavior-point">“I don't want to hurt you.“</span>
+                                <span class="behavior-point">“Don’t be sad, it will be over soon.”</span>
+                                <span class="behavior-point">“Be nice. I don’t want to hurt you.”</span>
+                                <span class="behavior-point">“Hm. I’m very sorry, dear stranger.”</span>
+                                <span class="behavior-point">"Shh. You have to be quiet."</span>
+                                <span class="behavior-point">"Skia cry"</span>
+                                <span style="font-style: italic; color: #888; display: block; margin-top: 5px; margin-bottom: 5px;">Henry's Special Responses</span>
+                                <span class="behavior-point">"I don't want to hurt you."</span>
+                                <span class="behavior-point">"Please, you should leave now."</span>
+                                <span class="behavior-point">"I'm sorry, she made me like this."</span>
+                            </div>
+                        </div>
 
-                <div class="ghost-card ref-card-hr">
-                    <div class="ghost-header">
-                        <div class="ghost-name" style="color: #00ffff;">Heart Rate Status Ranges</div>
-                    </div>
-                    <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
-                        <span class="behavior-point"><span class="hr-badge normal"></span><strong>Normal:</strong> Anxiety 0% - 17% | Heart Rate 60 - 77 BPM | Hunt Chance 0%</span>
-                        <span class="behavior-point"><span class="hr-badge anxious"></span><strong>Anxious:</strong> Anxiety 17% - 40% | Heart Rate 77 - 100 BPM | Demon can hunt | Hunt Chance 33%</span>
-                        <span class="behavior-point"><span class="hr-badge panicked"></span><strong>Panicked:</strong> Anxiety 40% - 70% | Heart Rate 100 - 130 BPM | All ghosts can hunt | Hunt Chance 33% - 50%</span>
-                        <span class="behavior-point"><span class="hr-badge distressed"></span><strong>Distressed:</strong> Anxiety 70% - 100% | Heart Rate 130 - 160 BPM | All ghosts can hunt | Hunt Chance 50% - 66%</span>
-                    </div>
-                </div>
+                        <div class="ghost-card ref-card-hr">
+                            <div class="ghost-header">
+                                <div class="ghost-name" style="color: #00ffff;">Heart Rate Status Ranges</div>
+                            </div>
+                            <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                                <span class="behavior-point"><span class="hr-badge normal"></span><strong>Normal:</strong> Anxiety 0% - 17% | Heart Rate 60 - 77 BPM | Hunt Chance 0%</span>
+                                <span class="behavior-point"><span class="hr-badge anxious"></span><strong>Anxious:</strong> Anxiety 17% - 40% | Heart Rate 77 - 100 BPM | Demon can hunt | Hunt Chance 33%</span>
+                                <span class="behavior-point"><span class="hr-badge panicked"></span><strong>Panicked:</strong> Anxiety 40% - 70% | Heart Rate 100 - 130 BPM | All ghosts can hunt | Hunt Chance 33% - 50%</span>
+                                <span class="behavior-point"><span class="hr-badge distressed"></span><strong>Distressed:</strong> Anxiety 70% - 100% | Heart Rate 130 - 160 BPM | All ghosts can hunt | Hunt Chance 50% - 66%</span>
+                            </div>
+                        </div>
 
-                <div class="ghost-card ref-card-emf">
-                    <div class="ghost-header">
-                        <div class="ghost-name" style="color: #ff4444;">Iblis Shapeshifting Information</div>
-                    </div>
-                    <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
-                        <span class="behavior-point"><strong>St. Joseph’s Orphanage (Henry)</strong> <strong>Normal model:</strong> Dirty face, white eyes and red eye bags, dirty plaid baby blue shirt, dark gray Scottish overalls, dark blue knee socks and brown leather shoes. <strong>Shapeshift cosmetics:</strong> Clean face, blue eyes, clean plaid baby blue shirt, dark gray Scottish overalls, dark blue knee socks and brown leather shoes.</span>
-                        <span class="behavior-point"><strong>Abaddon Hallows (Abigail)</strong> Only ghost model that has only 1 change. <strong>Normal model:</strong> Black habit and white collar. <strong>Shapeshift cosmetics:</strong> Red habit and black collar.</span>
-                        <span class="behavior-point"><strong>Summerhill Psychiatric Institution (Stevie)</strong> <strong>Normal model:</strong> White straight jacket dress, with brown leather belts. <strong>Shapeshift cosmetics:</strong> Black straight jacket dress, with red leather belts // Red straight jacket dress, with black leather belts.</span>
-                        <span class="behavior-point"><strong>Stone Manor Plantation (Victoria)</strong> <strong>Normal model:</strong> Dark purple flower crown, black dress, veiny décolleté and black mesh fingerless gloves. <strong>Shapeshift cosmetics:</strong> Red flower crown, red hair tips, bloody mouth, red ruffles on a black dress, translucent mesh fingerless gloves and red shoes // White flower crown, bloody mouth, white dress, white mesh fingerless gloves and white shoes.</span>
-                        <span class="behavior-point"><strong>317 Aspen Heights (Jennifer)</strong> <strong>Normal model:</strong> Black hair, black jacket, white crop top, cropped 3/4 white gym pants and black sneakers. Gray face, eyes and lips. <strong>Shapeshift cosmetics:</strong> Red hair, red jacket, red top, cropped 3/4 pink gym pants and red shoelaces // Red hair, blue jacket, blue top, cropped 3/4 gray gym pants and blue shoelaces</span>
-                        <span class="behavior-point"><strong>1205 Cedar Street (Jebediah)</strong> <strong>Normal model:</strong> White t-shirt and dark blue pants and bloody mouth and cheeks. <strong>Shapeshift cosmetics:</strong> White tank top with dark pants, bloody elbows and left mouth side showing teeth // Striped gray shirt and dark pants, bloody right eye and chest area.</span>
-                        <span class="behavior-point"><strong>12 Ravenwood Lane (Gary)</strong> <strong>Normal model:</strong> White polka dot jester hat and pants, with white face makeup, bloody spots on face, arms and upper body. <strong>Shapeshift cosmetics:</strong> Green jester hat and green plaid pants, with different makeup // Beige polka dot jester hat and pants, with no makeup.</span>
+                        <div class="ghost-card ref-card-emf">
+                            <div class="ghost-header">
+                                <div class="ghost-name" style="color: #ff4444;">Iblis Shapeshifting Information</div>
+                            </div>
+                            <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                                <span class="behavior-point"><strong>St. Joseph’s Orphanage (Henry)</strong> <strong>Normal model:</strong> Dirty face, white eyes and red eye bags, dirty plaid baby blue shirt, dark gray Scottish overalls, dark blue knee socks and brown leather shoes. <strong>Shapeshift cosmetics:</strong> Clean face, blue eyes, clean plaid baby blue shirt, dark gray Scottish overalls, dark blue knee socks and brown leather shoes.</span>
+                                <span class="behavior-point"><strong>Abaddon Hallows (Abigail)</strong> Only ghost model that has only 1 change. <strong>Normal model:</strong> Black habit and white collar. <strong>Shapeshift cosmetics:</strong> Red habit and black collar.</span>
+                                <span class="behavior-point"><strong>Summerhill Psychiatric Institution (Stevie)</strong> <strong>Normal model:</strong> White straight jacket dress, with brown leather belts. <strong>Shapeshift cosmetics:</strong> Black straight jacket dress, with red leather belts // Red straight jacket dress, with black leather belts.</span>
+                                <span class="behavior-point"><strong>Stone Manor Plantation (Victoria)</strong> <strong>Normal model:</strong> Dark purple flower crown, black dress, veiny décolleté and black mesh fingerless gloves. <strong>Shapeshift cosmetics:</strong> Red flower crown, red hair tips, bloody mouth, red ruffles on a black dress, translucent mesh fingerless gloves and red shoes // White flower crown, bloody mouth, white dress, white mesh fingerless gloves and white shoes.</span>
+                                <span class="behavior-point"><strong>317 Aspen Heights (Jennifer)</strong> <strong>Normal model:</strong> Black hair, black jacket, white crop top, cropped 3/4 white gym pants and black sneakers. Gray face, eyes and lips. <strong>Shapeshift cosmetics:</strong> Red hair, red jacket, red top, cropped 3/4 pink gym pants and red shoelaces // Red hair, blue jacket, blue top, cropped 3/4 gray gym pants and blue shoelaces</span>
+                                <span class="behavior-point"><strong>1205 Cedar Street (Jebediah)</strong> <strong>Normal model:</strong> White t-shirt and dark blue pants and bloody mouth and cheeks. <strong>Shapeshift cosmetics:</strong> White tank top with dark pants, bloody elbows and left mouth side showing teeth // Striped gray shirt and dark pants, bloody right eye and chest area.</span>
+                                <span class="behavior-point"><strong>12 Ravenwood Lane (Gary)</strong> <strong>Normal model:</strong> White polka dot jester hat and pants, with white face makeup, bloody spots on face, arms and upper body. <strong>Shapeshift cosmetics:</strong> Green jester hat and green plaid pants, with different makeup // Beige polka dot jester hat and pants, with no makeup.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -412,7 +519,7 @@
         const ghosts = [
             { name: "Banshee", ev: ["Audio", "EMF", "Radiation"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Banshee is a chilling presence tied to omens of death, amplifying fear through its signature piercing screams and erratic electrical interference. Investigators close with death claim to hear the Banshee's cries.", desc: ["Can extinguish candles.", "Causes electrical interferences.", "May scream on Spirit Box / Boom Box / Radios.", "Screams may be heard on electronics when heart rate >120bpm."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Bhoot", ev: ["Freezing", "Radiation", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Long (90s)", cd_val: 3, lore: "The Bhoot is a tormented soul, bound to the place of its suffering and fueled by a need for vengeance. Investigators report experiencing intense cold when the Bhoot is nearing.", desc: ["Can extinguish candles.", "Increased hunt cooldown.", "Room gets cold before hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Demon", ev: ["Radiation", "UV", "Writing"], speed: "Fast", losspeed: "Slow", los: "Low", hw: "More Effective (5s)", cooldown: "Short (40s) / 2m (sprayed)", cd_val: 1, lore: "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.", desc: ["Can extinguish candles.", "Holy Water stops hunt for 2 minutes (forced hunt after time lapses).", "Hunts at 90.2 BPM (40 second cooldown).", "Leaves hot temps on touched objects."], tags: ["extinguish", "lights-off", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
+            { name: "Demon", ev: ["Radiation", "UV", "Writing"], speed: "Fast", losspeed: "Slow", los: "Low", hw: "More Effective (5s)", cooldown: "Short (40s) / 2m (sprayed)", cd_val: 1, lore: "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.", desc: ["Can extinguish candles.", "Holy Water changes hunt cooldown to 2 minutes after being sprayed (forced hunt after time lapses).", "Hunts at 77 BPM (40 second cooldown).", "Leaves hot temps on touched objects."], tags: ["extinguish", "lights-off", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
             { name: "Doppelganger", ev: ["Audio", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Low", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Doppelganger is a deceptive spirit, often tricking its intended targets. Investigators report feeling alone moments before the ghost hunts. Where does it go?", desc: ["Can extinguish candles.", "Returns to favorite room before hunt.", "Easier to break LOS (Low Range)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Iblis", ev: ["Audio", "Freezing", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".", desc: ["Can extinguish candles.", "Increases speed slightly.", "Shapeshifts during hunt. (See Reference Resources below)"], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Phantom", ev: ["Audio", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Phantom is a sinister entity born from pure darkness, operating in silence and shadows. Investigators report frequent radio frequency interruptions, though they've never seen the phantom in full-form, only in the shadows.", desc: ["Ignores candles.", "Ignores FLX-POD.", "No manifest events (More shadow events).", "Turns off radios (never on)."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-off", "shadow-only", "spray-normal"] },
@@ -422,11 +529,11 @@
             { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Variable", los: "Normal", hw: "Normal (3s)", cooldown: "High (90s)", cd_val: 3, lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses. (See Reference Resources below)", "Distressed sounds near player during hunt.", "Ignores candles.", "Ignores FLX-POD.", "Increased hunt cooldown.", "Line of sight speed slows from 3.10m/s down to 2.35m/s when closing within 2 meters of its target."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Strigoi", ev: ["Freezing", "UV", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Strigoi is a restless, undead spirit drawn from old legends, believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.", desc: ["Actively raises heart rate (drains sanity) while in the same room.", "Ignores candles.", "Increases speed slightly.", "Shadow events only.", "Turns on radios (never off)."], tags: ["candles-ignore", "lights-on", "lights-off", "doors", "radio-on", "shadow-only", "spray-normal"] },
             { name: "Tantalus", ev: ["EMF", "Freezing", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.", desc: ["Can extinguish candles.", "Ignores FLX-POD.", "Increases speed slightly.", "Never closes / slams doors (except hunt)."], tags: ["extinguish", "flx-ignore", "no-doors", "lights-on", "lights-off", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s) / 90s (sprayed)", cd_val: 2, lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Water stops hunt for 90 seconds (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
+            { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s) / 90s (sprayed)", cd_val: 2, lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Water changes hunt cooldown to 90 seconds after being sprayed (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
             { name: "The Echo", ev: ["Freezing", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Echo is a passive, residual spirit. Investigators report an eerily silent atmosphere, with lights never being affected by this ghost.", desc: ["Can't use main breaker (only individual, except post-hunt).", "Ignores candles.", "Ignores FLX-POD.", "Ignores lights and radios."], tags: ["candles-ignore", "lights-ignore", "radio-ignore", "flx-ignore", "doors", "no-breaker", "spray-normal"] },
             { name: "The Forgotten", ev: ["EMF", "Radiation", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Forgotten has a nearly silent presence. Passive, cold, and elusive, as if it's barely there at all. Investigators report minimal activity, no defining behavior, and a feeling of safety, until the Forgotten strikes.", desc: ["Can extinguish candles.", "Hardest to ID (no evidence).", "Ignores FLX-POD.", "Increases speed slightly."], tags: ["extinguish", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
             { name: "Wewe Gombel", ev: ["EMF", "Freezing", "Radiation"], speed: "Normal", losspeed: "Fast", los: "Normal", hw: "More Effective (5s)", cooldown: "Short (40s)", cd_val: 1, lore: "The Wewe Gombel is a vengeful and malicious spirit, rooted in folklore as an unforgiving force that punishes those it deems deserving. Investigators report this ghost as incredibly fast, deeming Holy Water a necessity when having an encounter.", desc: ["Can extinguish candles.", "Increases speed drastically.", "Lights OFF only (Can't use main breaker, except post-hunt).", "Short cooldown."], tags: ["extinguish", "lights-off", "doors", "radio-on", "radio-off", "no-breaker", "spray-more"] },
-            { name: "Wisp", ev: ["Audio", "Freezing", "Radiation"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "More Effective (5s)", cooldown: "Normal (60s) / 2m (sprayed)", cd_val: 2, lore: "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.", desc: ["Holy Water stops hunt for 2 minutes (forced hunt after time lapses).", "Ignores candles.", "Increases speed slightly.", "Lights ON only (never off / frequent)."], tags: ["candles-ignore", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
+            { name: "Wisp", ev: ["Audio", "Freezing", "Radiation"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "More Effective (5s)", cooldown: "Normal (60s) / 2m (sprayed)", cd_val: 2, lore: "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.", desc: ["Holy Water changes hunt cooldown to 2 minutes after being sprayed (forced hunt after time lapses).", "Ignores candles.", "Increases speed slightly.", "Lights ON only (never off / frequent)."], tags: ["candles-ignore", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
             { name: "Wraith", ev: ["Audio", "Freezing", "UV"], speed: "Fast", losspeed: "Fast", los: "Very High", hw: "More Effective (5s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Wraith is a swift and vengeful entity, fueled by deep sorrow and rage. Investigators report them as incredibly fast entities, and report feeling targeted. You'll want Holy Water on hand for this ghost.", desc: ["Breaks LOS easily.", "Can extinguish candles.", "No feet (floating).", "Targets specific player."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-more"] }
         ];
 
@@ -449,7 +556,41 @@
             });
             loadData();
             filterGhosts();
+            switchTab(0);
         });
+
+        function setRefMode(mode) {
+            const container = document.getElementById('referenceContainer');
+            const btnTabs = document.getElementById('ref-btn-tabs');
+            const btnAll = document.getElementById('ref-btn-all');
+            
+            if(mode === 'tabs') {
+                container.classList.remove('all-mode');
+                container.classList.add('tabs-mode');
+                btnTabs.classList.add('active');
+                btnAll.classList.remove('active');
+            } else {
+                container.classList.remove('tabs-mode');
+                container.classList.add('all-mode');
+                btnTabs.classList.remove('active');
+                btnAll.classList.add('active');
+            }
+        }
+
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tabs-nav .tab-btn');
+            const panels = document.querySelectorAll('.tabs-content .ghost-card');
+            
+            tabs.forEach((tab, i) => {
+                if(i === index) {
+                    tab.classList.add('active');
+                    panels[i].classList.add('active-tab-panel');
+                } else {
+                    tab.classList.remove('active');
+                    panels[i].classList.remove('active-tab-panel');
+                }
+            });
+        }
 
         function toggleSelection(name) {
             if (selectedGhost === name) selectedGhost = null;
