@@ -285,6 +285,7 @@
         .ref-card-audio { cursor: default; border-color: #ffa500 !important; background: rgba(255, 165, 0, 0.05); }
         .ref-card-emf { cursor: default; border-color: #ff4444 !important; background: rgba(255, 68, 68, 0.05); }
         .ref-card-hr { cursor: default; border-color: #00ffff !important; background: rgba(0, 255, 255, 0.05); }
+        .ref-card-wheel { cursor: default; border-color: #ffd700 !important; background: rgba(255, 215, 0, 0.05); }
         
         .phrase-tag { background: #2c2c2c; border: 1px solid #444; color: #e0e0e0; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; font-family: 'Consolas', monospace; user-select: text; display: inline-block; }
 
@@ -424,6 +425,7 @@
                         <button class="tab-btn" onclick="switchTab(2)">Skia Unique Audio</button>
                         <button class="tab-btn" onclick="switchTab(3)">Heart Rate Status</button>
                         <button class="tab-btn" onclick="switchTab(4)">Iblis Shapeshifting</button>
+                        <button class="tab-btn" onclick="switchTab(5)">Map Picker</button>
                     </div>
                     
                     <div class="tabs-content">
@@ -508,6 +510,19 @@
                                 <span class="behavior-point"><strong>12 Ravenwood Lane (Gary)</strong> <strong>Normal model:</strong> White polka dot jester hat and pants, with white face makeup, bloody spots on face, arms and upper body. <strong>Shapeshift cosmetics:</strong> Green jester hat and green plaid pants, with different makeup // Beige polka dot jester hat and pants, with no makeup.</span>
                             </div>
                         </div>
+
+                        <!-- MAP PICKER WHEEL TAB -->
+                        <div class="ghost-card ref-card-wheel" style="align-items: center; text-align: center;">
+                            <div class="ghost-header" style="width: 100%;">
+                                <div class="ghost-name" style="color: #ffd700;">Map Picker</div>
+                            </div>
+                            <div style="position: relative; margin: 15px 0;">
+                                <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 18px solid #ffd700; z-index: 5;"></div>
+                                <canvas id="wheelCanvas" width="450" height="450" style="max-width: 100%; height: auto; border-radius: 50%; border: 2px solid var(--border); background: #1a1a1a;"></canvas>
+                            </div>
+                            <button class="timer-btn btn-start" onclick="spinWheel()" style="max-width: 200px; width: 100%;">Spin Wheel</button>
+                            <div id="wheelResult" style="margin-top: 10px; font-size: 1.1rem; font-weight: bold; color: var(--select-green); min-height: 24px;"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -544,6 +559,34 @@
         let seconds = 0;
         let isRunning = false;
 
+        /* MAP PICKER DATA */
+        const mapList = [
+            "St. Joseph's Orphanage",
+            "Abaddon Hallows West",
+            "Abaddon Hallows East",
+            "Abaddon Hallows East (P)",
+            "Summerhill Psychiatric",
+            "Stone Manor Plantation",
+            "317 Aspen Heights",
+            "1205 Cedar Street",
+            "12 Ravenwood Lane"
+        ];
+
+        const mapTextColors = [
+            "#ff4444", // Red
+            "#ffa500", // Orange
+            "#ffd700", // Yellow
+            "#32cd32", // Green
+            "#00ffff", // Cyan
+            "#44aaff", // Blue
+            "#bc13fe", // Purple
+            "#ff66cc", // Pink
+            "#4ecdc4"  // Teal
+        ];
+
+        let currentWheelAngle = 0;
+        let isSpinning = false;
+
         window.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('evidence-container');
             evidenceTypes.forEach(ev => {
@@ -557,6 +600,7 @@
             loadData();
             filterGhosts();
             switchTab(0);
+            drawWheel();
         });
 
         function setRefMode(mode) {
@@ -590,6 +634,88 @@
                     panels[i].classList.remove('active-tab-panel');
                 }
             });
+        }
+
+        /* WHEEL FUNCTIONS */
+        function drawWheel() {
+            const canvas = document.getElementById('wheelCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const numSlices = mapList.length;
+            if (numSlices === 0) return;
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = canvas.width / 2 - 5;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const sliceColors = ['#2c2c2c', '#1e1e1e', '#383838', '#222222'];
+
+            for (let i = 0; i < numSlices; i++) {
+                const startAngle = currentWheelAngle + (i * sliceAngle);
+                const endAngle = startAngle + sliceAngle;
+
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = sliceColors[i % sliceColors.length];
+                ctx.fill();
+                ctx.strokeStyle = '#444';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(startAngle + sliceAngle / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = mapTextColors[i % mapTextColors.length];
+                ctx.font = "bold 13px 'Segoe UI', sans-serif";
+                ctx.fillText(mapList[i], radius - 15, 4);
+                ctx.restore();
+            }
+        }
+
+        function spinWheel() {
+            if (isSpinning || mapList.length === 0) return;
+            isSpinning = true;
+            document.getElementById('wheelResult').innerText = "Selecting location...";
+
+            const totalRotation = (Math.random() * 12 + 18) * Math.PI; 
+            const duration = Math.random() * 2000 + 3000;
+            const startTimestamp = performance.now();
+
+            function animate(now) {
+                const elapsed = now - startTimestamp;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const easeOut = 1 - Math.pow(1 - progress, 4);
+                currentWheelAngle = (easeOut * totalRotation) % (2 * Math.PI);
+
+                drawWheel();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    isSpinning = false;
+                    calculateWheelWinner();
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function calculateWheelWinner() {
+            const numSlices = mapList.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+
+            let pointerAngle = (3 * Math.PI / 2 - currentWheelAngle) % (2 * Math.PI);
+            if (pointerAngle < 0) pointerAngle += 2 * Math.PI;
+
+            const winningIndex = Math.floor(pointerAngle / sliceAngle) % numSlices;
+            document.getElementById('wheelResult').innerText = `Destination: ${mapList[winningIndex]}`;
         }
 
         function toggleSelection(name) {
