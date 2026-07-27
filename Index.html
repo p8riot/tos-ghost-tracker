@@ -37,18 +37,12 @@
         .reset-small-btn:hover { background: #333; border-color: var(--danger-red); color: #ffffff; }
 
         .main-content { display: flex; flex: 1; overflow: hidden; }
-
-        /* SIDEBAR */
-        .sidebar { width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar { width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
         .sidebar-scroll { padding: 20px; overflow-y: auto; flex: 1; }
         .sidebar-section { margin-bottom: 25px; }
         .sidebar-section h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
-
-        /* SETUP TOGGLES */
-        .limit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-
-        /* CONTENT */
-        .content-area { flex: 1; padding: 20px; overflow-y: auto; background: #000000; display: flex; flex-direction: column; }
+.limit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.content-area { flex: 1; padding: 20px; overflow-y: auto; background: #000000; display: flex; flex-direction: column; }
         
         .instruction-bar { 
             background: #1e1e1e; border: 1px solid #333; padding: 8px 10px; margin-bottom: 20px; 
@@ -59,9 +53,7 @@
         .instruction-text { text-align: center; flex: 1; }
         
         .ghost-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; }
-        
-        /* REFERENCE OVERHAUL STYLES */
-        .reference-header {
+.reference-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -98,9 +90,7 @@
             background: var(--accent);
             color: #000;
         }
-
-        /* Tabs Mode Configuration */
-        .reference-container.tabs-mode { display: flex; flex-direction: column; gap: 15px; padding-bottom: 40px; }
+.reference-container.tabs-mode { display: flex; flex-direction: column; gap: 15px; padding-bottom: 40px; }
         .reference-container.tabs-mode .tabs-wrapper { width: 100%; display: flex; flex-direction: column; gap: 15px; }
         .reference-container.tabs-mode .tabs-nav { display: flex; gap: 5px; overflow-x: auto; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
         .tab-btn { background: #1e1e1e; border: 1px solid #333; color: #aaa; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border-radius: 4px; white-space: nowrap; transition: 0.2s; text-transform: uppercase; min-height: 44px; }
@@ -108,15 +98,11 @@
         .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(187, 134, 252, 0.05); }
         .reference-container.tabs-mode .tabs-content .ghost-card { display: none; cursor: default; }
         .reference-container.tabs-mode .tabs-content .ghost-card.active-tab-panel { display: flex; }
-
-        /* Expand All Mode Configuration */
-        .reference-container.all-mode { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; align-items: flex-start; }
+.reference-container.all-mode { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; align-items: flex-start; }
         .reference-container.all-mode .tabs-wrapper, .reference-container.all-mode .tabs-content { display: contents; }
         .reference-container.all-mode .tabs-nav { display: none; }
         .reference-container.all-mode .tabs-content .ghost-card { display: flex !important; }
-
-        /* UNIFIED TOGGLE BOX & BEHAVIOR STYLES */
-        .behavior-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.behavior-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
         .toggle-box {
             width: 100%; padding: 6px 8px; margin-bottom: 0; border-radius: 6px; background: #2c2c2c; border: 1px solid var(--border);
@@ -135,9 +121,7 @@
         }
 
         .limit-box { background: rgba(187, 134, 252, 0.1); border-color: var(--accent); color: var(--accent); }
-
-        /* DYNAMIC BEHAVIOR STATES (CENTER OVERLAY WITH COLORS) */
-        .toggle-box.breaker[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; }
+.toggle-box.breaker[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; }
         .toggle-box.breaker[data-state="1"]::after { content: "CAN USE"; color: #4ecdc4; }
         .toggle-box.breaker[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
         .toggle-box.breaker[data-state="2"]::after { content: "CANNOT USE"; color: #ff8888; }
@@ -207,9 +191,7 @@
         .toggle-box.losrange[data-state="3"]::after { content: "HIGH"; color: #ff8888; }
         .toggle-box.losrange[data-state="4"] { background: rgba(139, 0, 0, 0.15); border-color: #ff4444; }
         .toggle-box.losrange[data-state="4"]::after { content: "VERY HIGH"; color: #ff4444; }
-
-        /* TIMER STYLES */
-        .timer-container {
+.timer-container {
             background: #181818; border: 1px solid #333; border-radius: 6px; padding: 15px;
             display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
         }
@@ -229,9 +211,7 @@
         .btn-stop:hover { background: #333; }
         .btn-reset { background: #2c2c2c; color: var(--text-dim); }
         .btn-reset:hover { background: #333; color: white; }
-
-        /* EVIDENCE TOGGLES */
-        .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .ev-btn {
             padding: 6px 8px; background: #2c2c2c; border: 1px solid #333; color: #ffffff;
             border-radius: 6px; cursor: pointer; text-align: center; font-size: 0.75rem;
@@ -240,17 +220,13 @@
         }
         .ev-btn:hover { background: #333; }
         .ev-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
-        
-        /* Restored Evidence Colors for Confirmed Real (State 1) */
-        .ev-btn[data-ev="EMF"][data-state="1"] { background: rgba(255, 68, 68, 0.2) !important; border: 2px solid #ff4444 !important; color: #ff4444 !important; } 
+.ev-btn[data-ev="EMF"][data-state="1"] { background: rgba(255, 68, 68, 0.2) !important; border: 2px solid #ff4444 !important; color: #ff4444 !important; } 
         .ev-btn[data-ev="Audio"][data-state="1"] { background: rgba(255, 165, 0, 0.2) !important; border: 2px solid #ffa500 !important; color: #ffa500 !important; } 
         .ev-btn[data-ev="UV"][data-state="1"] { background: rgba(188, 19, 254, 0.2) !important; border: 2px solid #bc13fe !important; color: #bc13fe !important; } 
         .ev-btn[data-ev="Writing"][data-state="1"] { background: rgba(0, 255, 255, 0.2) !important; border: 2px solid #00ffff !important; color: #00ffff !important; } 
         .ev-btn[data-ev="Freezing"][data-state="1"] { background: rgba(68, 170, 255, 0.2) !important; border: 2px solid #44aaff !important; color: #44aaff !important; } 
         .ev-btn[data-ev="Radiation"][data-state="1"] { background: rgba(50, 205, 50, 0.2) !important; border: 2px solid #32cd32 !important; color: #32cd32 !important; } 
-
-        /* State 2 (Fake) and State 3 (Excluded) Styling */
-        .ev-btn[data-state="2"] { border: 2px dashed var(--warning-orange) !important; background: rgba(255, 165, 0, 0.15) !important; color: var(--warning-orange) !important; } 
+.ev-btn[data-state="2"] { border: 2px dashed var(--warning-orange) !important; background: rgba(255, 165, 0, 0.15) !important; color: var(--warning-orange) !important; } 
         .ev-btn[data-state="2"]::after { content: "FAKE"; font-size: 0.55rem; font-weight: bold; opacity: 0.9; position: absolute; bottom: 4px; }
         .ev-btn[data-state="3"] { background: rgba(40, 40, 40, 0.5) !important; border-color: #444 !important; color: #ffffff !important; text-decoration: line-through; text-decoration-color: var(--danger-red); text-decoration-thickness: 3px; opacity: 0.6; }
 
@@ -274,9 +250,7 @@
         .phrase-tag { background: #2c2c2c; border: 1px solid #444; color: #e0e0e0; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; font-family: 'Consolas', monospace; user-select: text; display: inline-block; }
 
         .forced-badge { font-size: 0.6rem; font-weight: bold; background: rgba(187, 134, 252, 0.2); color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 1px 4px; margin-left: 6px; text-transform: uppercase; }
-
-        /* OVERLAY REMINDER */
-        .select-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; z-index: 10; flex-direction: column; justify-content: center; align-items: center; text-align: center; animation: pulse 2s infinite; pointer-events: none; }
+.select-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; z-index: 10; flex-direction: column; justify-content: center; align-items: center; text-align: center; animation: pulse 2s infinite; pointer-events: none; }
         .ghost-card.selected .select-overlay { display: flex; }
         .overlay-text { color: var(--select-green); font-weight: 900; font-size: 1.1rem; text-transform: uppercase; border: 2px solid var(--select-green); padding: 10px; background: #252525; letter-spacing: 1px; }
         @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
@@ -559,6 +533,134 @@
         const mapTextColors = ["#ff4444", "#ffa500", "#ffd700", "#32cd32", "#00ffff", "#44aaff", "#bc13fe", "#ff66cc", "#4ecdc4"];
         let currentWheelAngle = 0, isSpinning = false;
 
+
+        const behaviorFilters = {
+            bspeed: {
+                property: 'speed',
+                states: { 1: ['Normal'], 2: ['Fast'] }
+            },
+            cooldown: {
+                property: 'cd_val',
+                states: { 1: [1], 2: [2], 3: [3] }
+            },
+            losspeed: {
+                property: 'losspeed',
+                states: {
+                    1: ['Slow'],
+                    2: ['Normal'],
+                    3: ['Medium'],
+                    4: ['Fast', 'Variable'],
+                    5: ['Variable']
+                }
+            },
+            losrange: {
+                property: 'los',
+                states: {
+                    1: ['Low'],
+                    2: ['Normal'],
+                    3: ['High'],
+                    4: ['Very High']
+                }
+            },
+            candle: {
+                states: {
+                    1: { allTags: ['extinguish'] },
+                    2: { allTags: ['candles-ignore'] }
+                }
+            },
+            lights: {
+                states: {
+                    1: { allTags: ['lights-off'] },
+                    2: { allTags: ['lights-on'] },
+                    3: { allTags: ['lights-on', 'lights-off'] },
+                    4: { allTags: ['lights-ignore'] }
+                }
+            },
+            radio: {
+                states: {
+                    1: { allTags: ['radio-off'] },
+                    2: { allTags: ['radio-on'] },
+                    3: { allTags: ['radio-on', 'radio-off'] },
+                    4: { allTags: ['radio-ignore'] }
+                }
+            },
+            holy: {
+                states: {
+                    1: { allTags: ['spray-normal'] },
+                    2: { allTags: ['spray-more'] }
+                }
+            },
+            doors: {
+                states: {
+                    1: { allTags: ['doors'] },
+                    2: { allTags: ['no-doors'] }
+                }
+            },
+            flx: {
+                states: {
+                    1: { noTags: ['flx-ignore'] },
+                    2: { allTags: ['flx-ignore'] }
+                }
+            },
+            breaker: {
+                states: {
+                    1: { noTags: ['no-breaker'] },
+                    2: { allTags: ['no-breaker'] }
+                }
+            },
+            manifest: {
+                states: {
+                    1: { noTags: ['shadow-only'] },
+                    2: { allTags: ['shadow-only'] }
+                }
+            }
+        };
+
+        function readBehaviorStates() {
+            const states = {};
+
+            document.querySelectorAll('.toggle-box').forEach(button => {
+                if (!button.classList.contains('limit-box')) {
+                    states[button.id.replace('btn-', '')] = Number(button.dataset.state);
+                }
+            });
+
+            return states;
+        }
+
+        function matchesBehaviorFilters(ghost, states) {
+            return Object.entries(behaviorFilters).every(([key, filter]) => {
+                const rule = filter.states[states[key]];
+                if (!rule) return true;
+
+                if (filter.property) {
+                    return rule.includes(ghost[filter.property]);
+                }
+
+                if (rule.allTags && !rule.allTags.every(tag => ghost.tags.includes(tag))) {
+                    return false;
+                }
+
+                if (rule.noTags && rule.noTags.some(tag => ghost.tags.includes(tag))) {
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        function matchesEvidenceFilters(ghost, realEvidence, excludedEvidence) {
+            const hasRealEvidence = [...realEvidence].every(evidence => ghost.ev.includes(evidence));
+            const hasExcludedEvidence = [...excludedEvidence].some(evidence => ghost.ev.includes(evidence));
+            return hasRealEvidence && !hasExcludedEvidence;
+        }
+
+        function matchesForcedEvidence(ghost, realEvidence) {
+            if (realLimit <= 0 || realLimit >= 3 || !ghost.forced) return true;
+            if (realEvidence.size < realLimit) return true;
+            return realEvidence.has(ghost.forced);
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('evidence-container');
             evidenceTypes.forEach(ev => {
@@ -623,8 +725,6 @@
 
             let currentState = evidenceStates[type] || 0;
             let nextState = (currentState + 1) % 4;
-
-            // Freezing temperatures can never be fake
             if (type === "Freezing" && nextState === 2) {
                 nextState = 3;
             }
@@ -810,98 +910,25 @@
         }
 
         function filterGhosts() {
-            const states = {};
-            document.querySelectorAll('.toggle-box').forEach(b => {
-                if (!b.classList.contains('limit-box')) {
-                    states[b.id.replace('btn-','')] = parseInt(b.dataset.state);
-                }
-            });
+            const states = readBehaviorStates();
+            const realEvidence = new Set(Object.keys(evidenceStates).filter(key => evidenceStates[key] === 1));
+            const fakeEvidence = new Set(Object.keys(evidenceStates).filter(key => evidenceStates[key] === 2));
+            const excludedEvidence = new Set(Object.keys(evidenceStates).filter(key => evidenceStates[key] === 3));
 
-            const realEvidence = new Set(Object.keys(evidenceStates).filter(k => evidenceStates[k] === 1));
-            const fakeEvidence = new Set(Object.keys(evidenceStates).filter(k => evidenceStates[k] === 2));
-            const excludedEvidence = new Set(Object.keys(evidenceStates).filter(k => evidenceStates[k] === 3));
-
-            // Dynamically treat Fake Evidence as Excluded on 3 Real Evidence runs
             if (realLimit === 3) {
-                fakeEvidence.forEach(e => excludedEvidence.add(e));
+                fakeEvidence.forEach(evidence => excludedEvidence.add(evidence));
             }
 
-            let matches = [], nonMatches = [];
+            const matches = [];
+            const nonMatches = [];
 
-            ghosts.forEach(g => {
-                let match = true;
+            ghosts.forEach(ghost => {
+                const isMatch =
+                    matchesEvidenceFilters(ghost, realEvidence, excludedEvidence) &&
+                    matchesForcedEvidence(ghost, realEvidence) &&
+                    matchesBehaviorFilters(ghost, states);
 
-                // 1. Standard Real Evidence Match
-                for (let e of realEvidence) {
-                    if (!g.ev.includes(e)) match = false;
-                }
-
-                // 2. Standard Excluded Evidence Match
-                for (let e of excludedEvidence) {
-                    if (g.ev.includes(e)) match = false;
-                }
-
-                // 3. Forced Evidence Logic
-                if (realLimit > 0 && realLimit < 3) {
-                    if (g.forced) {
-                        if (realEvidence.size >= realLimit) {
-                            if (!realEvidence.has(g.forced)) {
-                                match = false;
-                            }
-                        }
-                    }
-                }
-
-                // 4. Behavior Filters
-                if (states.bspeed === 1 && g.speed !== "Normal") match = false;
-                if (states.bspeed === 2 && g.speed !== "Fast") match = false;
-
-                if (states.cooldown === 1 && g.cd_val !== 1) match = false;
-                if (states.cooldown === 2 && g.cd_val !== 2) match = false;
-                if (states.cooldown === 3 && g.cd_val !== 3) match = false;
-
-                if (states.losspeed === 1 && g.losspeed !== "Slow") match = false;
-                if (states.losspeed === 2 && g.losspeed !== "Normal") match = false;
-                if (states.losspeed === 3 && g.losspeed !== "Medium") match = false;
-                
-                // LINKED SKIA LOGIC: Fast line of sight includes Variable ghosts (Skia starts fast at 3.10m/s)
-                if (states.losspeed === 4 && g.losspeed !== "Fast" && g.losspeed !== "Variable") match = false;
-                if (states.losspeed === 5 && g.losspeed !== "Variable") match = false;
-
-                if (states.losrange === 1 && g.los !== "Low") match = false;
-                if (states.losrange === 2 && g.los !== "Normal") match = false;
-                if (states.losrange === 3 && g.los !== "High") match = false;
-                if (states.losrange === 4 && g.los !== "Very High") match = false;
-                
-                if (states.candle === 1 && !g.tags.includes('extinguish')) match = false;
-                if (states.candle === 2 && !g.tags.includes('candles-ignore')) match = false;
-                
-                if (states.lights === 1 && !g.tags.includes('lights-off')) match = false;
-                if (states.lights === 2 && !g.tags.includes('lights-on')) match = false;
-                if (states.lights === 3 && (!g.tags.includes('lights-on') || !g.tags.includes('lights-off'))) match = false;
-                if (states.lights === 4 && !g.tags.includes('lights-ignore')) match = false;
-
-                if (states.radio === 1 && !g.tags.includes('radio-off')) match = false;
-                if (states.radio === 2 && !g.tags.includes('radio-on')) match = false;
-                if (states.radio === 3 && (!g.tags.includes('radio-on') || !g.tags.includes('radio-off'))) match = false;
-                if (states.radio === 4 && !g.tags.includes('radio-ignore')) match = false;
-
-                if (states.holy === 1 && !g.tags.includes('spray-normal')) match = false;
-                if (states.holy === 2 && !g.tags.includes('spray-more')) match = false;
-
-                if (states.doors === 1 && !g.tags.includes('doors')) match = false;
-                if (states.doors === 2 && !g.tags.includes('no-doors')) match = false;
-                
-                if (states.flx === 1 && g.tags.includes('flx-ignore')) match = false;
-                if (states.flx === 2 && !g.tags.includes('flx-ignore')) match = false;
-                
-                if (states.breaker === 1 && g.tags.includes('no-breaker')) match = false;
-                if (states.breaker === 2 && !g.tags.includes('no-breaker')) match = false;
-                
-                if (states.manifest === 1 && g.tags.includes('shadow-only')) match = false;
-                if (states.manifest === 2 && !g.tags.includes('shadow-only')) match = false;
-
-                match ? matches.push(g) : nonMatches.push(g);
+                (isMatch ? matches : nonMatches).push(ghost);
             });
 
             matches.sort((a, b) => {
@@ -912,7 +939,7 @@
                 return a.name.localeCompare(b.name);
             });
 
-            const validSet = new Set(matches.map(g => g.name));
+            const validSet = new Set(matches.map(ghost => ghost.name));
             renderGhosts([...matches, ...nonMatches], validSet, realEvidence, fakeEvidence);
         }
 
