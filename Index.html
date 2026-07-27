@@ -6,9 +6,16 @@
     <title>Identify Assistant - The Other Side</title>
     <style>
         :root {
-            --bg-dark: #000000; --bg-panel: #000000; --bg-card: #252525;
-            --text-main: #e0e0e0; --text-dim: #ffffff; --accent: #bb86fc;
-            --border: #333; --select-green: #00e676; --danger-red: #ff4444;
+            --bg-dark: #000000; 
+            --bg-panel: #000000; 
+            --bg-card: #252525;
+            --text-main: #e0e0e0; 
+            --text-dim: #ffffff; 
+            --accent: #bb86fc;
+            --border: #333333; 
+            --select-green: #00e676; 
+            --danger-red: #ff4444;
+            --warning-orange: #ffa500;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
         
@@ -19,23 +26,26 @@
             display: flex; flex-direction: row; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             flex-shrink: 0; z-index: 10; position: relative; min-height: 60px;
         }
-        h1 { font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin: 0; text-align: center; }
+        h1 { font-size: 1.3rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin: 0; text-align: center; }
 
         .reset-small-btn {
             position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
             background: #2c2c2c; border: 1px solid #444; color: #ff6b6b;
             font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.2s;
-            text-transform: uppercase; font-size: 0.75rem; padding: 5px 12px;
+            text-transform: uppercase; font-size: 0.75rem; padding: 6px 12px; min-height: 44px;
         }
-        .reset-small-btn:hover { background: #333; border-color: #ff4444; color: #ffffff; }
+        .reset-small-btn:hover { background: #333; border-color: var(--danger-red); color: #ffffff; }
 
         .main-content { display: flex; flex: 1; overflow: hidden; }
 
         /* SIDEBAR */
         .sidebar { width: 340px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
         .sidebar-scroll { padding: 20px; overflow-y: auto; flex: 1; }
-        .sidebar-section { margin-bottom: 30px; }
+        .sidebar-section { margin-bottom: 25px; }
         .sidebar-section h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+
+        /* SETUP TOGGLES */
+        .limit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
         /* CONTENT */
         .content-area { flex: 1; padding: 20px; overflow-y: auto; background: #000000; display: flex; flex-direction: column; }
@@ -43,7 +53,7 @@
         .instruction-bar { 
             background: #1e1e1e; border: 1px solid #333; padding: 8px 10px; margin-bottom: 20px; 
             color: #ffffff; font-size: 0.85rem; border-radius: 4px; font-weight: 600;
-            display: flex; align-items: center; justify-content: center; min-height: 40px;
+            display: flex; align-items: center; justify-content: center; min-height: 44px;
         }
         .instruction-bar span { color: var(--accent); }
         .instruction-text { text-align: center; flex: 1; }
@@ -82,6 +92,7 @@
             cursor: pointer;
             border-radius: 3px;
             transition: 0.2s;
+            min-height: 44px;
         }
         .ref-mode-btn.active {
             background: var(--accent);
@@ -89,152 +100,117 @@
         }
 
         /* Tabs Mode Configuration */
-        .reference-container.tabs-mode {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding-bottom: 40px;
-        }
-        .reference-container.tabs-mode .tabs-wrapper {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .reference-container.tabs-mode .tabs-nav {
-            display: flex;
-            gap: 5px;
-            overflow-x: auto;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-        .tab-btn {
-            background: #1e1e1e;
-            border: 1px solid #333;
-            color: #aaa;
-            padding: 8px 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 4px;
-            white-space: nowrap;
-            transition: 0.2s;
-            text-transform: uppercase;
-        }
-        .tab-btn:hover {
-            background: #2c2c2c;
-            color: #fff;
-        }
-        .tab-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(187, 134, 252, 0.05);
-        }
-        .reference-container.tabs-mode .tabs-content .ghost-card {
-            display: none;
-            cursor: default;
-        }
-        .reference-container.tabs-mode .tabs-content .ghost-card.active-tab-panel {
-            display: flex;
-        }
+        .reference-container.tabs-mode { display: flex; flex-direction: column; gap: 15px; padding-bottom: 40px; }
+        .reference-container.tabs-mode .tabs-wrapper { width: 100%; display: flex; flex-direction: column; gap: 15px; }
+        .reference-container.tabs-mode .tabs-nav { display: flex; gap: 5px; overflow-x: auto; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .tab-btn { background: #1e1e1e; border: 1px solid #333; color: #aaa; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border-radius: 4px; white-space: nowrap; transition: 0.2s; text-transform: uppercase; min-height: 44px; }
+        .tab-btn:hover { background: #2c2c2c; color: #fff; }
+        .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(187, 134, 252, 0.05); }
+        .reference-container.tabs-mode .tabs-content .ghost-card { display: none; cursor: default; }
+        .reference-container.tabs-mode .tabs-content .ghost-card.active-tab-panel { display: flex; }
 
         /* Expand All Mode Configuration */
-        .reference-container.all-mode {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-            padding-bottom: 40px;
-            align-items: flex-start;
-        }
-        .reference-container.all-mode .tabs-wrapper,
-        .reference-container.all-mode .tabs-content {
-            display: contents;
-        }
-        .reference-container.all-mode .tabs-nav {
-            display: none;
-        }
-        .reference-container.all-mode .tabs-content .ghost-card {
-            display: flex !important;
-        }
+        .reference-container.all-mode { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 40px; align-items: flex-start; }
+        .reference-container.all-mode .tabs-wrapper, .reference-container.all-mode .tabs-content { display: contents; }
+        .reference-container.all-mode .tabs-nav { display: none; }
+        .reference-container.all-mode .tabs-content .ghost-card { display: flex !important; }
+
+        /* UNIFIED TOGGLE BOX & BEHAVIOR STYLES */
+        .behavior-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
         .toggle-box {
-            width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 6px; background: #2c2c2c; border: 1px solid var(--border);
-            color: #ffffff; cursor: pointer; text-align: left; font-size: 0.9rem; font-weight: 600;
-            transition: all 0.2s; user-select: none; position: relative; min-height: 44px;
+            width: 100%; padding: 6px 8px; margin-bottom: 0; border-radius: 6px; background: #2c2c2c; border: 1px solid var(--border);
+            color: #ffffff; cursor: pointer; text-align: center; font-size: 0.75rem; font-weight: 600;
+            transition: all 0.2s; user-select: none; position: relative; min-height: 44px; display: flex; align-items: center; justify-content: center;
         }
         .toggle-box:hover { background: #333; border-color: #555; }
-        .toggle-box[data-state="0"]::after { content: ""; position: absolute; right: 12px; font-size: 0.7rem; opacity: 0.5; }
+        .toggle-box.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
-        /* DYNAMIC STATES */
-        .toggle-box.breaker[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; color: #4ecdc4; }
-        .toggle-box.breaker[data-state="1"]::after { content: "CAN USE"; opacity: 1; }
-        .toggle-box.breaker[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
-        .toggle-box.breaker[data-state="2"]::after { content: "CANNOT USE"; opacity: 1; }
+        .toggle-label { transition: opacity 0.2s; z-index: 1; }
+        .toggle-box[data-state]:not([data-state="0"]) .toggle-label { opacity: 0.2; }
 
-        .toggle-box.candle[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
-        .toggle-box.candle[data-state="1"]::after { content: "EXTINGUISH"; color: #ff4444; opacity: 1; }
-        .toggle-box.candle[data-state="2"] { background: rgba(163, 154, 230, 0.15); border-color: #a39ae6; color: #a39ae6; }
-        .toggle-box.candle[data-state="2"]::after { content: "IGNORES"; opacity: 1; }
+        .toggle-box::after {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: bold; z-index: 2; pointer-events: none; text-transform: uppercase;
+        }
 
-        .toggle-box.lights[data-state="1"], .toggle-box.radio[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
-        .toggle-box.lights[data-state="1"]::after, .toggle-box.radio[data-state="1"]::after { content: "TURNS OFF"; color: #ff4444; opacity: 1; }
-        .toggle-box.lights[data-state="2"], .toggle-box.radio[data-state="2"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; color: #ffd700; }
-        .toggle-box.lights[data-state="2"]::after, .toggle-box.radio[data-state="2"]::after { content: "TURNS ON"; opacity: 1; }
-        .toggle-box.lights[data-state="3"], .toggle-box.radio[data-state="3"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
-        .toggle-box.lights[data-state="3"]::after, .toggle-box.radio[data-state="3"]::after { content: "BOTH"; opacity: 1; }
-        .toggle-box.lights[data-state="4"], .toggle-box.radio[data-state="4"] { background: rgba(163, 154, 230, 0.15); border-color: #a39ae6; color: #a39ae6; }
-        .toggle-box.lights[data-state="4"]::after, .toggle-box.radio[data-state="4"]::after { content: "IGNORES"; opacity: 1; }
+        .limit-box { background: rgba(187, 134, 252, 0.1); border-color: var(--accent); color: var(--accent); }
 
-        .toggle-box.holy[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
-        .toggle-box.holy[data-state="1"]::after { content: "NORMAL (3s)"; opacity: 1; }
-        .toggle-box.holy[data-state="2"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; color: #4ecdc4; }
-        .toggle-box.holy[data-state="2"]::after { content: "MORE EFFECTIVE (5s)"; opacity: 1; }
+        /* DYNAMIC BEHAVIOR STATES (CENTER OVERLAY WITH COLORS) */
+        .toggle-box.breaker[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; }
+        .toggle-box.breaker[data-state="1"]::after { content: "CAN USE"; color: #4ecdc4; }
+        .toggle-box.breaker[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.breaker[data-state="2"]::after { content: "CANNOT USE"; color: #ff8888; }
 
-        .toggle-box.action[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; color: #4ecdc4; }
-        .toggle-box.action[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
+        .toggle-box.candle[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.candle[data-state="1"]::after { content: "EXTINGUISH"; color: #ff8888; }
+        .toggle-box.candle[data-state="2"] { background: rgba(163, 154, 230, 0.15); border-color: #a39ae6; }
+        .toggle-box.candle[data-state="2"]::after { content: "IGNORES"; color: #a39ae6; }
 
-        .toggle-box.doors[data-state="1"]::after { content: "CLOSES"; opacity: 1; }
-        .toggle-box.doors[data-state="2"]::after { content: "NEVER CLOSES"; opacity: 1; }
-        .toggle-box.flx[data-state="1"]::after { content: "DEACTIVATES"; opacity: 1; }
-        .toggle-box.flx[data-state="2"]::after { content: "LEAVES ON"; opacity: 1; }
-        .toggle-box.manifest[data-state="1"]::after { content: "FULL BODY"; opacity: 1; }
-        .toggle-box.manifest[data-state="2"]::after { content: "SHADOW ONLY"; opacity: 1; }
+        .toggle-box.doors[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; }
+        .toggle-box.doors[data-state="1"]::after { content: "CLOSES"; color: #4ecdc4; }
+        .toggle-box.doors[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.doors[data-state="2"]::after { content: "NEVER CLOSES"; color: #ff8888; }
 
-        .toggle-box.bspeed[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
-        .toggle-box.bspeed[data-state="1"]::after { content: "NORMAL"; opacity: 1; }
-        .toggle-box.bspeed[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
-        .toggle-box.bspeed[data-state="2"]::after { content: "FAST"; opacity: 1; }
+        .toggle-box.flx[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.flx[data-state="1"]::after { content: "DEACTIVATES"; color: #ff8888; }
+        .toggle-box.flx[data-state="2"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; }
+        .toggle-box.flx[data-state="2"]::after { content: "LEAVES ON"; color: #4ecdc4; }
 
-        .toggle-box.cooldown[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
-        .toggle-box.cooldown[data-state="1"]::after { content: "SHORT (40s)"; opacity: 1; }
-        .toggle-box.cooldown[data-state="2"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
-        .toggle-box.cooldown[data-state="2"]::after { content: "NORMAL (60s)"; opacity: 1; }
-        .toggle-box.cooldown[data-state="3"] { background: rgba(68, 170, 255, 0.15); border-color: #44aaff; color: #44aaff; }
-        .toggle-box.cooldown[data-state="3"]::after { content: "LONG (90s)"; opacity: 1; }
+        .toggle-box.manifest[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; }
+        .toggle-box.manifest[data-state="1"]::after { content: "FULL BODY"; color: #4ecdc4; }
+        .toggle-box.manifest[data-state="2"] { background: rgba(187, 134, 252, 0.15); border-color: #bb86fc; }
+        .toggle-box.manifest[data-state="2"]::after { content: "SHADOW ONLY"; color: #bb86fc; }
 
-        .toggle-box.losspeed[data-state="1"] { background: rgba(68, 170, 255, 0.15); border-color: #44aaff; color: #44aaff; }
-        .toggle-box.losspeed[data-state="1"]::after { content: "SLOW"; opacity: 1; }
-        .toggle-box.losspeed[data-state="2"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
-        .toggle-box.losspeed[data-state="2"]::after { content: "NORMAL"; opacity: 1; }
-        .toggle-box.losspeed[data-state="3"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; color: #ffd700; }
-        .toggle-box.losspeed[data-state="3"]::after { content: "MEDIUM"; opacity: 1; }
-        .toggle-box.losspeed[data-state="4"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
-        .toggle-box.losspeed[data-state="4"]::after { content: "FAST"; opacity: 1; }
-        .toggle-box.losspeed[data-state="5"] { background: rgba(187, 134, 252, 0.15); border-color: #bb86fc; color: #bb86fc; }
-        .toggle-box.losspeed[data-state="5"]::after { content: "VARIABLE"; opacity: 1; }
+        .toggle-box.lights[data-state="1"], .toggle-box.radio[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.lights[data-state="1"]::after, .toggle-box.radio[data-state="1"]::after { content: "TURNS OFF"; color: #ff8888; }
+        .toggle-box.lights[data-state="2"], .toggle-box.radio[data-state="2"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; }
+        .toggle-box.lights[data-state="2"]::after, .toggle-box.radio[data-state="2"]::after { content: "TURNS ON"; color: #ffd700; }
+        .toggle-box.lights[data-state="3"], .toggle-box.radio[data-state="3"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; }
+        .toggle-box.lights[data-state="3"]::after, .toggle-box.radio[data-state="3"]::after { content: "BOTH"; color: #32cd32; }
+        .toggle-box.lights[data-state="4"], .toggle-box.radio[data-state="4"] { background: rgba(163, 154, 230, 0.15); border-color: #a39ae6; }
+        .toggle-box.lights[data-state="4"]::after, .toggle-box.radio[data-state="4"]::after { content: "IGNORES"; color: #a39ae6; }
 
-        .toggle-box.losrange[data-state="1"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; color: #ffd700; }
-        .toggle-box.losrange[data-state="1"]::after { content: "LOW"; opacity: 1; }
-        .toggle-box.losrange[data-state="2"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; color: #32cd32; }
-        .toggle-box.losrange[data-state="2"]::after { content: "NORMAL"; opacity: 1; }
-        .toggle-box.losrange[data-state="3"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; color: #ff8888; }
-        .toggle-box.losrange[data-state="3"]::after { content: "HIGH"; opacity: 1; }
-        .toggle-box.losrange[data-state="4"] { background: rgba(139, 0, 0, 0.15); border-color: #ff4444; color: #ff4444; }
-        .toggle-box.losrange[data-state="4"]::after { content: "VERY HIGH"; opacity: 1; }
+        .toggle-box.holy[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; }
+        .toggle-box.holy[data-state="1"]::after { content: "NORMAL (3s)"; color: #32cd32; }
+        .toggle-box.holy[data-state="2"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; }
+        .toggle-box.holy[data-state="2"]::after { content: "MORE EFFECTIVE (5s)"; color: #4ecdc4; }
+
+        .toggle-box.bspeed[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; }
+        .toggle-box.bspeed[data-state="1"]::after { content: "NORMAL"; color: #32cd32; }
+        .toggle-box.bspeed[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.bspeed[data-state="2"]::after { content: "FAST"; color: #ff8888; }
+
+        .toggle-box.cooldown[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.cooldown[data-state="1"]::after { content: "SHORT (40s)"; color: #ff8888; }
+        .toggle-box.cooldown[data-state="2"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; }
+        .toggle-box.cooldown[data-state="2"]::after { content: "NORMAL (60s)"; color: #32cd32; }
+        .toggle-box.cooldown[data-state="3"] { background: rgba(68, 170, 255, 0.15); border-color: #44aaff; }
+        .toggle-box.cooldown[data-state="3"]::after { content: "LONG (90s)"; color: #44aaff; }
+
+        .toggle-box.losspeed[data-state="1"] { background: rgba(68, 170, 255, 0.15); border-color: #44aaff; }
+        .toggle-box.losspeed[data-state="1"]::after { content: "SLOW"; color: #44aaff; }
+        .toggle-box.losspeed[data-state="2"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; }
+        .toggle-box.losspeed[data-state="2"]::after { content: "NORMAL"; color: #32cd32; }
+        .toggle-box.losspeed[data-state="3"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; }
+        .toggle-box.losspeed[data-state="3"]::after { content: "MEDIUM"; color: #ffd700; }
+        .toggle-box.losspeed[data-state="4"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.losspeed[data-state="4"]::after { content: "FAST"; color: #ff8888; }
+        .toggle-box.losspeed[data-state="5"] { background: rgba(187, 134, 252, 0.15); border-color: #bb86fc; }
+        .toggle-box.losspeed[data-state="5"]::after { content: "VARIABLE"; color: #bb86fc; }
+
+        .toggle-box.losrange[data-state="1"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; }
+        .toggle-box.losrange[data-state="1"]::after { content: "LOW"; color: #ffd700; }
+        .toggle-box.losrange[data-state="2"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; }
+        .toggle-box.losrange[data-state="2"]::after { content: "NORMAL"; color: #32cd32; }
+        .toggle-box.losrange[data-state="3"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
+        .toggle-box.losrange[data-state="3"]::after { content: "HIGH"; color: #ff8888; }
+        .toggle-box.losrange[data-state="4"] { background: rgba(139, 0, 0, 0.15); border-color: #ff4444; }
+        .toggle-box.losrange[data-state="4"]::after { content: "VERY HIGH"; color: #ff4444; }
 
         /* TIMER STYLES */
         .timer-container {
-            background: #1e1e1e; border: 1px solid #333; border-radius: 6px; padding: 15px;
+            background: #181818; border: 1px solid #333; border-radius: 6px; padding: 15px;
             display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
         }
         .timer-display {
@@ -245,7 +221,7 @@
         .timer-controls { display: flex; gap: 8px; }
         .timer-btn {
             flex: 1; padding: 10px; border-radius: 4px; border: 1px solid #333; cursor: pointer;
-            font-weight: bold; text-transform: uppercase; font-size: 0.8rem; transition: 0.2s;
+            font-weight: bold; text-transform: uppercase; font-size: 0.8rem; transition: 0.2s; min-height: 44px;
         }
         .btn-start { background: #2c2c2c; color: var(--select-green); border-color: #2a5a3a; }
         .btn-start:hover { background: #333; }
@@ -254,21 +230,29 @@
         .btn-reset { background: #2c2c2c; color: var(--text-dim); }
         .btn-reset:hover { background: #333; color: white; }
 
-        /* EVIDENCE & GHOST CARDS */
-        .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        /* EVIDENCE TOGGLES */
+        .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .ev-btn {
-            padding: 12px; background: #2c2c2c; border: 1px solid #333; color: #ffffff;
-            border-radius: 4px; cursor: pointer; text-align: center; font-size: 0.85rem;
-            transition: 0.2s; user-select: none; font-weight: 600; min-height: 44px; display: flex; align-items: center; justify-content: center;
+            padding: 6px 8px; background: #2c2c2c; border: 1px solid #333; color: #ffffff;
+            border-radius: 6px; cursor: pointer; text-align: center; font-size: 0.75rem;
+            transition: 0.2s; user-select: none; font-weight: 600; min-height: 44px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;
         }
         .ev-btn:hover { background: #333; }
-        .ev-btn[data-ev="EMF"].active { background: rgba(255, 68, 68, 0.2); border-color: #ff4444; color: #ff4444; } 
-        .ev-btn[data-ev="Audio"].active { background: rgba(255, 165, 0, 0.2); border-color: #ffa500; color: #ffa500; } 
-        .ev-btn[data-ev="UV"].active { background: rgba(188, 19, 254, 0.2); border-color: #bc13fe; color: #bc13fe; } 
-        .ev-btn[data-ev="Writing"].active { background: rgba(0, 255, 255, 0.2); border-color: #00ffff; color: #00ffff; } 
-        .ev-btn[data-ev="Freezing"].active { background: rgba(68, 170, 255, 0.2); border-color: #44aaff; color: #44aaff; } 
-        .ev-btn[data-ev="Radiation"].active { background: rgba(50, 205, 50, 0.2); border-color: #32cd32; color: #32cd32; } 
-        .ev-btn.excluded { background: rgba(40, 40, 40, 0.5) !important; border-color: #444 !important; color: #ffffff !important; text-decoration: line-through; text-decoration-color: var(--danger-red); text-decoration-thickness: 3px; opacity: 0.6; }
+        .ev-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+        
+        /* Restored Evidence Colors for Confirmed Real (State 1) */
+        .ev-btn[data-ev="EMF"][data-state="1"] { background: rgba(255, 68, 68, 0.2) !important; border: 2px solid #ff4444 !important; color: #ff4444 !important; } 
+        .ev-btn[data-ev="Audio"][data-state="1"] { background: rgba(255, 165, 0, 0.2) !important; border: 2px solid #ffa500 !important; color: #ffa500 !important; } 
+        .ev-btn[data-ev="UV"][data-state="1"] { background: rgba(188, 19, 254, 0.2) !important; border: 2px solid #bc13fe !important; color: #bc13fe !important; } 
+        .ev-btn[data-ev="Writing"][data-state="1"] { background: rgba(0, 255, 255, 0.2) !important; border: 2px solid #00ffff !important; color: #00ffff !important; } 
+        .ev-btn[data-ev="Freezing"][data-state="1"] { background: rgba(68, 170, 255, 0.2) !important; border: 2px solid #44aaff !important; color: #44aaff !important; } 
+        .ev-btn[data-ev="Radiation"][data-state="1"] { background: rgba(50, 205, 50, 0.2) !important; border: 2px solid #32cd32 !important; color: #32cd32 !important; } 
+
+        /* State 2 (Fake) and State 3 (Excluded) Styling */
+        .ev-btn[data-state="2"] { border: 2px dashed var(--warning-orange) !important; background: rgba(255, 165, 0, 0.15) !important; color: var(--warning-orange) !important; } 
+        .ev-btn[data-state="2"]::after { content: "FAKE"; font-size: 0.55rem; font-weight: bold; opacity: 0.9; position: absolute; bottom: 4px; }
+        .ev-btn[data-state="3"] { background: rgba(40, 40, 40, 0.5) !important; border-color: #444 !important; color: #ffffff !important; text-decoration: line-through; text-decoration-color: var(--danger-red); text-decoration-thickness: 3px; opacity: 0.6; }
 
         .ghost-card {
             background: var(--bg-card); border-radius: 8px; padding: 15px; border: 2px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.3);
@@ -289,6 +273,8 @@
         
         .phrase-tag { background: #2c2c2c; border: 1px solid #444; color: #e0e0e0; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; font-family: 'Consolas', monospace; user-select: text; display: inline-block; }
 
+        .forced-badge { font-size: 0.6rem; font-weight: bold; background: rgba(187, 134, 252, 0.2); color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 1px 4px; margin-left: 6px; text-transform: uppercase; }
+
         /* OVERLAY REMINDER */
         .select-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; z-index: 10; flex-direction: column; justify-content: center; align-items: center; text-align: center; animation: pulse 2s infinite; pointer-events: none; }
         .ghost-card.selected .select-overlay { display: flex; }
@@ -296,7 +282,7 @@
         @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }
 
         .ghost-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-        .ghost-name { font-size: 1.2rem; font-weight: bold; color: white; }
+        .ghost-name { font-size: 1.2rem; font-weight: bold; color: white; display: flex; align-items: center; }
         .ghost-lore { font-size: 0.8rem; color: #888; font-style: italic; line-height: 1.3; margin-bottom: 5px; }
         .ghost-behavior { font-size: 0.85rem; color: #ffffff; line-height: 1.4; border-top: 1px dashed #333; padding-top: 8px; }
         .behavior-point { display: block; margin-bottom: 4px; position: relative; padding-left: 12px; }
@@ -311,6 +297,7 @@
         .evidence-tag.match[data-ev="Writing"] { border-color: #00ffff; color: white; background: rgba(0, 255, 255, 0.2); }
         .evidence-tag.match[data-ev="Freezing"] { border-color: #44aaff; color: white; background: rgba(68, 170, 255, 0.2); }
         .evidence-tag.match[data-ev="Radiation"] { border-color: #32cd32; color: white; background: rgba(50, 205, 50, 0.2); }
+        .evidence-tag.fake-tag { border-style: dashed !important; border-color: var(--warning-orange) !important; color: var(--warning-orange) !important; }
 
         .stats-container { margin-top: auto; padding-top: 10px; border-top: 1px dashed #444; }
         .stat-item { margin-bottom: 8px; font-size: 0.75rem; color: #ffffff; display: flex; justify-content: space-between; }
@@ -337,16 +324,14 @@
             .content-area { padding: 15px; overflow: visible; }
             .ghost-grid { grid-template-columns: 1fr; }
             .evidence-grid { gap: 5px; }
-            .ev-btn { padding: 15px 5px; font-size: 0.9rem; }
+            .ev-btn { padding: 8px 5px; font-size: 0.75rem; }
             .sidebar-section { margin-bottom: 20px; }
-            .toggle-box { padding: 15px; font-size: 1rem; }
+            .toggle-box { padding: 6px; font-size: 0.75rem; }
             .instruction-bar { flex-direction: column; padding: 10px; gap: 10px; }
             .reference-header { flex-direction: column; gap: 10px; align-items: flex-start; }
         }
         
-        .footer-link {
-            font-size: 0.7rem; color: #ffffff; text-align: center; margin-top: 20px; margin-bottom: 10px;
-        }
+        .footer-link { font-size: 0.7rem; color: #ffffff; text-align: center; margin-top: 20px; margin-bottom: 10px; }
         .footer-link a { color: var(--accent); text-decoration: none; font-weight: bold; }
         .footer-link a:hover { text-decoration: underline; }
     </style>
@@ -363,24 +348,34 @@
             <div class="sidebar-scroll">
 
                 <div class="sidebar-section">
-                    <h3>Evidence</h3>
+                    <h3>Evidence Setup</h3>
+                    <div class="limit-grid">
+                        <div class="toggle-box limit-box" id="btn-real-limit" onclick="cycleRealLimit()">Real Evidence - 3</div>
+                        <div class="toggle-box limit-box" id="btn-false-limit" onclick="cycleFalseLimit()">False Evidence - 0</div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Evidence Tracker</h3>
                     <div class="evidence-grid" id="evidence-container"></div>
                 </div>
 
                 <div class="sidebar-section">
                     <h3>Behaviors</h3>
-                    <div class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="3" onclick="cycleState(this)">Base Speed - </div>
-                    <div class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="3" onclick="cycleState(this)">Breaker Box - </div>
-                    <div class="toggle-box candle" id="btn-candle" data-state="0" data-max="3" onclick="cycleState(this)">Candle Interaction - </div>
-                    <div class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)">Door Interaction - </div>
-                    <div class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)">FLX-POD Interaction - </div>
-                    <div class="toggle-box holy" id="btn-holy" data-state="0" data-max="3" onclick="cycleState(this)">Holy Water - </div>
-                    <div class="toggle-box cooldown" id="btn-cooldown" data-state="0" data-max="4" onclick="cycleState(this)">Hunt Cooldown - </div>
-                    <div class="toggle-box lights" id="btn-lights" data-state="0" data-max="5" onclick="cycleState(this)">Light Switch - </div>
-                    <div class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="5" onclick="cycleState(this)">Line of Sight Range - </div>
-                    <div class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="6" onclick="cycleState(this)">Line of Sight Speed - </div>
-                    <div class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)">Manifestation - </div>
-                    <div class="toggle-box radio" id="btn-radio" data-state="0" data-max="5" onclick="cycleState(this)">Radio Interaction - </div>
+                    <div class="behavior-grid">
+                        <div class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">Base Speed</span></div>
+                        <div class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">Breaker Box</span></div>
+                        <div class="toggle-box candle" id="btn-candle" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">Candle</span></div>
+                        <div class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">Doors</span></div>
+                        <div class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">FLX-POD</span></div>
+                        <div class="toggle-box holy" id="btn-holy" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">Holy Water</span></div>
+                        <div class="toggle-box cooldown" id="btn-cooldown" data-state="0" data-max="4" onclick="cycleState(this)"><span class="toggle-label">Cooldown</span></div>
+                        <div class="toggle-box lights" id="btn-lights" data-state="0" data-max="5" onclick="cycleState(this)"><span class="toggle-label">Lights</span></div>
+                        <div class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="5" onclick="cycleState(this)"><span class="toggle-label">LOS Range</span></div>
+                        <div class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="6" onclick="cycleState(this)"><span class="toggle-label">LOS Speed</span></div>
+                        <div class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">Manifest</span></div>
+                        <div class="toggle-box radio" id="btn-radio" data-state="0" data-max="5" onclick="cycleState(this)"><span class="toggle-label">Radio</span></div>
+                    </div>
 
                     <div class="timer-container">
                         <div class="timer-display" id="timerDisplay">00:00</div>
@@ -400,13 +395,12 @@
         <div class="content-area">
             <div class="instruction-bar">
                 <div class="instruction-text">
-                    <span>Left Click / Tap:</span> Highlight Ghost | <span>Right Click / Hold:</span> Eliminate Ghost
+                    <span>Left Click/Tap:</span> Highlight Ghost <span>Right Click/Hold:</span> Eliminate Ghost
                 </div>
             </div>
             
             <div class="ghost-grid" id="ghostGrid"></div>
             
-            <!-- OVERHAULED REFERENCE SECTION CONTAINER -->
             <div class="reference-header">
                 <div class="reference-section-title">Reference Resources</div>
                 <div class="ref-toggle-container">
@@ -417,7 +411,6 @@
 
             <div class="reference-container tabs-mode" id="referenceContainer">
                 
-                <!-- DYNAMIC TAB WRAPPER -->
                 <div class="tabs-wrapper">
                     <div class="tabs-nav">
                         <button class="tab-btn active" onclick="switchTab(0)">Notes</button>
@@ -429,14 +422,13 @@
                     </div>
                     
                     <div class="tabs-content">
-                        <!-- NOTES CARD INTEGRATED INSIDE THE TAB CLUSTER -->
                         <div class="ghost-card ref-card-uv active-tab-panel">
                             <div class="ghost-header">
                                 <div class="ghost-name" style="color: #bc13fe;">Notes</div>
                             </div>
                             <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
                                 <span class="behavior-point">Hearing heartbeat during hunt = Ghost sees you. RUN!</span>
-                                <span class="behavior-point">Full stamina run will give you 11 steps. Don't consume all stamina or it takes longer to regenerate. Take 10 steps, stop for 3 or 4 seconds (depending on how you count), sprint again. Revenant gives permanent debuff to stamina once targeted.</span>
+                                <span class="behavior-point">Full stamina run will give you 11 steps. Don't consume all stamina or it takes longer to regenerate. Take 10 steps, stop for 3 or 4 seconds, sprint again. Revenant gives permanent debuff to stamina once targeted.</span>
                                 <span class="behavior-point">Cellphone, including phone flashlight, can safely be used during hunt. Turn off or drop all other electronics you're carrying.</span>
                                 <span class="behavior-point">Ghosts will have a favorite room but they can leave evidence anywhere inside the location. Infrasound Receiver has to be in favorite room to capture audio.</span>
                                 <span class="behavior-point">Sanctified Cross can only be flipped in favorite room.</span>
@@ -511,7 +503,6 @@
                             </div>
                         </div>
 
-                        <!-- MAP PICKER WHEEL TAB -->
                         <div class="ghost-card ref-card-wheel" style="align-items: center; text-align: center;">
                             <div class="ghost-header" style="width: 100%;">
                                 <div class="ghost-name" style="color: #ffd700;">Map Picker</div>
@@ -532,60 +523,41 @@
 
     <script>
         const ghosts = [
-            { name: "Banshee", ev: ["Audio", "EMF", "Radiation"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Banshee is a chilling presence tied to omens of death, amplifying fear through its signature piercing screams and erratic electrical interference. Investigators close with death claim to hear the Banshee's cries.", desc: ["Can extinguish candles.", "Causes electrical interferences.", "May scream on Spirit Box / Boom Box / Radios.", "Screams may be heard on electronics when heart rate >120bpm."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Bhoot", ev: ["Freezing", "Radiation", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Long (90s)", cd_val: 3, lore: "The Bhoot is a tormented soul, bound to the place of its suffering and fueled by a need for vengeance. Investigators report experiencing intense cold when the Bhoot is nearing.", desc: ["Can extinguish candles.", "Increased hunt cooldown.", "Room gets cold before hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Demon", ev: ["Radiation", "UV", "Writing"], speed: "Fast", losspeed: "Slow", los: "Low", hw: "More Effective (5s)", cooldown: "Short (40s) / 2m (sprayed)", cd_val: 1, lore: "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.", desc: ["Can extinguish candles.", "Holy Water changes hunt cooldown to 2 minutes after being sprayed (forced hunt after time lapses).", "Hunts at 77 BPM (40 second cooldown).", "Leaves hot temps on touched objects."], tags: ["extinguish", "lights-off", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
-            { name: "Doppelganger", ev: ["Audio", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Low", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Doppelganger is a deceptive spirit, often tricking its intended targets. Investigators report feeling alone moments before the ghost hunts. Where does it go?", desc: ["Can extinguish candles.", "Returns to favorite room before hunt.", "Easier to break LOS (Low Range)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Iblis", ev: ["Audio", "Freezing", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".", desc: ["Can extinguish candles.", "Increases speed slightly.", "Shapeshifts during hunt. (See Reference Resources below)"], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Phantom", ev: ["Audio", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Phantom is a sinister entity born from pure darkness, operating in silence and shadows. Investigators report frequent radio frequency interruptions, though they've never seen the phantom in full-form, only in the shadows.", desc: ["Ignores candles.", "Doesn't deactivate FLX-POD.", "No manifest events (More shadow events).", "Turns off radios (never on)."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-off", "shadow-only", "spray-normal"] },
-            { name: "Poltergeist", ev: ["EMF", "Radiation", "Writing"], speed: "Normal", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Poltergeist is a chaotic and mischievous entity, notorious for its disruptive presence. Investigators report that this ghost thrives on manipulating the environment, throwing more objects than any other spirit.", desc: ["Can extinguish candles.", "Increases speed slightly.", "Throws multiple objects."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Revenant", ev: ["EMF", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Revenant is a relentless, high-threat entity known for its aggressive presence. Investigators report that being hunted by one feels like literal suffocation, making it harder to outrun.", desc: ["Can extinguish candles.", "Stamina drains faster when targeted (permanent once targeted)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Shura", ev: ["EMF", "Freezing", "Writing"], speed: "Fast", losspeed: "Fast", los: "High", hw: "Normal (3s)", cooldown: "Short (40s)", cd_val: 1, lore: "The Shura is a cursed spirit of pure rage, trapped between worlds by a fate even the underworld rejects. Fueled by violence, investigators warn of their aggression, speed, and keen eyes.", desc: ["Can extinguish candles.", "Harder to break LOS (High Range).", "Increases speed.", "Shorter cooldown."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Variable", los: "Normal", hw: "Normal (3s)", cooldown: "High (90s)", cd_val: 3, lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses. (See Reference Resources below)", "Distressed sounds near player during hunt.", "Ignores candles.", "Doesn't deactivate FLX-POD.", "Increased hunt cooldown.", "Line of sight speed slows from 3.10m/s down to 2.35m/s when closing within 2 meters of its target."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Strigoi", ev: ["Freezing", "UV", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Strigoi is a restless, undead spirit drawn from old legends, believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.", desc: ["Actively raises heart rate (drains sanity) while in the same room.", "Ignores candles.", "Increases speed slightly.", "Shadow events only.", "Turns on radios (never off)."], tags: ["candles-ignore", "lights-on", "lights-off", "doors", "radio-on", "shadow-only", "spray-normal"] },
-            { name: "Tantalus", ev: ["EMF", "Freezing", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.", desc: ["Can extinguish candles.", "Doesn't deactivate FLX-POD.", "Increases speed slightly.", "Never closes / slams doors (except hunt)."], tags: ["extinguish", "flx-ignore", "no-doors", "lights-on", "lights-off", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s) / 90s (sprayed)", cd_val: 2, lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Water changes hunt cooldown to 90 seconds after being sprayed (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
-            { name: "The Echo", ev: ["Freezing", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Echo is a passive, residual spirit. Investigators report an eerily silent atmosphere, with lights never being affected by this ghost.", desc: ["Can't use main breaker (only individual, except post-hunt).", "Ignores candles.", "Doesn't deactivate FLX-POD.", "Ignores lights and radios."], tags: ["candles-ignore", "lights-ignore", "radio-ignore", "flx-ignore", "doors", "no-breaker", "spray-normal"] },
-            { name: "The Forgotten", ev: ["EMF", "Radiation", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Forgotten has a nearly silent presence. Passive, cold, and elusive, as if it's barely there at all. Investigators report minimal activity, no defining behavior, and a feeling of safety, until the Forgotten strikes.", desc: ["Can extinguish candles.", "Hardest to ID (no evidence).", "Doesn't deactivate FLX-POD.", "Increases speed slightly."], tags: ["extinguish", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
-            { name: "Wewe Gombel", ev: ["EMF", "Freezing", "Radiation"], speed: "Normal", losspeed: "Fast", los: "Normal", hw: "More Effective (5s)", cooldown: "Short (40s)", cd_val: 1, lore: "The Wewe Gombel is a vengeful and malicious spirit, rooted in folklore as an unforgiving force that punishes those it deems deserving. Investigators report this ghost as incredibly fast, deeming Holy Water a necessity when having an encounter.", desc: ["Can extinguish candles.", "Increases speed drastically.", "Lights OFF only (Can't use main breaker, except post-hunt).", "Short cooldown."], tags: ["extinguish", "lights-off", "doors", "radio-on", "radio-off", "no-breaker", "spray-more"] },
-            { name: "Wisp", ev: ["Audio", "Freezing", "Radiation"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "More Effective (5s)", cooldown: "Normal (60s) / 2m (sprayed)", cd_val: 2, lore: "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.", desc: ["Holy Water changes hunt cooldown to 2 minutes after being sprayed (forced hunt after time lapses).", "Ignores candles.", "Increases speed slightly.", "Lights ON only (never off / frequent)."], tags: ["candles-ignore", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
-            { name: "Wraith", ev: ["Audio", "Freezing", "UV"], speed: "Fast", losspeed: "Fast", los: "Very High", hw: "More Effective (5s)", cooldown: "Normal (60s)", cd_val: 2, lore: "The Wraith is a swift and vengeful entity, fueled by deep sorrow and rage. Investigators report them as incredibly fast entities, and report feeling targeted. You'll want Holy Water on hand for this ghost.", desc: ["Breaks LOS easily.", "Can extinguish candles.", "No feet (floating).", "Targets specific player."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-more"] }
+            { name: "Banshee", ev: ["Audio", "EMF", "Radiation"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: "Audio", lore: "The Banshee is a chilling presence tied to omens of death, amplifying fear through its signature piercing screams and erratic electrical interference. Investigators close with death claim to hear the Banshee's cries.", desc: ["Can extinguish candles.", "Causes electrical interferences.", "May scream on Spirit Box / Boom Box / Radios.", "Screams may be heard on electronics when heart rate >120bpm."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Bhoot", ev: ["Freezing", "Radiation", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Long (90s)", cd_val: 3, forced: "Freezing", lore: "The Bhoot is a tormented soul, bound to the place of its suffering and fueled by a need for vengeance. Investigators report experiencing intense cold when the Bhoot is nearing.", desc: ["Can extinguish candles.", "Increased hunt cooldown.", "Room gets cold before hunt."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Demon", ev: ["Radiation", "UV", "Writing"], speed: "Fast", losspeed: "Slow", los: "Low", hw: "More Effective (5s)", cooldown: "Short (40s) / 2m (sprayed)", cd_val: 1, forced: null, lore: "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.", desc: ["Can extinguish candles.", "Holy Water changes hunt cooldown to 2 minutes after being sprayed (forced hunt after time lapses).", "Hunts at 77 BPM (40 second cooldown).", "Leaves hot temps on touched objects."], tags: ["extinguish", "lights-off", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
+            { name: "Doppelganger", ev: ["Audio", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Low", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: null, lore: "The Doppelganger is a deceptive spirit, often tricking its intended targets. Investigators report feeling alone moments before the ghost hunts. Where does it go?", desc: ["Can extinguish candles.", "Returns to favorite room before hunt.", "Easier to break LOS (Low Range)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Iblis", ev: ["Audio", "Freezing", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: null, lore: "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".", desc: ["Can extinguish candles.", "Increases speed slightly.", "Shapeshifts during hunt. (See Reference Resources below)"], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Phantom", ev: ["Audio", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: "UV", lore: "The Phantom is a sinister entity born from pure darkness, operating in silence and shadows. Investigators report frequent radio frequency interruptions, though they've never seen the phantom in full-form, only in the shadows.", desc: ["Ignores candles.", "Doesn't deactivate FLX-POD.", "No manifest events (More shadow events).", "Turns off radios (never on)."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-off", "shadow-only", "spray-normal"] },
+            { name: "Poltergeist", ev: ["EMF", "Radiation", "Writing"], speed: "Normal", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: "EMF", lore: "The Poltergeist is a chaotic and mischievous entity, notorious for its disruptive presence. Investigators report that this ghost thrives on manipulating the environment, throwing more objects than any other spirit.", desc: ["Can extinguish candles.", "Increases speed slightly.", "Throws multiple objects."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Revenant", ev: ["EMF", "UV", "Writing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: null, lore: "The Revenant is a relentless, high-threat entity known for its aggressive presence. Investigators report that being hunted by one feels like literal suffocation, making it harder to outrun.", desc: ["Can extinguish candles.", "Stamina drains faster when targeted (permanent once targeted)."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Shura", ev: ["EMF", "Freezing", "Writing"], speed: "Fast", losspeed: "Fast", los: "High", hw: "Normal (3s)", cooldown: "Short (40s)", cd_val: 1, forced: "Writing", lore: "The Shura is a cursed spirit of pure rage, trapped between worlds by a fate even the underworld rejects. Fueled by violence, investigators warn of their aggression, speed, and keen eyes.", desc: ["Can extinguish candles.", "Harder to break LOS (High Range).", "Increases speed.", "Shorter cooldown."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Skia", ev: ["Audio", "EMF", "UV"], speed: "Fast", losspeed: "Variable", los: "Normal", hw: "Normal (3s)", cooldown: "High (90s)", cd_val: 3, forced: "Audio", lore: "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.", desc: ["Chance for unique Spirit Box responses. (See Reference Resources below)", "Distressed sounds near player during hunt.", "Ignores candles.", "Doesn't deactivate FLX-POD.", "Increased hunt cooldown.", "Line of sight speed slows from 3.10m/s down to 2.35m/s when closing within 2 meters of its target."], tags: ["candles-ignore", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Strigoi", ev: ["Freezing", "UV", "Writing"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: null, lore: "The Strigoi is a restless, undead spirit drawn from old legends, believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.", desc: ["Actively raises heart rate (drains sanity) while in the same room.", "Ignores candles.", "Increases speed slightly.", "Shadow events only.", "Turns on radios (never off)."], tags: ["candles-ignore", "lights-on", "lights-off", "doors", "radio-on", "shadow-only", "spray-normal"] },
+            { name: "Tantalus", ev: ["EMF", "Freezing", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: null, lore: "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.", desc: ["Can extinguish candles.", "Doesn't deactivate FLX-POD.", "Increases speed slightly.", "Never closes / slams doors (except hunt)."], tags: ["extinguish", "flx-ignore", "no-doors", "lights-on", "lights-off", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Tariaksuq", ev: ["Audio", "EMF", "Freezing"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s) / 90s (sprayed)", cd_val: 2, forced: null, lore: "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.", desc: ["Can extinguish candles (up to 10 at once).", "Holy Water changes hunt cooldown to 90 seconds after being sprayed (forced hunt after time lapses).", "Never turns ON lights / Turns off frequently.", "Only appears fully during hunt.", "Shadow events only."], tags: ["extinguish", "lights-off", "doors", "radio-on", "radio-off", "shadow-only", "spray-normal"] },
+            { name: "The Echo", ev: ["Freezing", "Radiation", "UV"], speed: "Normal", losspeed: "Normal", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: null, lore: "The Echo is a passive, residual spirit. Investigators report an eerily silent atmosphere, with lights never being affected by this ghost.", desc: ["Can't use main breaker (only individual, except post-hunt).", "Ignores candles.", "Doesn't deactivate FLX-POD.", "Ignores lights and radios."], tags: ["candles-ignore", "lights-ignore", "radio-ignore", "flx-ignore", "doors", "no-breaker", "spray-normal"] },
+            { name: "The Forgotten", ev: ["EMF", "Radiation", "UV"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "Normal (3s)", cooldown: "Normal (60s)", cd_val: 2, forced: null, lore: "The Forgotten has a nearly silent presence. Passive, cold, and elusive, as if it's barely there at all. Investigators report minimal activity, no defining behavior, and a feeling of safety, until the Forgotten strikes.", desc: ["Can extinguish candles.", "Hardest to ID (no evidence).", "Doesn't deactivate FLX-POD.", "Increases speed slightly."], tags: ["extinguish", "flx-ignore", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-normal"] },
+            { name: "Wewe Gombel", ev: ["EMF", "Freezing", "Radiation"], speed: "Normal", losspeed: "Fast", los: "Normal", hw: "More Effective (5s)", cooldown: "Short (40s)", cd_val: 1, forced: null, lore: "The Wewe Gombel is a vengeful and malicious spirit, rooted in folklore as an unforgiving force that punishes those it deems deserving. Investigators report this ghost as incredibly fast, deeming Holy Water a necessity when having an encounter.", desc: ["Can extinguish candles.", "Increases speed drastically.", "Lights OFF only (Can't use main breaker, except post-hunt).", "Short cooldown."], tags: ["extinguish", "lights-off", "doors", "radio-on", "radio-off", "no-breaker", "spray-more"] },
+            { name: "Wisp", ev: ["Audio", "Freezing", "Radiation"], speed: "Fast", losspeed: "Medium", los: "Normal", hw: "More Effective (5s)", cooldown: "Normal (60s) / 2m (sprayed)", cd_val: 2, forced: null, lore: "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.", desc: ["Holy Water changes hunt cooldown to 2 minutes after being sprayed (forced hunt after time lapses).", "Ignores candles.", "Increases speed slightly.", "Lights ON only (never off / frequent)."], tags: ["candles-ignore", "lights-on", "doors", "radio-on", "radio-off", "spray-more"] },
+            { name: "Wraith", ev: ["Audio", "Freezing", "UV"], speed: "Fast", losspeed: "Fast", los: "Very High", hw: "More Effective (5s)", cooldown: "Normal (60s)", cd_val: 2, forced: null, lore: "The Wraith is a swift and vengeful entity, fueled by deep sorrow and rage. Investigators report them as incredibly fast entities, and report feeling targeted. You'll want Holy Water on hand for this ghost.", desc: ["Breaks LOS easily.", "Can extinguish candles.", "No feet (floating).", "Targets specific player."], tags: ["extinguish", "lights-on", "lights-off", "doors", "radio-on", "radio-off", "spray-more"] }
         ];
 
         const evidenceTypes = ["Audio", "EMF", "Freezing", "Radiation", "UV", "Writing"];
-        let activeEvidence = new Set(), excludedEvidence = new Set(), eliminatedGhosts = new Set(), selectedGhost = null;
-        
-        let timerInterval = null;
-        let seconds = 0;
-        let isRunning = false;
+        let evidenceStates = { "Audio": 0, "EMF": 0, "Freezing": 0, "Radiation": 0, "UV": 0, "Writing": 0 };
+        let realLimit = 3;
+        let falseLimit = 0;
 
-        /* MAP PICKER DATA */
+        let eliminatedGhosts = new Set(), selectedGhost = null;
+        let timerInterval = null, seconds = 0, isRunning = false;
+
         const mapList = [
-            "St. Joseph's Orphanage",
-            "Abaddon Hallows West",
-            "Abaddon Hallows East",
-            "Abaddon Hallows East (P)",
-            "Summerhill Psychiatric",
-            "Stone Manor Plantation",
-            "317 Aspen Heights",
-            "1205 Cedar Street",
-            "12 Ravenwood Lane"
+            "St. Joseph's Orphanage", "Abaddon Hallows West", "Abaddon Hallows East",
+            "Abaddon Hallows East (P)", "Summerhill Psychiatric", "Stone Manor Plantation",
+            "317 Aspen Heights", "1205 Cedar Street", "12 Ravenwood Lane"
         ];
-
-        const mapTextColors = [
-            "#ff4444", // Red
-            "#ffa500", // Orange
-            "#ffd700", // Yellow
-            "#32cd32", // Green
-            "#00ffff", // Cyan
-            "#44aaff", // Blue
-            "#bc13fe", // Purple
-            "#ff66cc", // Pink
-            "#4ecdc4"  // Teal
-        ];
-
-        let currentWheelAngle = 0;
-        let isSpinning = false;
+        const mapTextColors = ["#ff4444", "#ffa500", "#ffd700", "#32cd32", "#00ffff", "#44aaff", "#bc13fe", "#ff66cc", "#4ecdc4"];
+        let currentWheelAngle = 0, isSpinning = false;
 
         window.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('evidence-container');
@@ -594,14 +566,75 @@
                 btn.className = 'ev-btn';
                 btn.innerText = ev;
                 btn.setAttribute('data-ev', ev);
-                btn.onclick = () => toggleEvidence(btn, ev);
+                btn.setAttribute('data-state', '0');
+                btn.onclick = () => cycleEvidenceState(btn, ev);
                 container.appendChild(btn);
             });
             loadData();
+            updateLimitDisplays();
             filterGhosts();
             switchTab(0);
             drawWheel();
         });
+
+        function cycleRealLimit() {
+            realLimit = (realLimit + 1) % 4;
+            if (realLimit === 0) {
+                falseLimit = 0;
+            }
+            updateLimitDisplays();
+            saveData();
+            filterGhosts();
+        }
+
+        function cycleFalseLimit() {
+            if (realLimit === 0) return;
+            falseLimit = (falseLimit + 1) % 3;
+            updateLimitDisplays();
+            saveData();
+            filterGhosts();
+        }
+
+        function updateLimitDisplays() {
+            const realBtn = document.getElementById('btn-real-limit');
+            const falseBtn = document.getElementById('btn-false-limit');
+
+            realBtn.innerText = `Real Evidence - ${realLimit}`;
+            falseBtn.innerText = `False Evidence - ${falseLimit}`;
+
+            const evBtns = document.querySelectorAll('.ev-btn');
+
+            if (realLimit === 0) {
+                falseBtn.classList.add('disabled');
+                evBtns.forEach(btn => {
+                    btn.classList.add('disabled');
+                    const ev = btn.getAttribute('data-ev');
+                    evidenceStates[ev] = 0;
+                    btn.setAttribute('data-state', '0');
+                });
+            } else {
+                falseBtn.classList.remove('disabled');
+                evBtns.forEach(btn => btn.classList.remove('disabled'));
+            }
+        }
+
+        function cycleEvidenceState(btn, type) {
+            if (realLimit === 0) return;
+
+            let currentState = evidenceStates[type] || 0;
+            let nextState = (currentState + 1) % 4;
+
+            // Freezing temperatures can never be fake
+            if (type === "Freezing" && nextState === 2) {
+                nextState = 3;
+            }
+
+            evidenceStates[type] = nextState;
+            btn.setAttribute('data-state', nextState);
+
+            saveData();
+            filterGhosts();
+        }
 
         function setRefMode(mode) {
             const container = document.getElementById('referenceContainer');
@@ -636,7 +669,6 @@
             });
         }
 
-        /* WHEEL FUNCTIONS */
         function drawWheel() {
             const canvas = document.getElementById('wheelCanvas');
             if (!canvas) return;
@@ -650,7 +682,6 @@
             const sliceAngle = (2 * Math.PI) / numSlices;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             const sliceColors = ['#2c2c2c', '#1e1e1e', '#383838', '#222222'];
 
             for (let i = 0; i < numSlices; i++) {
@@ -690,7 +721,6 @@
             function animate(now) {
                 const elapsed = now - startTimestamp;
                 const progress = Math.min(elapsed / duration, 1);
-                
                 const easeOut = 1 - Math.pow(1 - progress, 4);
                 currentWheelAngle = (easeOut * totalRotation) % (2 * Math.PI);
 
@@ -710,10 +740,8 @@
         function calculateWheelWinner() {
             const numSlices = mapList.length;
             const sliceAngle = (2 * Math.PI) / numSlices;
-
             let pointerAngle = (3 * Math.PI / 2 - currentWheelAngle) % (2 * Math.PI);
             if (pointerAngle < 0) pointerAngle += 2 * Math.PI;
-
             const winningIndex = Math.floor(pointerAngle / sliceAngle) % numSlices;
             document.getElementById('wheelResult').innerText = `Destination: ${mapList[winningIndex]}`;
         }
@@ -732,19 +760,6 @@
             filterGhosts();
         }
 
-        function toggleEvidence(btn, type) {
-            if(activeEvidence.has(type)) {
-                activeEvidence.delete(type); excludedEvidence.add(type);
-                btn.classList.remove('active'); btn.classList.add('excluded');
-            } else if(excludedEvidence.has(type)) {
-                excludedEvidence.delete(type); btn.classList.remove('excluded');
-            } else {
-                activeEvidence.add(type); btn.classList.add('active');
-            }
-            saveData();
-            filterGhosts();
-        }
-
         function cycleState(btn) {
             const max = parseInt(btn.getAttribute('data-max'));
             let current = parseInt(btn.dataset.state);
@@ -754,8 +769,10 @@
         }
 
         function resetAll() {
-            activeEvidence.clear(); excludedEvidence.clear(); eliminatedGhosts.clear(); selectedGhost = null;
-            document.querySelectorAll('.ev-btn').forEach(b => { b.classList.remove('active'); b.classList.remove('excluded'); });
+            evidenceTypes.forEach(ev => evidenceStates[ev] = 0);
+            eliminatedGhosts.clear(); 
+            selectedGhost = null;
+            document.querySelectorAll('.ev-btn').forEach(b => b.setAttribute('data-state', '0'));
             document.querySelectorAll('.toggle-box').forEach(b => b.dataset.state = 0);
             saveData();
             filterGhosts();
@@ -794,15 +811,48 @@
 
         function filterGhosts() {
             const states = {};
-            document.querySelectorAll('.toggle-box').forEach(b => states[b.id.replace('btn-','')] = parseInt(b.dataset.state));
+            document.querySelectorAll('.toggle-box').forEach(b => {
+                if (!b.classList.contains('limit-box')) {
+                    states[b.id.replace('btn-','')] = parseInt(b.dataset.state);
+                }
+            });
+
+            const realEvidence = new Set(Object.keys(evidenceStates).filter(k => evidenceStates[k] === 1));
+            const fakeEvidence = new Set(Object.keys(evidenceStates).filter(k => evidenceStates[k] === 2));
+            const excludedEvidence = new Set(Object.keys(evidenceStates).filter(k => evidenceStates[k] === 3));
+
+            // Dynamically treat Fake Evidence as Excluded on 3 Real Evidence runs
+            if (realLimit === 3) {
+                fakeEvidence.forEach(e => excludedEvidence.add(e));
+            }
 
             let matches = [], nonMatches = [];
 
             ghosts.forEach(g => {
                 let match = true;
-                for (let e of activeEvidence) if (!g.ev.includes(e)) match = false;
-                for (let e of excludedEvidence) if (g.ev.includes(e)) match = false;
-                
+
+                // 1. Standard Real Evidence Match
+                for (let e of realEvidence) {
+                    if (!g.ev.includes(e)) match = false;
+                }
+
+                // 2. Standard Excluded Evidence Match
+                for (let e of excludedEvidence) {
+                    if (g.ev.includes(e)) match = false;
+                }
+
+                // 3. Forced Evidence Logic
+                if (realLimit > 0 && realLimit < 3) {
+                    if (g.forced) {
+                        if (realEvidence.size >= realLimit) {
+                            if (!realEvidence.has(g.forced)) {
+                                match = false;
+                            }
+                        }
+                    }
+                }
+
+                // 4. Behavior Filters
                 if (states.bspeed === 1 && g.speed !== "Normal") match = false;
                 if (states.bspeed === 2 && g.speed !== "Fast") match = false;
 
@@ -813,7 +863,9 @@
                 if (states.losspeed === 1 && g.losspeed !== "Slow") match = false;
                 if (states.losspeed === 2 && g.losspeed !== "Normal") match = false;
                 if (states.losspeed === 3 && g.losspeed !== "Medium") match = false;
-                if (states.losspeed === 4 && g.losspeed !== "Fast") match = false;
+                
+                // LINKED SKIA LOGIC: Fast line of sight includes Variable ghosts (Skia starts fast at 3.10m/s)
+                if (states.losspeed === 4 && g.losspeed !== "Fast" && g.losspeed !== "Variable") match = false;
                 if (states.losspeed === 5 && g.losspeed !== "Variable") match = false;
 
                 if (states.losrange === 1 && g.los !== "Low") match = false;
@@ -855,18 +907,16 @@
             matches.sort((a, b) => {
                 const aEliminated = eliminatedGhosts.has(a.name);
                 const bEliminated = eliminatedGhosts.has(b.name);
-                
                 if (aEliminated && !bEliminated) return 1;
                 if (!aEliminated && bEliminated) return -1;
-                
                 return a.name.localeCompare(b.name);
             });
 
             const validSet = new Set(matches.map(g => g.name));
-            renderGhosts([...matches, ...nonMatches], validSet);
+            renderGhosts([...matches, ...nonMatches], validSet, realEvidence, fakeEvidence);
         }
 
-        function renderGhosts(list, validSet) {
+        function renderGhosts(list, validSet, realEvSet, fakeEvSet) {
             const grid = document.getElementById('ghostGrid');
             grid.innerHTML = "";
 
@@ -882,17 +932,12 @@
             }
 
             const losspeedStrings = {
-                'Slow': 'Slow (2.00m/s)',
-                'Normal': 'Normal (2.50m/s)',
-                'Medium': 'Medium (2.70m/s)',
-                'Fast': 'Fast (3.10m/s)',
+                'Slow': 'Slow (2.00m/s)', 'Normal': 'Normal (2.50m/s)',
+                'Medium': 'Medium (2.70m/s)', 'Fast': 'Fast (3.10m/s)',
                 'Variable': 'Variable (3.10m/s ➔ 2.35m/s)'
             };
             
-            const speedStrings = {
-                'Normal': 'Normal (2.42m/s)',
-                'Fast': 'Fast (2.60m/s)'
-            };
+            const speedStrings = { 'Normal': 'Normal (2.42m/s)', 'Fast': 'Fast (2.60m/s)' };
 
             list.forEach(g => {
                 const isSelected = selectedGhost === g.name;
@@ -904,7 +949,14 @@
                 if(isSelected) classes += " selected";
                 if(isRuledOut) classes += " ruled-out";
 
-                let evTags = g.ev.map(e => `<span class="evidence-tag ${activeEvidence.has(e) ? 'match' : ''}" data-ev="${e}">${e}</span>`).join('');
+                let evTags = g.ev.map(e => {
+                    let tagClass = "evidence-tag";
+                    if (realEvSet.has(e)) tagClass += " match";
+                    else if (fakeEvSet.has(e)) tagClass += " fake-tag";
+                    return `<span class="${tagClass}" data-ev="${e}">${e}</span>`;
+                }).join('');
+
+                let forcedBadge = g.forced ? `<span class="forced-badge">Forced: ${g.forced}</span>` : "";
                 let descHTML = g.desc.map(d => `<span class="behavior-point">${d}</span>`).join('');
                 
                 const speedC = g.speed === 'Fast' ? '#ff4444' : g.speed === 'Variable' ? '#bb86fc' : '#32cd32';
@@ -923,7 +975,7 @@
                 card.innerHTML = `
                     <div class="select-overlay"><div class="overlay-text">⚠ Select In Game ⚠</div></div>
                     <div class="ghost-header">
-                        <div class="ghost-name">${g.name}</div>
+                        <div class="ghost-name">${g.name} ${forcedBadge}</div>
                         <div class="evidence-items">${evTags}</div>
                     </div>
                     <div class="ghost-lore">${g.lore}</div>
@@ -941,29 +993,37 @@
 
         function saveData() {
             const data = {
-                active: Array.from(activeEvidence),
-                excluded: Array.from(excludedEvidence),
+                evidenceStates: evidenceStates,
+                realLimit: realLimit,
+                falseLimit: falseLimit,
                 eliminated: Array.from(eliminatedGhosts),
                 selected: selectedGhost,
                 states: {}
             };
-            document.querySelectorAll('.toggle-box').forEach(b => data.states[b.id] = b.dataset.state);
-            localStorage.setItem('tos_ghost_tracker_v3', JSON.stringify(data));
+            document.querySelectorAll('.toggle-box').forEach(b => {
+                if (!b.classList.contains('limit-box')) {
+                    data.states[b.id] = b.dataset.state;
+                }
+            });
+            localStorage.setItem('tos_ghost_tracker_v4', JSON.stringify(data));
         }
 
         function loadData() {
-            const raw = localStorage.getItem('tos_ghost_tracker_v3');
+            const raw = localStorage.getItem('tos_ghost_tracker_v4');
             if(!raw) return;
             try {
                 const data = JSON.parse(raw);
-                activeEvidence = new Set(data.active);
-                excludedEvidence = new Set(data.excluded);
-                eliminatedGhosts = new Set(data.eliminated);
-                selectedGhost = data.selected;
+                if (data.evidenceStates) evidenceStates = data.evidenceStates;
+                if (typeof data.realLimit === 'number') realLimit = data.realLimit;
+                if (typeof data.falseLimit === 'number') falseLimit = data.falseLimit;
+                
+                eliminatedGhosts = new Set(data.eliminated || []);
+                selectedGhost = data.selected || null;
 
                 document.querySelectorAll('.ev-btn').forEach(btn => {
-                    if(activeEvidence.has(btn.innerText)) btn.classList.add('active');
-                    if(excludedEvidence.has(btn.innerText)) btn.classList.add('excluded');
+                    const ev = btn.getAttribute('data-ev');
+                    const state = evidenceStates[ev] || 0;
+                    btn.setAttribute('data-state', state);
                 });
 
                 if(data.states) {
