@@ -125,6 +125,19 @@
         .reference-container.all-mode .tabs-content .ghost-card { display: flex !important; }
         .behavior-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
+        .reference-container.tabs-mode .ref-card-hr #playerInputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .reference-container.all-mode .ref-card-hr #playerInputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
         .toggle-box {
             width: 100%; padding: 6px 8px; margin-bottom: 0; border-radius: 6px; background: #2c2c2c; border: 1px solid var(--border);
             color: #ffffff; cursor: pointer; text-align: center; font-size: 0.75rem; font-weight: 600;
@@ -327,6 +340,15 @@
             .toggle-box { padding: 6px; font-size: 0.75rem; }
             .instruction-bar { padding: 10px; gap: 6px; }
             .reference-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .reference-container.all-mode { grid-template-columns: 1fr; }
+            .reference-container.tabs-mode .ref-card-hr #playerInputs { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media screen and (max-width: 360px) {
+            .reference-container.tabs-mode .ref-card-hr #playerInputs,
+            .reference-container.all-mode .ref-card-hr #playerInputs {
+                grid-template-columns: 1fr;
+            }
         }
         
         .footer-link { font-size: 0.7rem; color: #ffffff; text-align: center; margin-top: 20px; margin-bottom: 10px; }
@@ -418,9 +440,9 @@
                 <div class="tabs-wrapper">
                     <div class="tabs-nav">
                         <button class="tab-btn active" onclick="switchTab(0)">Notes</button>
-                        <button class="tab-btn" onclick="switchTab(1)">Spirit Box Phrases</button>
-                        <button class="tab-btn" onclick="switchTab(2)">Skia Unique Audio</button>
-                        <button class="tab-btn" onclick="switchTab(3)">Heart Rate Status</button>
+                        <button class="tab-btn" onclick="switchTab(1)">Heart Rate Calculator</button>
+                        <button class="tab-btn" onclick="switchTab(2)">Spirit Box Phrases</button>
+                        <button class="tab-btn" onclick="switchTab(3)">Skia Unique Audio</button>
                         <button class="tab-btn" onclick="switchTab(4)">Iblis Shapeshifting</button>
                         <button class="tab-btn" onclick="switchTab(5)">Map Picker</button>
                     </div>
@@ -439,6 +461,26 @@
                                 <span class="behavior-point">Forced hunts from Holy Water (Demon, Tariaksuq, Wisp) execute at the specified time if any players are inside the location. Forced hunts pause the regular hunt cooldown. If no players are inside when timer expires, the forced hunt happens when a player enters the location.</span>
                                 <span class="behavior-point">The hunt threshold for all ghosts (except Demon) is 100 BPM. This threshold is the average BPM of all players inside the location. Players outside the location with a low heart rate do not help prevent a hunt.</span>
                                 <span class="behavior-point">TVs and alarm clocks do not count as Radio interaction. Old Tape Recorder and Gramophone do count as Radio interaction. Lights exploding count as lights off.</span>
+                            </div>
+                        </div>
+
+                        <div class="ghost-card ref-card-hr">
+                            <div class="ghost-header">
+                                <div class="ghost-name" style="color: #00ffff;">Heart Rate Calculator & Status Ranges</div>
+                            </div>
+                            <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
+                                <div id="playerInputs"></div>
+                                <div style="background: #121212; padding: 10px; border-radius: 4px; border: 1px solid #333; text-align: center; margin-bottom: 12px;">
+                                    <div style="font-size: 0.8rem; color: #aaa;">Team Average BPM (Inside Only)</div>
+                                    <div id="avgBpmDisplay" style="font-size: 1.8rem; font-weight: bold; color: #32cd32;">0 BPM</div>
+                                    <div id="bpmStatusAlert" style="font-size: 0.8rem; font-weight: bold; color: #888; margin-top: 4px;">No Players Inside</div>
+                                </div>
+                                <div style="border-top: 1px dashed #333; padding-top: 8px;">
+                                    <span class="behavior-point"><span class="hr-badge normal"></span><strong>Normal:</strong> Anxiety 0% - 17% | Heart Rate 60 - 76 BPM | Hunt Chance 0%</span>
+                                    <span class="behavior-point"><span class="hr-badge anxious"></span><strong>Anxious:</strong> Anxiety 17% - 40% | Heart Rate 77 - 99 BPM | Demon can hunt | Hunt Chance 33%</span>
+                                    <span class="behavior-point"><span class="hr-badge panicked"></span><strong>Panicked:</strong> Anxiety 40% - 70% | Heart Rate 100 - 129 BPM | All ghosts can hunt | Hunt Chance 33% - 50%</span>
+                                    <span class="behavior-point"><span class="hr-badge distressed"></span><strong>Distressed:</strong> Anxiety 70% - 100% | Heart Rate 130 - 160 BPM | All ghosts can hunt | Hunt Chance 50% - 66%</span>
+                                </div>
                             </div>
                         </div>
 
@@ -477,18 +519,6 @@
                                 <span class="behavior-point">"I don't want to hurt you."</span>
                                 <span class="behavior-point">"Please, you should leave now."</span>
                                 <span class="behavior-point">"I'm sorry, she made me like this."</span>
-                            </div>
-                        </div>
-
-                        <div class="ghost-card ref-card-hr">
-                            <div class="ghost-header">
-                                <div class="ghost-name" style="color: #00ffff;">Heart Rate Status Ranges</div>
-                            </div>
-                            <div class="ghost-behavior" style="border-top: none; padding-top: 5px;">
-                                <span class="behavior-point"><span class="hr-badge normal"></span><strong>Normal:</strong> Anxiety 0% - 17% | Heart Rate 60 - 77 BPM | Hunt Chance 0%</span>
-                                <span class="behavior-point"><span class="hr-badge anxious"></span><strong>Anxious:</strong> Anxiety 17% - 40% | Heart Rate 77 - 100 BPM | Demon can hunt | Hunt Chance 33%</span>
-                                <span class="behavior-point"><span class="hr-badge panicked"></span><strong>Panicked:</strong> Anxiety 40% - 70% | Heart Rate 100 - 130 BPM | All ghosts can hunt | Hunt Chance 33% - 50%</span>
-                                <span class="behavior-point"><span class="hr-badge distressed"></span><strong>Distressed:</strong> Anxiety 70% - 100% | Heart Rate 130 - 160 BPM | All ghosts can hunt | Hunt Chance 50% - 66%</span>
                             </div>
                         </div>
 
@@ -580,6 +610,78 @@
             breaker: { states: { 1: { noTags: ['no-breaker'] }, 2: { allTags: ['no-breaker'] } } },
             manifest: { states: { 1: { noTags: ['shadow-only'] }, 2: { allTags: ['shadow-only'] } } }
         };
+
+        function initHrCalculator() {
+            const container = document.getElementById('playerInputs');
+            if (!container) return;
+            
+            let html = '';
+            for (let i = 1; i <= 6; i++) {
+                html += `
+                    <div style="display: flex; gap: 6px; align-items: center; background: #1e1e1e; padding: 6px 8px; border-radius: 4px; border: 1px solid #333;">
+                        <span style="font-size: 0.75rem; font-weight: bold; color: #888;">P${i}</span>
+                        <input type="number" id="hr-p${i}" placeholder="BPM" min="0" max="200" oninput="calculateTeamBpm()" 
+                               style="width: 75px; background: #121212; border: 1px solid #444; color: #fff; font-size: 0.8rem; padding: 3px 6px; border-radius: 3px; text-align: center;">
+                        <label style="font-size: 0.7rem; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 3px; margin-left: auto;">
+                            <input type="checkbox" id="in-p${i}" checked onchange="calculateTeamBpm()"> In
+                        </label>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function calculateTeamBpm() {
+            let totalBpm = 0;
+            let activePlayers = 0;
+
+            for (let i = 1; i <= 6; i++) {
+                const bpmInput = document.getElementById(`hr-p${i}`);
+                const inCheckbox = document.getElementById(`in-p${i}`);
+                
+                if (bpmInput && inCheckbox && inCheckbox.checked) {
+                    const val = parseFloat(bpmInput.value);
+                    if (!isNaN(val) && val > 0) {
+                        totalBpm += val;
+                        activePlayers++;
+                    }
+                }
+            }
+
+            const avgDisplay = document.getElementById('avgBpmDisplay');
+            const alertDisplay = document.getElementById('bpmStatusAlert');
+            
+            if (!avgDisplay || !alertDisplay) return;
+
+            if (activePlayers === 0) {
+                avgDisplay.innerText = "0 BPM";
+                avgDisplay.style.color = "#32cd32";
+                alertDisplay.innerText = "No Active Players Inside";
+                alertDisplay.style.color = "#888";
+                return;
+            }
+
+            const avg = Math.round(totalBpm / activePlayers);
+            avgDisplay.innerText = `${avg} BPM`;
+
+            if (avg < 77) {
+                avgDisplay.style.color = "#32cd32";
+                alertDisplay.innerText = "Normal (Safe)";
+                alertDisplay.style.color = "#32cd32";
+            } else if (avg >= 77 && avg < 100) {
+                avgDisplay.style.color = "#ffd700";
+                alertDisplay.innerText = "⚠ Anxious: DEMON CAN HUNT!";
+                alertDisplay.style.color = "#ffd700";
+            } else if (avg >= 100 && avg < 130) {
+                avgDisplay.style.color = "#ff8800";
+                alertDisplay.innerText = "🚨 Panicked: ALL GHOSTS CAN HUNT!";
+                alertDisplay.style.color = "#ff8800";
+            } else {
+                avgDisplay.style.color = "#ff4444";
+                alertDisplay.innerText = "💀 Distressed: HIGH HUNT PROBABILITY!";
+                alertDisplay.style.color = "#ff4444";
+            }
+        }
 
         function scrollToReference() {
             const sec = document.getElementById('referenceSection');
@@ -707,6 +809,53 @@
                 text.includes("spin wheel")
             ) {
                 pickMapByVoice();
+                return;
+            }
+
+            // Voice Commands for Heart Rate Calculator
+            if (text.includes("reset heart") || text.includes("clear heart") || text.includes("reset bpm") || text.includes("clear bpm")) {
+                for (let i = 1; i <= 6; i++) {
+                    const input = document.getElementById(`hr-p${i}`);
+                    if (input) input.value = '';
+                }
+                calculateTeamBpm();
+                showVoiceStatus("Heart rates reset");
+                return;
+            }
+
+            const playerNumberWords = {
+                one: "1", two: "2", three: "3", four: "4", five: "5", six: "6"
+            };
+            const hrText = text.replace(/\b(one|two|three|four|five|six)\b/gi, word => playerNumberWords[word.toLowerCase()]);
+
+            const hrBpmMatch = hrText.match(/(?:player|p)\s*([1-6])(?:'s)?\s*(?:bpm|heart rate|rate)?\s*(?:is|to|=|:)?\s*(\d{1,3})\b/i);
+            if (hrBpmMatch) {
+                const pNum = hrBpmMatch[1];
+                const bpmVal = Number(hrBpmMatch[2]);
+                if (bpmVal < 0 || bpmVal > 200) {
+                    showVoiceStatus("BPM must be between 0 and 200");
+                    return;
+                }
+
+                const input = document.getElementById(`hr-p${pNum}`);
+                if (input) {
+                    input.value = String(bpmVal);
+                    calculateTeamBpm();
+                    showVoiceStatus(`Player ${pNum} set to ${bpmVal} BPM`);
+                }
+                return;
+            }
+
+            const hrStatusMatch = hrText.match(/(?:player|p)\s*([1-6])\s*(?:is|to|set to)?\s*(inside|outside|in|out)\b/i);
+            if (hrStatusMatch) {
+                const pNum = hrStatusMatch[1];
+                const locState = hrStatusMatch[2];
+                const checkbox = document.getElementById(`in-p${pNum}`);
+                if (checkbox) {
+                    checkbox.checked = (locState === "inside" || locState === "in");
+                    calculateTeamBpm();
+                    showVoiceStatus(`Player ${pNum} set to ${checkbox.checked ? 'Inside' : 'Outside'}`);
+                }
                 return;
             }
 
@@ -923,6 +1072,7 @@
             switchTab(0);
             drawWheel();
             initVoiceRecognition();
+            initHrCalculator();
         });
 
         function cycleRealLimit() {
@@ -1115,6 +1265,14 @@
             selectedGhost = null;
             document.querySelectorAll('.ev-btn').forEach(b => b.setAttribute('data-state', '0'));
             document.querySelectorAll('.toggle-box').forEach(b => b.dataset.state = 0);
+            
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`hr-p${i}`);
+                const checkbox = document.getElementById(`in-p${i}`);
+                if (input) input.value = '';
+                if (checkbox) checkbox.checked = true;
+            }
+            calculateTeamBpm();
             filterGhosts();
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1144,11 +1302,11 @@
         }
 
         function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
             seconds = 0;
             updateTimerDisplay();
-            if (!isRunning) {
-                startTimer();
-            }
+            startTimer();
         }
 
         function updateTimerDisplay() {
