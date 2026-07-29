@@ -592,6 +592,20 @@
             if (contentArea) contentArea.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function pickMapByVoice() {
+            setRefMode('tabs');
+            switchTab(5);
+
+            requestAnimationFrame(() => {
+                const wheel = document.getElementById('wheelCanvas');
+                const wheelCard = wheel ? wheel.closest('.ghost-card') : null;
+                if (wheelCard) {
+                    wheelCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                spinWheel();
+            });
+        }
+
         function initVoiceRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -683,6 +697,18 @@
             if (text.includes("start timer")) { startTimer(); return; }
             if (text.includes("stop timer") || text.includes("pause timer")) { stopTimer(); return; }
             if (text.includes("reset timer") || text.includes("restart timer")) { resetTimer(); return; }
+            if (
+                text.includes("pick a map") ||
+                text.includes("pick map") ||
+                text.includes("choose a map") ||
+                text.includes("select a map") ||
+                text.includes("random map") ||
+                text.includes("spin the wheel") ||
+                text.includes("spin wheel")
+            ) {
+                pickMapByVoice();
+                return;
+            }
 
             const evTypes = [
                 { name: "EMF", keys: ["emf", "e m f"] },
