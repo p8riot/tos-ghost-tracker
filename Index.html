@@ -146,13 +146,20 @@
         .toggle-box:hover { background: #333; border-color: #555; }
         .toggle-box.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
-        .toggle-label { transition: opacity 0.2s; z-index: 1; }
-        .toggle-box[data-state]:not([data-state="0"]) .toggle-label { opacity: 0.2; }
+        .toggle-label { transition: opacity 0.2s, font-size 0.2s; z-index: 1; line-height: 1.1; }
+        .toggle-box[data-state]:not([data-state="0"]) { padding: 4px 6px 15px; }
+        .toggle-box[data-state]:not([data-state="0"]) .toggle-label {
+            position: absolute; left: 4px; right: 4px; bottom: 3px; opacity: 0.85;
+            color: #ffffff; font-size: 0.55rem; line-height: 1; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
+        }
 
         .toggle-box::after {
             position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem; font-weight: bold; z-index: 2; pointer-events: none; text-transform: uppercase;
+            padding: 0 4px; font-size: 0.75rem; line-height: 1; font-weight: bold;
+            z-index: 2; pointer-events: none; text-transform: uppercase;
         }
+        .toggle-box[data-state]:not([data-state="0"])::after { align-items: flex-start; padding-top: 6px; }
 
         .limit-box { background: #2c2c2c; border: 1px solid var(--border); color: #ffffff; }
         .toggle-box.breaker[data-state="1"] { background: rgba(78, 205, 196, 0.15); border-color: #4ecdc4; }
@@ -283,6 +290,30 @@
         .ref-card-emf { cursor: default; border-color: #ff4444 !important; background: rgba(255, 68, 68, 0.05); }
         .ref-card-hr { cursor: default; border-color: #00ffff !important; background: rgba(0, 255, 255, 0.05); }
         .ref-card-wheel { cursor: default; border-color: #ffd700 !important; background: rgba(255, 215, 0, 0.05); }
+
+        .map-filter-controls { width: 100%; max-width: 520px; margin-top: 4px; }
+        .map-filter-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 7px; }
+        .map-selection-count { color: #ffffff; font-size: 0.72rem; font-weight: 600; text-align: left; }
+        .map-filter-actions { display: flex; gap: 5px; flex-shrink: 0; }
+        .map-filter-action {
+            background: #2c2c2c; border: 1px solid #444; color: #ffffff; border-radius: 4px;
+            padding: 5px 8px; min-height: 34px; font-size: 0.65rem; font-weight: bold;
+            text-transform: uppercase; cursor: pointer;
+        }
+        .map-filter-action:hover { background: #333; border-color: #666; }
+        .map-filter-action:disabled { opacity: 0.4; cursor: not-allowed; }
+        .map-toggle-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+        .map-toggle-btn {
+            min-height: 40px; padding: 5px 7px; border-radius: 5px; border: 1px solid #444;
+            background: #1e1e1e; color: #888; font-size: 0.68rem; line-height: 1.15;
+            font-weight: 600; cursor: pointer; transition: 0.2s; overflow-wrap: anywhere;
+        }
+        .map-toggle-btn:hover { background: #2c2c2c; color: #ffffff; }
+        .map-toggle-btn.active { border-color: #ffd700; color: #ffd700; background: rgba(255, 215, 0, 0.1); }
+        .map-toggle-btn:not(.active) { text-decoration: line-through; text-decoration-color: var(--danger-red); opacity: 0.55; }
+        .map-toggle-btn:disabled { cursor: not-allowed; opacity: 0.35; }
+        .map-toggle-btn.active:disabled { opacity: 0.7; }
+        .wheel-spin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         
         .phrase-tag { background: #2c2c2c; border: 1px solid #444; color: #e0e0e0; font-size: 0.75rem; padding: 3px 6px; border-radius: 4px; font-family: 'Consolas', monospace; user-select: text; display: inline-block; }
 
@@ -342,6 +373,7 @@
             .reference-header { flex-direction: column; gap: 10px; align-items: flex-start; }
             .reference-container.all-mode { grid-template-columns: 1fr; }
             .reference-container.tabs-mode .ref-card-hr #playerInputs { grid-template-columns: repeat(2, 1fr); }
+            .map-filter-header { align-items: flex-start; }
         }
 
         @media screen and (max-width: 360px) {
@@ -545,8 +577,18 @@
                                 <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 18px solid #ffd700; z-index: 5;"></div>
                                 <canvas id="wheelCanvas" width="450" height="450" style="max-width: 100%; height: auto; border-radius: 50%; border: 2px solid var(--border); background: #1a1a1a;"></canvas>
                             </div>
-                            <button class="timer-btn btn-start" onclick="spinWheel()" style="max-width: 200px; width: 100%;">Spin Wheel</button>
-                            <div id="wheelResult" style="margin-top: 10px; font-size: 1.1rem; font-weight: bold; color: var(--select-green); min-height: 24px;"></div>
+                            <div class="map-filter-controls">
+                                <div class="map-filter-header">
+                                    <div id="mapSelectionCount" class="map-selection-count">9 of 9 maps included</div>
+                                    <div class="map-filter-actions">
+                                        <button id="selectAllMapsBtn" class="map-filter-action" type="button">All</button>
+                                        <button id="clearAllMapsBtn" class="map-filter-action" type="button">None</button>
+                                    </div>
+                                </div>
+                                <div id="mapToggleGrid" class="map-toggle-grid" aria-label="Maps included on the wheel"></div>
+                            </div>
+                            <button id="wheelSpinBtn" class="timer-btn btn-start wheel-spin-btn" onclick="spinWheel()" style="max-width: 200px; width: 100%; margin-top: 12px;">Spin Wheel</button>
+                            <div id="wheelResult" aria-live="polite" style="margin-top: 10px; font-size: 1.1rem; font-weight: bold; color: var(--select-green); min-height: 24px;"></div>
                         </div>
                     </div>
                 </div>
@@ -591,7 +633,8 @@
             "317 Aspen Heights", "1205 Cedar Street", "12 Ravenwood Lane"
         ];
         const mapTextColors = ["#ff4444", "#ffa500", "#ffd700", "#32cd32", "#00ffff", "#44aaff", "#bc13fe", "#ff66cc", "#4ecdc4"];
-        let currentWheelAngle = 0, isSpinning = false;
+        const selectedMaps = new Set(mapList);
+        let currentWheelAngle = 0, isSpinning = false, wheelSpinId = 0;
 
         let recognition = null;
         let isListening = false;
@@ -1070,6 +1113,7 @@
             updateLimitDisplays();
             filterGhosts();
             switchTab(0);
+            initMapSelector();
             drawWheel();
             initVoiceRecognition();
             initHrCalculator();
@@ -1162,19 +1206,105 @@
             });
         }
 
+        function getActiveMaps() {
+            return mapList.filter(map => selectedMaps.has(map));
+        }
+
+        function initMapSelector() {
+            const grid = document.getElementById('mapToggleGrid');
+            const selectAllBtn = document.getElementById('selectAllMapsBtn');
+            const clearAllBtn = document.getElementById('clearAllMapsBtn');
+            if (!grid || !selectAllBtn || !clearAllBtn) return;
+
+            grid.innerHTML = '';
+            mapList.forEach(map => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'map-toggle-btn';
+                btn.dataset.map = map;
+                btn.textContent = map;
+                btn.addEventListener('click', () => toggleMapOnWheel(map));
+                grid.appendChild(btn);
+            });
+
+            selectAllBtn.addEventListener('click', () => setAllMaps(true));
+            clearAllBtn.addEventListener('click', () => setAllMaps(false));
+            updateMapSelectorUI();
+        }
+
+        function toggleMapOnWheel(map) {
+            if (isSpinning) return;
+            if (selectedMaps.has(map)) selectedMaps.delete(map);
+            else selectedMaps.add(map);
+
+            currentWheelAngle = 0;
+            const result = document.getElementById('wheelResult');
+            if (result) result.innerText = '';
+            updateMapSelectorUI();
+            drawWheel();
+        }
+
+        function setAllMaps(includeAll) {
+            if (isSpinning) return;
+            selectedMaps.clear();
+            if (includeAll) mapList.forEach(map => selectedMaps.add(map));
+
+            currentWheelAngle = 0;
+            const result = document.getElementById('wheelResult');
+            if (result) result.innerText = includeAll ? '' : 'Select at least one map.';
+            updateMapSelectorUI();
+            drawWheel();
+        }
+
+        function updateMapSelectorUI() {
+            const activeMaps = getActiveMaps();
+            const count = document.getElementById('mapSelectionCount');
+            const spinBtn = document.getElementById('wheelSpinBtn');
+            const selectAllBtn = document.getElementById('selectAllMapsBtn');
+            const clearAllBtn = document.getElementById('clearAllMapsBtn');
+
+            if (count) count.innerText = `${activeMaps.length} of ${mapList.length} maps included`;
+            document.querySelectorAll('.map-toggle-btn').forEach(btn => {
+                const isActive = selectedMaps.has(btn.dataset.map);
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', String(isActive));
+                btn.disabled = isSpinning;
+            });
+
+            if (spinBtn) spinBtn.disabled = isSpinning || activeMaps.length === 0;
+            if (selectAllBtn) selectAllBtn.disabled = isSpinning || activeMaps.length === mapList.length;
+            if (clearAllBtn) clearAllBtn.disabled = isSpinning || activeMaps.length === 0;
+        }
+
         function drawWheel() {
             const canvas = document.getElementById('wheelCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            const numSlices = mapList.length;
-            if (numSlices === 0) return;
-
+            const activeMaps = getActiveMaps();
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const radius = canvas.width / 2 - 5;
-            const sliceAngle = (2 * Math.PI) / numSlices;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (activeMaps.length === 0) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = '#1a1a1a';
+                ctx.fill();
+                ctx.strokeStyle = '#444';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.fillStyle = '#888';
+                ctx.font = "bold 18px 'Segoe UI', sans-serif";
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('No maps selected', centerX, centerY);
+                return;
+            }
+
+            const numSlices = activeMaps.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
             const sliceColors = ['#2c2c2c', '#1e1e1e', '#383838', '#222222'];
 
             for (let i = 0; i < numSlices; i++) {
@@ -1194,24 +1324,31 @@
                 ctx.save();
                 ctx.translate(centerX, centerY);
                 ctx.rotate(startAngle + sliceAngle / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = mapTextColors[i % mapTextColors.length];
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = mapTextColors[mapList.indexOf(activeMaps[i]) % mapTextColors.length];
                 ctx.font = "bold 13px 'Segoe UI', sans-serif";
-                ctx.fillText(mapList[i], radius - 15, 4);
+                ctx.fillText(activeMaps[i], radius - 15, 0);
                 ctx.restore();
             }
         }
 
         function spinWheel() {
-            if (isSpinning || mapList.length === 0) return;
-            isSpinning = true;
-            document.getElementById('wheelResult').innerText = "Selecting location...";
+            const activeMaps = getActiveMaps();
+            if (isSpinning || activeMaps.length === 0) return;
 
-            const totalRotation = (Math.random() * 12 + 18) * Math.PI; 
+            isSpinning = true;
+            const spinId = ++wheelSpinId;
+            updateMapSelectorUI();
+            document.getElementById('wheelResult').innerText = 'Selecting location...';
+
+            const totalRotation = (Math.random() * 12 + 18) * Math.PI;
             const duration = Math.random() * 2000 + 3000;
             const startTimestamp = performance.now();
 
             function animate(now) {
+                if (spinId !== wheelSpinId) return;
+
                 const elapsed = now - startTimestamp;
                 const progress = Math.min(elapsed / duration, 1);
                 const easeOut = 1 - Math.pow(1 - progress, 4);
@@ -1223,20 +1360,22 @@
                     requestAnimationFrame(animate);
                 } else {
                     isSpinning = false;
-                    calculateWheelWinner();
+                    calculateWheelWinner(activeMaps);
+                    updateMapSelectorUI();
                 }
             }
 
             requestAnimationFrame(animate);
         }
 
-        function calculateWheelWinner() {
-            const numSlices = mapList.length;
+        function calculateWheelWinner(activeMaps = getActiveMaps()) {
+            if (activeMaps.length === 0) return;
+            const numSlices = activeMaps.length;
             const sliceAngle = (2 * Math.PI) / numSlices;
             let pointerAngle = (3 * Math.PI / 2 - currentWheelAngle) % (2 * Math.PI);
             if (pointerAngle < 0) pointerAngle += 2 * Math.PI;
             const winningIndex = Math.floor(pointerAngle / sliceAngle) % numSlices;
-            document.getElementById('wheelResult').innerText = `Destination: ${mapList[winningIndex]}`;
+            document.getElementById('wheelResult').innerText = `Destination: ${activeMaps[winningIndex]}`;
         }
 
         function toggleSelection(name) {
@@ -1265,6 +1404,16 @@
             selectedGhost = null;
             document.querySelectorAll('.ev-btn').forEach(b => b.setAttribute('data-state', '0'));
             document.querySelectorAll('.toggle-box').forEach(b => b.dataset.state = 0);
+
+            wheelSpinId++;
+            isSpinning = false;
+            currentWheelAngle = 0;
+            selectedMaps.clear();
+            mapList.forEach(map => selectedMaps.add(map));
+            const wheelResult = document.getElementById('wheelResult');
+            if (wheelResult) wheelResult.innerText = '';
+            updateMapSelectorUI();
+            drawWheel();
             
             for (let i = 1; i <= 6; i++) {
                 const input = document.getElementById(`hr-p${i}`);
