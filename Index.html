@@ -2,7 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#bb86fc">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="P.M.S. Tracker">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/pms-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
     <title>Identify Assistant - The Other Side</title>
     <style>
         :root {
@@ -152,6 +160,7 @@
             width: 100%; padding: 6px 8px; margin-bottom: 0; border-radius: 6px; background: var(--bg-control); border: 1px solid var(--border);
             color: #ffffff; cursor: pointer; text-align: center; font-size: 0.75rem; font-weight: 600;
             transition: all 0.2s; user-select: none; position: relative; min-height: 44px; display: flex; align-items: center; justify-content: center;
+            appearance: none; -webkit-appearance: none;
         }
         .toggle-box:hover { background: var(--bg-control-hover); border-color: #555; }
         .toggle-box.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
@@ -581,6 +590,19 @@
             }
         }
         
+        .toggle-box:focus-visible, .ev-btn:focus-visible, .beta-modal-close:focus-visible, .hdr-btn:focus-visible {
+            outline: 2px solid var(--accent); outline-offset: 2px;
+        }
+        .toggle-box:disabled, .ev-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+        .install-btn { color: #7de2a4; }
+        .install-btn:hover { border-color: #7de2a4; color: #ffffff; }
+        .hdr-btn[hidden], .ios-install-note[hidden] { display: none !important; }
+        .ios-install-note {
+            background: var(--bg-soft); border-bottom: 1px solid var(--border); color: #ffffff;
+            padding: 7px 12px; text-align: center; font-size: 0.72rem; line-height: 1.35; flex-shrink: 0;
+        }
+        .ios-install-note strong { color: var(--accent); }
+
         .footer-link { font-size: 0.7rem; color: #ffffff; text-align: center; margin-top: 20px; margin-bottom: 10px; }
         .footer-link a { color: var(--accent); text-decoration: none; font-weight: bold; }
         .footer-link a:hover { text-decoration: underline; }
@@ -593,10 +615,12 @@
         <div class="header-btn-group">
             <button class="hdr-btn reset-btn" onclick="resetAll()">Reset</button>
             <button class="hdr-btn ref-btn" onclick="scrollToReference()">Reference</button>
+            <button id="installAppBtn" class="hdr-btn install-btn" type="button" hidden>Install</button>
             <button id="micBtn" class="hdr-btn mic-btn" onclick="toggleVoice()" title="Click for Voice Command">🎤</button>
         </div>
         <h1>Paranormal Monitoring System Tracker</h1>
     </header>
+    <div id="iosInstallNote" class="ios-install-note" role="status" hidden><strong>Install P.M.S. on iPhone/iPad:</strong> open the Share menu, choose <strong>Add to Home Screen</strong>, then tap <strong>Add</strong>.</div>
 
     <div class="main-content">
         <div class="sidebar">
@@ -605,8 +629,8 @@
                 <div class="sidebar-section">
                     <h3>Evidence Setup</h3>
                     <div class="limit-grid">
-                        <div class="toggle-box limit-box" id="btn-real-limit" onclick="cycleRealLimit()">Real Evidence - 3</div>
-                        <div class="toggle-box limit-box" id="btn-false-limit" onclick="cycleFalseLimit()">Diminishing Evidence - 0</div>
+                        <button type="button" class="toggle-box limit-box" id="btn-real-limit" onclick="cycleRealLimit()" aria-label="Real Evidence limit: 3">Real Evidence - 3</button>
+                        <button type="button" class="toggle-box limit-box" id="btn-false-limit" onclick="cycleFalseLimit()" aria-label="Diminishing Evidence limit: 0">Diminishing Evidence - 0</button>
                     </div>
                 </div>
 
@@ -618,18 +642,18 @@
                 <div class="sidebar-section">
                     <h3>Behaviors</h3>
                     <div class="behavior-grid">
-                        <div class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="4" onclick="cycleState(this)"><span class="toggle-label">Base Speed</span></div>
-                        <div class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="5" onclick="cycleState(this)"><span class="toggle-label">Breaker Box</span></div>
-                        <div class="toggle-box candle" id="btn-candle" data-state="0" data-max="4" onclick="cycleState(this)"><span class="toggle-label">Candle</span></div>
-                        <div class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">Doors</span></div>
-                        <div class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">FLX-POD</span></div>
-                        <div class="toggle-box holy" id="btn-holy" data-state="0" data-max="4" onclick="cycleState(this)"><span class="toggle-label">Holy Water</span></div>
-                        <div class="toggle-box cooldown" id="btn-cooldown" data-state="0" data-max="4" onclick="cycleState(this)"><span class="toggle-label">Cooldown</span></div>
-                        <div class="toggle-box lights" id="btn-lights" data-state="0" data-max="5" onclick="cycleState(this)"><span class="toggle-label">Lights</span></div>
-                        <div class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">LOS Range</span></div>
-                        <div class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="5" onclick="cycleState(this)"><span class="toggle-label">LOS Speed</span></div>
-                        <div class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)"><span class="toggle-label">Manifest</span></div>
-                        <div class="toggle-box radio" id="btn-radio" data-state="0" data-max="5" onclick="cycleState(this)"><span class="toggle-label">Radio</span></div>
+                        <button type="button" class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Base Speed: Cleared"><span class="toggle-label">Base Speed</span></button>
+                        <button type="button" class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Breaker Box: Cleared"><span class="toggle-label">Breaker Box</span></button>
+                        <button type="button" class="toggle-box candle" id="btn-candle" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Candle: Cleared"><span class="toggle-label">Candle</span></button>
+                        <button type="button" class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Doors: Cleared"><span class="toggle-label">Doors</span></button>
+                        <button type="button" class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="FLX-POD: Cleared"><span class="toggle-label">FLX-POD</span></button>
+                        <button type="button" class="toggle-box holy" id="btn-holy" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Holy Water: Cleared"><span class="toggle-label">Holy Water</span></button>
+                        <button type="button" class="toggle-box cooldown" id="btn-cooldown" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Cooldown: Cleared"><span class="toggle-label">Cooldown</span></button>
+                        <button type="button" class="toggle-box lights" id="btn-lights" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Lights: Cleared"><span class="toggle-label">Lights</span></button>
+                        <button type="button" class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="LOS Range: Cleared"><span class="toggle-label">LOS Range</span></button>
+                        <button type="button" class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="LOS Speed: Cleared"><span class="toggle-label">LOS Speed</span></button>
+                        <button type="button" class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Manifest: Cleared"><span class="toggle-label">Manifest</span></button>
+                        <button type="button" class="toggle-box radio" id="btn-radio" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Radio: Cleared"><span class="toggle-label">Radio</span></button>
                     </div>
 
                     <div class="timer-container">
@@ -2091,8 +2115,21 @@
             pinnedGhosts.clear(); snapshot.pinnedGhosts.forEach(name => pinnedGhosts.add(name));
             showPossibleOnly = !!snapshot.showPossibleOnly;
             skippedBestTests.clear(); (snapshot.skippedBestTests || []).forEach(name => skippedBestTests.add(name));
-            document.querySelectorAll('.ev-btn').forEach(btn => btn.dataset.state = String(evidenceStates[btn.dataset.ev] || 0));
-            Object.entries(snapshot.behaviorStates).forEach(([id, state]) => { const btn = document.getElementById(id); if (btn) btn.dataset.state = String(state); });
+            document.querySelectorAll('.ev-btn').forEach(btn => {
+                const ev = btn.dataset.ev;
+                const state = evidenceStates[ev] || 0;
+                const stateLabel = state === 0 ? 'Cleared' : state === 1 ? 'Real' : state === 2 ? 'Diminishing' : 'Excluded';
+                btn.dataset.state = String(state);
+                btn.setAttribute('aria-label', `${evidenceLabel(ev)} evidence: ${stateLabel}`);
+            });
+            Object.entries(snapshot.behaviorStates).forEach(([id, state]) => {
+                const btn = document.getElementById(id);
+                if (btn) {
+                    btn.dataset.state = String(state);
+                    const key = id.replace('btn-', '');
+                    btn.setAttribute('aria-label', `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${state ? getBehaviorStateLabel(key, state) : 'Cleared'}`);
+                }
+            });
             updateLimitDisplays();
             isRestoringHistory = false;
             filterGhosts();
@@ -2493,22 +2530,38 @@
             openBetaModal('Compare Remaining Ghosts', body);
         }
 
+        let betaModalLastFocus = null;
+
+        function getBetaModalFocusableElements() {
+            const modal = document.getElementById('betaModal');
+            if (!modal) return [];
+            return [...modal.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+                .filter(el => !el.hidden && el.offsetParent !== null);
+        }
+
         function openBetaModal(title, html) {
             const modal = document.getElementById('betaModal');
             const titleEl = document.getElementById('betaModalTitle');
             const body = document.getElementById('betaModalBody');
             if (!modal || !titleEl || !body) return;
+            if (!modal.classList.contains('show')) betaModalLastFocus = document.activeElement;
             titleEl.textContent = title;
             body.innerHTML = html;
             modal.classList.add('show');
             modal.setAttribute('aria-hidden', 'false');
+            requestAnimationFrame(() => modal.querySelector('.beta-modal-close')?.focus());
         }
 
         function closeBetaModal() {
             const modal = document.getElementById('betaModal');
-            if (!modal) return;
+            if (!modal || !modal.classList.contains('show')) return;
             modal.classList.remove('show');
             modal.setAttribute('aria-hidden', 'true');
+            const returnTarget = betaModalLastFocus;
+            betaModalLastFocus = null;
+            if (returnTarget && returnTarget.isConnected && typeof returnTarget.focus === 'function') {
+                requestAnimationFrame(() => returnTarget.focus());
+            }
         }
 
         function handleBetaModalBackdrop(event) {
@@ -2516,7 +2569,25 @@
         }
 
         document.addEventListener('keydown', event => {
-            if (event.key === 'Escape') closeBetaModal();
+            const modal = document.getElementById('betaModal');
+            if (!modal?.classList.contains('show')) return;
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                closeBetaModal();
+                return;
+            }
+            if (event.key !== 'Tab') return;
+            const focusable = getBetaModalFocusableElements();
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
         });
 
         function initHrCalculator() {
@@ -2691,7 +2762,10 @@
             recordInvestigationAction(`${evType}: ${stateLabel} (voice)`);
             evidenceStates[evType] = state;
             const btn = document.querySelector(`.ev-btn[data-ev="${evType}"]`);
-            if (btn) btn.setAttribute('data-state', state);
+            if (btn) {
+                btn.setAttribute('data-state', state);
+                btn.setAttribute('aria-label', `${evidenceLabel(evType)} evidence: ${stateLabel}`);
+            }
             filterGhosts();
         }
 
@@ -2700,8 +2774,10 @@
             if (!btn) return;
             if (Number(btn.dataset.state || 0) === Number(targetState)) return;
             const key = id.replace('btn-', '');
-            recordInvestigationAction(`${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${targetState ? getBehaviorStateLabel(key, targetState) : 'Cleared'} (voice)`);
+            const stateLabel = targetState ? getBehaviorStateLabel(key, targetState) : 'Cleared';
+            recordInvestigationAction(`${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${stateLabel} (voice)`);
             btn.dataset.state = targetState;
+            btn.setAttribute('aria-label', `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${stateLabel}`);
             filterGhosts();
         }
 
@@ -2976,14 +3052,103 @@
             return matchesForcedEvidenceForLimit(ghost, realEvidence, realLimit);
         }
 
+        // =========================
+        // INSTALLABLE WEB APP (PWA)
+        // =========================
+        let deferredInstallPrompt = null;
+
+        function isPmsRunningStandalone() {
+            return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        }
+
+        function isAppleMobileDevice() {
+            const ua = navigator.userAgent || '';
+            const classicIOS = /iPad|iPhone|iPod/i.test(ua);
+            const modernIPad = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+            return classicIOS || modernIPad;
+        }
+
+        function updatePmsInstallUI() {
+            const installBtn = document.getElementById('installAppBtn');
+            const iosNote = document.getElementById('iosInstallNote');
+            if (!installBtn || !iosNote) return;
+
+            if (isPmsRunningStandalone()) {
+                installBtn.hidden = true;
+                iosNote.hidden = true;
+                return;
+            }
+
+            if (isAppleMobileDevice()) {
+                installBtn.hidden = true;
+                iosNote.hidden = false;
+                return;
+            }
+
+            iosNote.hidden = true;
+            installBtn.hidden = !deferredInstallPrompt;
+        }
+
+        async function promptPmsInstall() {
+            const installBtn = document.getElementById('installAppBtn');
+            if (!deferredInstallPrompt || isPmsRunningStandalone()) return;
+
+            const promptEvent = deferredInstallPrompt;
+            deferredInstallPrompt = null;
+            if (installBtn) installBtn.disabled = true;
+
+            try {
+                await promptEvent.prompt();
+                await promptEvent.userChoice;
+            } catch (error) {
+                console.warn('[PMS] Install prompt could not be shown.', error);
+            } finally {
+                if (installBtn) installBtn.disabled = false;
+                updatePmsInstallUI();
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', event => {
+            if (isPmsRunningStandalone()) return;
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            updatePmsInstallUI();
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredInstallPrompt = null;
+            updatePmsInstallUI();
+        });
+
+        function initPmsInstallExperience() {
+            document.getElementById('installAppBtn')?.addEventListener('click', promptPmsInstall);
+            updatePmsInstallUI();
+
+            const displayMode = window.matchMedia('(display-mode: standalone)');
+            if (typeof displayMode.addEventListener === 'function') {
+                displayMode.addEventListener('change', updatePmsInstallUI);
+            }
+
+            const canRegisterServiceWorker = 'serviceWorker' in navigator &&
+                (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+            if (canRegisterServiceWorker) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./service-worker.js')
+                        .catch(error => console.warn('[PMS] Service worker registration failed.', error));
+                }, { once: true });
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('evidence-container');
             evidenceTypes.forEach(ev => {
-                const btn = document.createElement('div');
+                const btn = document.createElement('button');
+                btn.type = 'button';
                 btn.className = 'ev-btn';
                 btn.innerText = evidenceLabel(ev);
                 btn.setAttribute('data-ev', ev);
                 btn.setAttribute('data-state', '0');
+                btn.setAttribute('aria-label', `${evidenceLabel(ev)} evidence: Cleared`);
                 btn.onclick = () => cycleEvidenceState(btn, ev);
                 container.appendChild(btn);
             });
@@ -2999,6 +3164,7 @@
             validateTrackerData();
             updateUndoAndHistoryUI();
             updateBetaAssistant();
+            initPmsInstallExperience();
         });
 
         function cycleRealLimit() {
@@ -3026,21 +3192,27 @@
             const falseBtn = document.getElementById('btn-false-limit');
 
             realBtn.innerText = `Real Evidence - ${realLimit}`;
+            realBtn.setAttribute('aria-label', `Real Evidence limit: ${realLimit}`);
             falseBtn.innerText = `Diminishing Evidence - ${falseLimit}`;
+            falseBtn.setAttribute('aria-label', `Diminishing Evidence limit: ${falseLimit}`);
 
             const evBtns = document.querySelectorAll('.ev-btn');
 
             if (realLimit === 0) {
                 falseBtn.classList.add('disabled');
+                falseBtn.disabled = true;
                 evBtns.forEach(btn => {
                     btn.classList.add('disabled');
+                    btn.disabled = true;
                     const ev = btn.getAttribute('data-ev');
                     evidenceStates[ev] = 0;
                     btn.setAttribute('data-state', '0');
+                    btn.setAttribute('aria-label', `${evidenceLabel(ev)} evidence: Cleared`);
                 });
             } else {
                 falseBtn.classList.remove('disabled');
-                evBtns.forEach(btn => btn.classList.remove('disabled'));
+                falseBtn.disabled = false;
+                evBtns.forEach(btn => { btn.classList.remove('disabled'); btn.disabled = false; });
             }
         }
 
@@ -3057,6 +3229,7 @@
             recordInvestigationAction(`${type}: ${stateLabel}`);
             evidenceStates[type] = nextState;
             btn.setAttribute('data-state', nextState);
+            btn.setAttribute('aria-label', `${evidenceLabel(type)} evidence: ${stateLabel}`);
 
             filterGhosts();
         }
@@ -3281,8 +3454,10 @@
             let current = parseInt(btn.dataset.state);
             const nextState = (current + 1) % max;
             const key = btn.id.replace('btn-', '');
-            recordInvestigationAction(`${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${nextState ? getBehaviorStateLabel(key, nextState) : 'Cleared'}`);
+            const stateLabel = nextState ? getBehaviorStateLabel(key, nextState) : 'Cleared';
+            recordInvestigationAction(`${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${stateLabel}`);
             btn.dataset.state = nextState;
+            btn.setAttribute('aria-label', `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${stateLabel}`);
             filterGhosts();
         }
 
@@ -3298,8 +3473,17 @@
             const possibleOnlyBtn = document.getElementById('btnPossibleOnly');
             if (possibleOnlyBtn) possibleOnlyBtn.classList.remove('active');
             closeBetaModal();
-            document.querySelectorAll('.ev-btn').forEach(b => b.setAttribute('data-state', '0'));
-            document.querySelectorAll('.toggle-box').forEach(b => b.dataset.state = 0);
+            document.querySelectorAll('.ev-btn').forEach(b => {
+                b.setAttribute('data-state', '0');
+                b.setAttribute('aria-label', `${evidenceLabel(b.dataset.ev)} evidence: Cleared`);
+            });
+            document.querySelectorAll('.toggle-box').forEach(b => {
+                if (!b.classList.contains('limit-box')) {
+                    b.dataset.state = 0;
+                    const key = b.id.replace('btn-', '');
+                    b.setAttribute('aria-label', `${BEHAVIOR_DISPLAY_NAMES[key] || key}: Cleared`);
+                }
+            });
 
             wheelSpinId++;
             isSpinning = false;
