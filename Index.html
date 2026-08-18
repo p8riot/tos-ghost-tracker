@@ -558,6 +558,79 @@
         .theme-select { background: var(--bg-control); color: #fff; border: 1px solid var(--border-strong); border-radius: 4px; padding: 5px 8px; font-size: 0.7rem; min-height: 34px; }
         .theme-select:focus { outline: 1px solid var(--accent); outline-offset: 1px; }
 
+
+
+        /* Phone-only possible-ghost drawer. Desktop/tablet ghost grid stays unchanged. */
+        .mobile-ghost-drawer { display: none; }
+        @media screen and (max-width: 600px) {
+            body { padding-bottom: 62px; }
+            .mobile-ghost-drawer {
+                display: flex; flex-direction: column; position: fixed; left: 0; right: 0; bottom: 0;
+                z-index: 90; pointer-events: none;
+            }
+            .mobile-ghost-bar {
+                pointer-events: auto; width: 100%; min-height: 56px; border: 0; border-top: 2px solid var(--accent);
+                background: var(--bg-deep); color: #fff; padding: 9px 14px; cursor: pointer;
+                display: flex; align-items: center; justify-content: space-between; gap: 12px;
+                box-shadow: 0 -6px 18px rgba(0,0,0,.45); font-weight: 800;
+            }
+            .mobile-ghost-bar-main { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-width: 0; }
+            .mobile-ghost-bar-count { color: var(--accent); font-size: .88rem; text-transform: uppercase; letter-spacing: .4px; }
+            .mobile-ghost-bar-hint { color: var(--text-muted); font-size: .62rem; font-weight: 600; }
+            .mobile-ghost-chevron { color: var(--accent); font-size: 1rem; transition: transform .18s ease; }
+            .mobile-ghost-drawer.open .mobile-ghost-chevron { transform: rotate(180deg); }
+            .mobile-ghost-panel {
+                pointer-events: auto; max-height: 0; overflow: hidden; visibility: hidden;
+                background: var(--bg-panel); border-top: 0 solid var(--border-strong);
+                transition: max-height .22s ease, visibility 0s linear .22s;
+            }
+            .mobile-ghost-drawer.open .mobile-ghost-panel {
+                max-height: 72vh; visibility: visible; border-top-width: 1px;
+                transition: max-height .22s ease;
+            }
+            .mobile-ghost-panel-header {
+                min-height: 46px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between;
+                gap: 10px; border-bottom: 1px solid var(--border); background: var(--bg-soft);
+            }
+            .mobile-ghost-panel-title { font-size: .78rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: .5px; }
+            .mobile-ghost-close {
+                min-width: 38px; min-height: 38px; border: 1px solid var(--border-strong); border-radius: 5px;
+                background: var(--bg-control); color: #fff; cursor: pointer; font-size: 1rem;
+            }
+            .mobile-ghost-list { max-height: calc(72vh - 46px); overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+            .mobile-ghost-row { border: 1px solid var(--border); border-radius: 7px; background: var(--bg-card); overflow: hidden; }
+            .mobile-ghost-row.pinned { border-color: #ffd700; box-shadow: inset 3px 0 0 #ffd700; }
+            .mobile-ghost-row.selected { border-color: var(--select-green); box-shadow: inset 3px 0 0 var(--select-green); }
+            .mobile-ghost-summary { min-height: 48px; display: flex; align-items: center; gap: 6px; padding: 5px 7px 5px 10px; }
+            .mobile-ghost-expand {
+                flex: 1; min-width: 0; min-height: 38px; border: 0; background: transparent; color: #fff; cursor: pointer;
+                display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left; font-weight: 800;
+            }
+            .mobile-ghost-expand-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .9rem; }
+            .mobile-ghost-expand-hint { color: var(--text-muted); font-size: .62rem; font-weight: 700; flex: 0 0 auto; }
+            .mobile-ghost-pin { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--bg-soft); color: var(--text-muted); cursor: pointer; }
+            .mobile-ghost-pin.pinned { color: #ffd700; border-color: #ffd700; }
+            .mobile-ghost-detail { border-top: 1px solid var(--border); padding: 9px 10px 11px; display: flex; flex-direction: column; gap: 8px; }
+            .mobile-ghost-detail[hidden] { display: none !important; }
+            .mobile-ghost-evidence { display: flex; flex-wrap: wrap; gap: 4px; }
+            .mobile-ghost-behaviors { display: flex; flex-direction: column; gap: 4px; color: var(--text-main); font-size: .72rem; line-height: 1.35; }
+            .mobile-ghost-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+            .mobile-ghost-stat { border: 1px solid var(--border); border-radius: 5px; background: var(--bg-soft); padding: 6px; font-size: .64rem; color: var(--text-muted); }
+            .mobile-ghost-stat strong { display: block; margin-top: 2px; color: #fff; font-size: .72rem; }
+            .mobile-ghost-actions { display: flex; gap: 6px; }
+            .mobile-ghost-action {
+                flex: 1; min-height: 40px; border: 1px solid var(--border-strong); border-radius: 5px;
+                background: var(--bg-control); color: #fff; cursor: pointer; font-size: .68rem; font-weight: 800; text-transform: uppercase;
+            }
+            .mobile-ghost-action.select { color: var(--select-green); border-color: rgba(0,230,118,.45); }
+            .mobile-ghost-empty { color: var(--text-muted); text-align: center; padding: 22px 10px; font-size: .78rem; }
+            .mobile-ghost-bar:focus-visible, .mobile-ghost-close:focus-visible, .mobile-ghost-expand:focus-visible,
+            .mobile-ghost-pin:focus-visible, .mobile-ghost-action:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .mobile-ghost-panel, .mobile-ghost-chevron { transition: none !important; }
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
@@ -863,6 +936,24 @@
         </div>
     </div>
 
+
+    <div id="mobileGhostDrawer" class="mobile-ghost-drawer" aria-label="Possible ghosts quick view">
+        <section id="mobileGhostPanel" class="mobile-ghost-panel" aria-hidden="true">
+            <div class="mobile-ghost-panel-header">
+                <div id="mobileGhostPanelTitle" class="mobile-ghost-panel-title">Possible Ghosts</div>
+                <button type="button" class="mobile-ghost-close" onclick="closeMobileGhostDrawer()" aria-label="Close possible ghosts">×</button>
+            </div>
+            <div id="mobileGhostList" class="mobile-ghost-list"></div>
+        </section>
+        <button id="mobileGhostBar" class="mobile-ghost-bar" type="button" onclick="toggleMobileGhostDrawer()" aria-expanded="false" aria-controls="mobileGhostPanel">
+            <span class="mobile-ghost-bar-main">
+                <span id="mobileGhostCount" class="mobile-ghost-bar-count">25 Possible Ghosts</span>
+                <span class="mobile-ghost-bar-hint">Tap to view without scrolling</span>
+            </span>
+            <span class="mobile-ghost-chevron" aria-hidden="true">▲</span>
+        </button>
+    </div>
+
     <div id="betaModal" class="beta-modal" onclick="handleBetaModalBackdrop(event)" aria-hidden="true">
         <div class="beta-modal-card" role="dialog" aria-modal="true" aria-labelledby="betaModalTitle">
             <div class="beta-modal-header">
@@ -998,11 +1089,14 @@
                                 "desc": [
                                             "After being sprayed, its line-of-sight speed will be increased in subsequent hunts",
                                             "Cannot manifest in full-form outside of a hunt",
-                                            "Cannot turn on or off lights"
+                                            "Cannot turn on or off lights",
+                                            "Can turn radios on and off"
                                 ],
                                 "tags": [
                                             "shadow-only",
-                                            "lights-ignore"
+                                            "lights-ignore",
+                                            "radio-on",
+                                            "radio-off"
                                 ],
                                 "starred": [
                                             "losspeed"
@@ -1782,6 +1876,7 @@
         let isRestoringHistory = false;
         let currentFilterMatches = [];
         let currentCandidateGhosts = [];
+        const mobileExpandedGhosts = new Set();
         let currentValidGhostNames = new Set();
         const MAX_UNDO_STEPS = 40;
 
@@ -2340,9 +2435,136 @@
             return suggestions.sort((a,b) => b.count - a.count).slice(0, 3);
         }
 
+
+
+        function isPhoneGhostDrawerViewport() {
+            return window.matchMedia && window.matchMedia('(max-width: 600px)').matches;
+        }
+
+        function setMobileGhostDrawerOpen(open) {
+            const drawer = document.getElementById('mobileGhostDrawer');
+            const panel = document.getElementById('mobileGhostPanel');
+            const bar = document.getElementById('mobileGhostBar');
+            if (!drawer || !panel || !bar) return;
+            const shouldOpen = !!open && isPhoneGhostDrawerViewport();
+            drawer.classList.toggle('open', shouldOpen);
+            panel.setAttribute('aria-hidden', String(!shouldOpen));
+            bar.setAttribute('aria-expanded', String(shouldOpen));
+        }
+
+        function toggleMobileGhostDrawer() {
+            const drawer = document.getElementById('mobileGhostDrawer');
+            setMobileGhostDrawerOpen(!drawer?.classList.contains('open'));
+        }
+
+        function closeMobileGhostDrawer() {
+            setMobileGhostDrawerOpen(false);
+            document.getElementById('mobileGhostBar')?.focus();
+        }
+
+        function toggleMobileGhostRow(name) {
+            if (mobileExpandedGhosts.has(name)) mobileExpandedGhosts.delete(name);
+            else mobileExpandedGhosts.add(name);
+            renderMobileGhostDrawer();
+        }
+
+        function renderMobileGhostDrawer() {
+            const countEl = document.getElementById('mobileGhostCount');
+            const titleEl = document.getElementById('mobileGhostPanelTitle');
+            const listEl = document.getElementById('mobileGhostList');
+            if (!countEl || !titleEl || !listEl) return;
+
+            const count = currentCandidateGhosts.length;
+            countEl.textContent = `${count} Possible Ghost${count === 1 ? '' : 's'}`;
+            titleEl.textContent = `${count} Possible Ghost${count === 1 ? '' : 's'}`;
+            if (!isPhoneGhostDrawerViewport()) return;
+
+            const activeNames = new Set(currentCandidateGhosts.map(g => g.name));
+            [...mobileExpandedGhosts].forEach(name => { if (!activeNames.has(name)) mobileExpandedGhosts.delete(name); });
+            listEl.replaceChildren();
+
+            if (!count) {
+                const empty = document.createElement('div');
+                empty.className = 'mobile-ghost-empty';
+                empty.textContent = 'No possible ghosts match the current observations.';
+                listEl.appendChild(empty);
+                return;
+            }
+
+            currentCandidateGhosts.forEach(g => {
+                const expanded = mobileExpandedGhosts.has(g.name);
+                const isPinned = pinnedGhosts.has(g.name);
+                const isSelected = selectedGhost === g.name;
+                const row = document.createElement('div');
+                row.className = `mobile-ghost-row${isPinned ? ' pinned' : ''}${isSelected ? ' selected' : ''}`;
+
+                const summary = document.createElement('div');
+                summary.className = 'mobile-ghost-summary';
+                const expand = document.createElement('button');
+                expand.type = 'button';
+                expand.className = 'mobile-ghost-expand';
+                expand.setAttribute('aria-expanded', String(expanded));
+                expand.innerHTML = `<span class="mobile-ghost-expand-name">${escapeHTML(g.name)}</span><span class="mobile-ghost-expand-hint">${expanded ? 'Hide' : 'Details'}</span>`;
+                expand.addEventListener('click', () => toggleMobileGhostRow(g.name));
+
+                const pin = document.createElement('button');
+                pin.type = 'button';
+                pin.className = `mobile-ghost-pin${isPinned ? ' pinned' : ''}`;
+                pin.textContent = '📌';
+                pin.setAttribute('aria-label', `${isPinned ? 'Unpin' : 'Pin'} ${g.name}`);
+                pin.addEventListener('click', () => togglePinGhost(g.name));
+                summary.appendChild(expand);
+                summary.appendChild(pin);
+                row.appendChild(summary);
+
+                const detail = document.createElement('div');
+                detail.className = 'mobile-ghost-detail';
+                detail.hidden = !expanded;
+
+                const evidence = document.createElement('div');
+                evidence.className = 'mobile-ghost-evidence';
+                evidence.innerHTML = g.ev.map(e => `<span class="evidence-tag" data-ev="${escapeHTML(e)}">${escapeHTML(evidenceLabel(e))}</span>`).join('');
+                detail.appendChild(evidence);
+
+                const behaviors = document.createElement('div');
+                behaviors.className = 'mobile-ghost-behaviors';
+                behaviors.innerHTML = getDisplayBehaviors(g).map(item => `<span>• ${escapeHTML(item)}</span>`).join('');
+                detail.appendChild(behaviors);
+
+                const stats = document.createElement('div');
+                stats.className = 'mobile-ghost-stats';
+                stats.innerHTML = `
+                    <div class="mobile-ghost-stat">Base Speed<strong>${escapeHTML(String(getBaseSpeedDisplay(g)))}</strong></div>
+                    <div class="mobile-ghost-stat">Cooldown<strong>${escapeHTML(String(getCooldownDisplay(g)))}</strong></div>
+                    <div class="mobile-ghost-stat">LOS Speed<strong>${escapeHTML(String(getLosSpeedDisplay(g)))}</strong></div>
+                    <div class="mobile-ghost-stat">LOS Range<strong>${escapeHTML(String(getLosRangeDisplay(g)))}</strong></div>`;
+                detail.appendChild(stats);
+
+                const actions = document.createElement('div');
+                actions.className = 'mobile-ghost-actions';
+                const select = document.createElement('button');
+                select.type = 'button';
+                select.className = 'mobile-ghost-action select';
+                select.textContent = isSelected ? 'Deselect' : 'Select Ghost';
+                select.addEventListener('click', () => toggleSelection(g.name));
+                const full = document.createElement('button');
+                full.type = 'button';
+                full.className = 'mobile-ghost-action';
+                full.textContent = 'Full Details';
+                full.addEventListener('click', () => openGhostDetails(g.name));
+                actions.appendChild(select);
+                actions.appendChild(full);
+                detail.appendChild(actions);
+
+                row.appendChild(detail);
+                listEl.appendChild(row);
+            });
+        }
+
         function updateBetaAssistant() {
             const remaining = document.getElementById('betaRemaining');
             if (remaining) remaining.textContent = `${currentCandidateGhosts.length} / ${ghosts.length} Possible`;
+            renderMobileGhostDrawer();
             const possibleBtn = document.getElementById('btnPossibleOnly');
             if (possibleBtn) possibleBtn.classList.toggle('active', showPossibleOnly);
             updateUndoAndHistoryUI();
@@ -3165,6 +3387,7 @@
             updateUndoAndHistoryUI();
             updateBetaAssistant();
             initPmsInstallExperience();
+        window.addEventListener('resize', () => { if (!isPhoneGhostDrawerViewport()) setMobileGhostDrawerOpen(false); else renderMobileGhostDrawer(); });
         });
 
         function cycleRealLimit() {
