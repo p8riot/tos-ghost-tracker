@@ -1,10 +1,11 @@
-const CACHE_NAME = 'pms-tracker-2.0-pwa-2026-08-18-index';
+const CACHE_NAME = 'pms-tracker-2.0-cheatsheet-2026-08-18';
 const APP_SHELL = [
   './Index.html',
   './manifest.webmanifest',
   './icons/pms-192.png',
   './icons/pms-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './TOS_Cheat_Sheet_QB.png'
 ];
 
 self.addEventListener('install', event => {

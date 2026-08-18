@@ -315,6 +315,13 @@
         .ref-card-hr { cursor: default; border-color: #00ffff !important; background: rgba(0, 255, 255, 0.05); }
         .ref-card-wheel { cursor: default; border-color: #ffd700 !important; background: rgba(255, 215, 0, 0.05); }
 
+        .ref-card-cheatsheet { cursor: default; border-color: var(--accent) !important; background: var(--accent-soft); }
+        .cheatsheet-credit { text-align: center; color: var(--text-muted); font-size: 0.82rem; line-height: 1.4; }
+        .cheatsheet-credit a { color: var(--accent); font-weight: 800; text-decoration: none; }
+        .cheatsheet-credit a:hover, .cheatsheet-credit a:focus-visible { text-decoration: underline; }
+        .cheatsheet-image-link { display: block; width: 100%; text-align: center; }
+        .cheatsheet-image { display: block; width: 100%; max-width: 1200px; height: auto; margin: 0 auto; border: 1px solid var(--border-strong); border-radius: 6px; background: #ffffff; }
+
         .map-filter-controls { width: 100%; max-width: 520px; margin-top: 4px; }
         .map-filter-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 7px; }
         .map-selection-count { color: #ffffff; font-size: 0.72rem; font-weight: 600; text-align: left; }
@@ -723,7 +730,8 @@
                     <h3>Behaviors</h3>
                     <div class="behavior-grid">
                         <button type="button" class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Base Speed: Cleared"><span class="toggle-label">Base Speed</span></button>
-                        <button type="button" class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Breaker Box: Cleared"><span class="toggle-label">Breaker Box</span></button>
+                        <button type="button" class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Main Breaker: Cleared"><span class="toggle-label">Main Breaker</span></button>
+                        <button type="button" class="toggle-box action breaker" id="btn-indbreaker" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Individual Breakers: Cleared"><span class="toggle-label">Individual Breakers</span></button>
                         <button type="button" class="toggle-box candle" id="btn-candle" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Candle: Cleared"><span class="toggle-label">Candle</span></button>
                         <button type="button" class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Doors: Cleared"><span class="toggle-label">Doors</span></button>
                         <button type="button" class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="FLX-POD: Cleared"><span class="toggle-label">FLX-POD</span></button>
@@ -798,6 +806,7 @@
                     <div class="tabs-nav">
                         <span class="tab-group-label">Gameplay</span>
                         <button class="tab-btn active" data-tab-id="notes" onclick="switchTab('notes')">Notes</button>
+                        <button class="tab-btn" data-tab-id="cheatsheet" onclick="switchTab('cheatsheet')">CheatSheet</button>
                         <button class="tab-btn" data-tab-id="heart-rate" onclick="switchTab('heart-rate')">Heart Rate Calculator</button>
                         <button class="tab-btn" data-tab-id="spirit-box" onclick="switchTab('spirit-box')">Spirit Box Phrases</button>
                         <button class="tab-btn" data-tab-id="skia-audio" onclick="switchTab('skia-audio')">Skia Unique Audio</button>
@@ -825,11 +834,22 @@
                                 <span class="behavior-point"><strong>Ghost Orbs:</strong> normally require infrared vision to see, but an orb can also be photographed using the cellphone camera flash. Sluagh can produce multiple Ghost Orbs.</span>
                                 <span class="behavior-point"><strong>Puca:</strong> can imitate behaviors of other ghost types while passive or hunting. Do not rely on a behavior observation alone to rule Puca out; its evidence combination remains reliable.</span>
                                 <span class="behavior-point"><strong>Candles:</strong> ghosts can normally both light and extinguish candles unless their Notes specifically restrict one of those actions.</span>
-                                <span class="behavior-point"><strong>Breaker Box:</strong> ghosts can normally turn the main breaker both on and off unless their Notes specifically say they cannot interact with it.</span>
+                                <span class="behavior-point"><strong>Main Breaker:</strong> this is the main switch that controls the entire breaker box. Echo, Wewe Gombel, and Wisp cannot use the main breaker normally; the automatic breaker change after a hunt is an exception and should not be treated as an identifying interaction.</span>
+                                <span class="behavior-point"><strong>Individual Breakers:</strong> these are the room-specific switches inside the breaker box. All ghosts can turn individual breakers off. Echo and Wewe Gombel can only turn individual breakers off; every other ghost can turn individual breakers both on and off.</span>
                                 <span class="behavior-point"><strong>Radio interactions:</strong> TVs and alarm clocks do not count as Radio interactions. The Old Tape Recorder and Gramophone do count as Radio interactions.</span>
                                 <span class="behavior-point"><strong>Lights:</strong> a light exploding counts as the ghost turning a light off. Player illumination is now dynamic, so being closer to active light sources provides more protection from anxiety than simply standing somewhere in a lit room.</span>
 
                             </div>
+                        </div>
+
+                        <div class="ghost-card ref-card-cheatsheet" data-tab-panel="cheatsheet">
+                            <div class="ghost-header">
+                                <div class="ghost-name" style="color: var(--accent);">CheatSheet</div>
+                            </div>
+                            <div class="cheatsheet-credit">Provided by <a href="https://twitch.tv/quibble_bibble" target="_blank" rel="noopener noreferrer">Quibble_Bibble</a></div>
+                            <a class="cheatsheet-image-link" href="./TOS_Cheat_Sheet_QB.png" target="_blank" rel="noopener noreferrer" aria-label="Open CheatSheet image full size">
+                                <img class="cheatsheet-image" src="./TOS_Cheat_Sheet_QB.png" alt="The Other Side ghost identification cheat sheet provided by Quibble_Bibble" loading="lazy">
+                            </a>
                         </div>
 
                         <div class="ghost-card ref-card-hr" data-tab-panel="heart-rate">
@@ -1241,7 +1261,8 @@
                                 "cd_val": 2,
                                 "forced": null,
                                 "desc": [
-                                            "Cannot interact with the main electrical breaker switch",
+                                            "Cannot use the main breaker outside the automatic post-hunt breaker change",
+                                            "Can only turn individual breaker switches off",
                                             "Cannot turn on or off lights",
                                             "Cannot turn on or off radios",
                                             "Cannot deactivate FLX-PODs",
@@ -1742,7 +1763,8 @@
                                 "cd_val": 1,
                                 "forced": null,
                                 "desc": [
-                                            "Cannot interact with the main electrical breaker switch",
+                                            "Cannot use the main breaker outside the automatic post-hunt breaker change",
+                                            "Can only turn individual breaker switches off",
                                             "Cannot turn on lights"
                                 ],
                                 "tags": [
@@ -1801,7 +1823,8 @@
                                 "desc": [
                                             "Holy water stops the ghost from hunting for 2 minutes after being sprayed",
                                             "Prefers interacting with lights",
-                                            "Cannot turn on or off any breakers",
+                                            "Cannot use the main breaker outside the automatic post-hunt breaker change",
+                                            "Can turn individual breaker switches on and off",
                                             "Cannot turn off lights",
                                             "Can light candles",
                                             "Cannot extinguish candles",
@@ -1856,6 +1879,12 @@
                     }
         ];
 
+        // Individual breaker switches are separate from the main breaker.
+        // Confirmed rule: Echo and Wewe Gombel can turn individual switches OFF only; all other ghosts can turn them ON and OFF.
+        ghosts.forEach(ghost => {
+            ghost.individualBreaker = (ghost.name === 'Echo' || ghost.name === 'Wewe Gombel') ? 'Off' : 'Both';
+        });
+
         let realLimit = GAME_RULES.maxRealEvidence;
         let falseLimit = 0;
 
@@ -1890,6 +1919,7 @@
         const BEHAVIOR_STATE_LABELS = Object.freeze({
             bspeed: { 1: 'Slow', 2: 'Medium', 3: 'Fast' },
             breaker: { 1: 'Turns Off', 2: 'Turns On', 3: 'Both', 4: 'Cannot Interact' },
+            indbreaker: { 1: 'Turns Off', 2: 'Turns On', 3: 'Both' },
             candle: { 1: 'Can Extinguish', 2: 'Cannot Extinguish', 3: 'Can Light' },
             doors: { 1: 'Can Close / Lock', 2: 'Cannot Close / Lock' },
             flx: { 1: 'Can Deactivate', 2: 'Cannot Deactivate' },
@@ -1902,7 +1932,7 @@
             radio: { 1: 'Turns Off', 2: 'Turns On', 3: 'Both', 4: 'Cannot Interact' }
         });
         const BEHAVIOR_DISPLAY_NAMES = Object.freeze({
-            bspeed:'Base Speed', breaker:'Breaker Box', candle:'Candle', doors:'Doors', flx:'FLX-POD', holy:'Holy Water',
+            bspeed:'Base Speed', breaker:'Main Breaker', indbreaker:'Individual Breakers', candle:'Candle', doors:'Doors', flx:'FLX-POD', holy:'Holy Water',
             cooldown:'Cooldown', lights:'Lights', losrange:'LOS Range', losspeed:'LOS Speed', manifest:'Manifest', radio:'Radio'
         });
 
@@ -1918,6 +1948,7 @@
             doors: { states: { 1: { noTags: ['no-doors'] }, 2: { allTags: ['no-doors'] } } },
             flx: { states: { 1: { noTags: ['flx-ignore'] }, 2: { allTags: ['flx-ignore'] } } },
             breaker: { states: { 1: { noTags: ['no-breaker'] }, 2: { noTags: ['no-breaker'] }, 3: { noTags: ['no-breaker'] }, 4: { allTags: ['no-breaker'] } } },
+            indbreaker: { property: 'individualBreaker', states: { 1: ['Off', 'Both'], 2: ['On', 'Both'], 3: ['Both'] } },
             manifest: { states: { 1: { noTags: ['shadow-only'] }, 2: { allTags: ['shadow-only'] } } }
         };
 
@@ -2321,7 +2352,8 @@
                     if (cannotExtinguish) return 'Can Light / Cannot Extinguish';
                     return 'Can Light / Can Extinguish';
                 }
-                case 'breaker': return ghost.tags.includes('no-breaker') ? 'Cannot Interact' : 'Turns On / Turns Off';
+                case 'breaker': return ghost.tags.includes('no-breaker') ? 'Cannot Interact Normally' : 'Turns On / Turns Off';
+                case 'indbreaker': return ghost.individualBreaker === 'Off' ? 'Turns Off Only' : ghost.individualBreaker === 'On' ? 'Turns On Only' : 'Turns On / Turns Off';
                 case 'doors': return ghost.tags.includes('no-doors') ? 'Cannot Close / Lock' : 'Can Close / Lock';
                 case 'flx': return ghost.tags.includes('flx-ignore') ? 'Cannot Deactivate' : 'Can Deactivate';
                 case 'manifest': return ghost.tags.includes('shadow-only') ? 'Shadow Only' : 'Full Form Possible';
@@ -2651,7 +2683,7 @@
             if (ghost.conditionalSpeed) badges.push({ text:'Conditional Speed', cls:'conditional' });
             if (ghost.desc.some(d => /multiple ghost orbs/i.test(d))) badges.push({ text:'Multiple Orbs' });
             if (ghost.tags.includes('shadow-only')) badges.push({ text:'Shadow Only' });
-            if (ghost.tags.includes('no-breaker')) badges.push({ text:'No Breaker' });
+            if (ghost.tags.includes('no-breaker')) badges.push({ text:'Main Breaker Restricted' });
             if (ghost.tags.includes('no-doors')) badges.push({ text:'No Door Close' });
             if (ghost.tags.includes('no-extinguish')) badges.push({ text:'No Candle Extinguish' });
             if (ghost.tags.includes('flx-ignore')) badges.push({ text:'FLX Resistant' });
@@ -2724,7 +2756,7 @@
 
         function getComparisonBehaviorSummary(ghost) {
             const parts = [];
-            ['lights','radio','candle','breaker','doors','flx','manifest'].forEach(key => parts.push(`${BEHAVIOR_DISPLAY_NAMES[key]}: ${getBehaviorSignature(ghost,key)}`));
+            ['lights','radio','candle','breaker','indbreaker','doors','flx','manifest'].forEach(key => parts.push(`${BEHAVIOR_DISPLAY_NAMES[key]}: ${getBehaviorSignature(ghost,key)}`));
             return parts.join(' | ');
         }
 
@@ -3119,8 +3151,21 @@
                 return;
             }
 
-            // Breaker Box
-            if (text.includes("breaker") || text.includes("fuse")) {
+            // Individual breaker switches (room-specific switches inside the breaker box)
+            if (text.includes("individual breaker") || text.includes("individual switch") || text.includes("room breaker") || text.includes("room switch")) {
+                if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-indbreaker", 0);
+                else if (text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("no interact")) {
+                    showVoiceStatus("All ghosts can interact with individual breakers. Say on, off, both, or clear.");
+                }
+                else if (text.includes("both") || text.includes("on and off") || text.includes("off and on")) setBehaviorState("btn-indbreaker", 3);
+                else if (text.includes("turn on") || text.includes("turned on") || text.includes("switch on") || text.includes("switched on") || text.includes("breaker on")) setBehaviorState("btn-indbreaker", 2);
+                else if (text.includes("turn off") || text.includes("turned off") || text.includes("switch off") || text.includes("switched off") || text.includes("breaker off")) setBehaviorState("btn-indbreaker", 1);
+                else cycleState(document.getElementById("btn-indbreaker"));
+                return;
+            }
+
+            // Main breaker switch. A generic "breaker" voice command continues to mean the main breaker.
+            if (text.includes("main breaker") || text.includes("main switch") || text.includes("breaker") || text.includes("fuse")) {
                 if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-breaker", 0);
                 else if (text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("ignore") || text.includes("no interact")) setBehaviorState("btn-breaker", 4);
                 else if (text.includes("both") || text.includes("on and off") || text.includes("off and on") || text.includes("can use") || text.includes("can interact")) setBehaviorState("btn-breaker", 3);
