@@ -450,6 +450,13 @@
         }
         .beta-conflict.show { display: block; }
         .beta-conflict strong { color: #ff8888; }
+        .beta-conflict.marid-exception {
+            border-color: var(--warning-orange);
+            background: rgba(255,165,0,0.08);
+        }
+        .beta-conflict.marid-exception strong { color: #ffd08a; }
+        .marid-exception-line { margin-top: 4px; }
+        .marid-exception-label { color: #ffd08a; font-weight: 800; }
         .history-list { display: flex; flex-direction: column; gap: 4px; }
         .history-item { display: flex; gap: 7px; align-items: flex-start; }
         .history-num { color: var(--accent); font-weight: 800; min-width: 18px; }
@@ -2486,6 +2493,29 @@
             return suggestions.sort((a,b) => b.count - a.count).slice(0, 3);
         }
 
+        function getMaridExceptionInfo() {
+            // Marid's extra Diminishing Evidence can make otherwise valid observations look contradictory.
+            // Keep Marid out of the normal match count when an extra observation conflicts with its
+            // normal evidence, but surface it as a special possibility whenever at least two of its
+            // normal evidence types are real and every extra real evidence type can be Diminishing.
+            const marid = ghosts.find(ghost => ghost.name === 'Marid' && ghost.specialDiminishing);
+            if (!marid) return null;
+
+            const context = getFilterContext();
+            if (!matchesBehaviorFilters(marid, context.states)) return null;
+
+            const selectedReal = [...context.realEvidence];
+            const matchingEvidence = marid.ev.filter(ev => context.realEvidence.has(ev));
+            const extraEvidence = selectedReal.filter(ev => !marid.ev.includes(ev));
+            const missingEvidence = marid.ev.filter(ev => !context.realEvidence.has(ev));
+
+            if (matchingEvidence.length < 2 || extraEvidence.length === 0) return null;
+            if (extraEvidence.some(ev => EVIDENCE_CONFIG[ev]?.allowFake !== true)) return null;
+            if (missingEvidence.some(ev => context.excludedEvidence.has(ev))) return null;
+
+            return { marid, matchingEvidence, extraEvidence, missingEvidence };
+        }
+
 
 
         function isPhoneGhostDrawerViewport() {
@@ -2526,8 +2556,9 @@
             if (!countEl || !titleEl || !listEl) return;
 
             const count = currentCandidateGhosts.length;
-            countEl.textContent = `${count} Possible Ghost${count === 1 ? '' : 's'}`;
-            titleEl.textContent = `${count} Possible Ghost${count === 1 ? '' : 's'}`;
+            const maridException = getMaridExceptionInfo();
+            countEl.textContent = maridException ? `${count} Normal • 1 Special` : `${count} Possible Ghost${count === 1 ? '' : 's'}`;
+            titleEl.textContent = maridException ? `Marid Exception • ${count} Normal` : `${count} Possible Ghost${count === 1 ? '' : 's'}`;
             if (!isPhoneGhostDrawerViewport()) return;
 
             const activeNames = new Set(currentCandidateGhosts.map(g => g.name));
@@ -2537,7 +2568,9 @@
             if (!count) {
                 const empty = document.createElement('div');
                 empty.className = 'mobile-ghost-empty';
-                empty.textContent = 'No possible ghosts match the current observations.';
+                empty.textContent = maridException
+                    ? 'Marid exception possible. Check the Investigation Assistant warning for the evidence to recheck and the Marid evidence still missing.'
+                    : 'No possible ghosts match the current observations.';
                 listEl.appendChild(empty);
                 return;
             }
@@ -2613,15 +2646,37 @@
         }
 
         function updateBetaAssistant() {
+            const maridException = getMaridExceptionInfo();
             const remaining = document.getElementById('betaRemaining');
-            if (remaining) remaining.textContent = `${currentCandidateGhosts.length} / ${ghosts.length} Possible`;
+            if (remaining) {
+                remaining.textContent = maridException
+                    ? `${currentCandidateGhosts.length} Normal • 1 Special`
+                    : `${currentCandidateGhosts.length} / ${ghosts.length} Possible`;
+            }
             renderMobileGhostDrawer();
             const possibleBtn = document.getElementById('btnPossibleOnly');
             if (possibleBtn) possibleBtn.classList.toggle('active', showPossibleOnly);
             updateUndoAndHistoryUI();
             const conflict = document.getElementById('betaConflict');
             if (!conflict) return;
-            if (currentFilterMatches.length === 0) {
+            conflict.classList.toggle('marid-exception', !!maridException);
+            if (maridException) {
+                const possibleDiminishing = maridException.extraEvidence.map(evidenceLabel).join(' • ');
+                const foundEvidence = maridException.matchingEvidence.map(evidenceLabel).join(' • ');
+                const missingEvidence = maridException.missingEvidence.map(evidenceLabel).join(' • ');
+                const relief = currentFilterMatches.length === 0 ? getContradictionReliefSuggestions() : [];
+                conflict.innerHTML = `<strong>Marid exception possible.</strong>` +
+                    `<div class="marid-exception-line">Marid can produce Diminishing Evidence even when the investigation is set to 0 Diminishing Evidence. One or more selected non-Freezing evidence types may be Diminishing.</div>` +
+                    `<div class="marid-exception-line"><span class="marid-exception-label">Possible Diminishing Evidence:</span> ${escapeHTML(possibleDiminishing)}</div>` +
+                    `<div class="marid-exception-line"><span class="marid-exception-label">Marid Evidence Found:</span> ${escapeHTML(foundEvidence)}</div>` +
+                    (missingEvidence
+                        ? `<div class="marid-exception-line"><span class="marid-exception-label">Still Check:</span> ${escapeHTML(missingEvidence)}</div>`
+                        : `<div class="marid-exception-line"><span class="marid-exception-label">Marid Evidence:</span> all three normal evidence types are already present.</div>`) +
+                    `<div class="beta-help">Marid normally requires Ghost Orb • Radiation • UV. It is shown here as a special possibility, not a normal evidence match.</div>` +
+                    (relief.length ? `<div class="beta-help">Possible conflicting checks: ${relief.map(item => `${escapeHTML(item.label)} (${item.count} restored)`).join(' • ')}</div>` : '') +
+                    (undoStack.length ? `<div class="beta-help">Use Undo to reverse the last investigation change.</div>` : '');
+                conflict.classList.add('show');
+            } else if (currentFilterMatches.length === 0) {
                 const relief = getContradictionReliefSuggestions();
                 conflict.innerHTML = `<strong>No ghosts match the current observations.</strong>` +
                     (relief.length ? `<div>Possible conflicting checks: ${relief.map(item => `${escapeHTML(item.label)} (${item.count} restored)`).join(' • ')}</div>` : '') +
@@ -2631,7 +2686,7 @@
                 conflict.innerHTML = `<strong>All filter-compatible ghosts have been manually eliminated.</strong><div class="beta-help">Restore one manually eliminated ghost or use Undo.</div>`;
                 conflict.classList.add('show');
             } else {
-                conflict.classList.remove('show');
+                conflict.classList.remove('show', 'marid-exception');
                 conflict.innerHTML = '';
             }
         }
