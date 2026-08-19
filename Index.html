@@ -832,8 +832,8 @@
                                 <span class="behavior-point"><strong>Holy Water hunt blocks:</strong> special ghosts may temporarily replace their normal hunt cooldown after being sprayed. Demon and Wisp are blocked for 2 minutes; Tariaksuq is blocked for 90 seconds. Check the ghost's Unique Behaviors for its special Holy Water or cooldown rule.</span>
                                 <span class="behavior-point"><strong>Diminishing Evidence:</strong> this evidence becomes weaker or can stop appearing as the case continues. Freezing can never be Diminishing. Marid can produce Diminishing Evidence even when the investigation is set to 0 Diminishing Evidence.</span>
                                 <span class="behavior-point"><strong>Ghost Orbs:</strong> normally require infrared vision to see, but an orb can also be photographed using the cellphone camera flash. Sluagh can produce multiple Ghost Orbs.</span>
-                                <span class="behavior-point"><strong>Puca:</strong> can imitate behaviors of other ghost types while passive or hunting. Do not rely on a behavior observation alone to rule Puca out; its evidence combination remains reliable.</span>
-                                <span class="behavior-point"><strong>Candles:</strong> ghosts can normally both light and extinguish candles unless their Notes specifically restrict one of those actions.</span>
+                                <span class="behavior-point"><strong>Puca:</strong> can imitate behaviors of other ghost types while passive or hunting, but it cannot extinguish candles. Observing a ghost extinguish a candle rules Puca out; other mimicked behavior observations do not.</span>
+                                <span class="behavior-point"><strong>Candles:</strong> Can Light is a specific identifying behavior for ghosts whose Notes list it. Cannot Extinguish is also a specific restriction. Puca may mimic candle-lighting behavior, but it still cannot extinguish candles.</span>
                                 <span class="behavior-point"><strong>Main Breaker:</strong> this is the main switch that controls the entire breaker box. Echo, Wewe Gombel, and Wisp cannot use the main breaker normally; the automatic breaker change after a hunt is an exception and should not be treated as an identifying interaction.</span>
                                 <span class="behavior-point"><strong>Individual Breakers:</strong> these are the room-specific switches inside the breaker box. All ghosts can turn individual breakers off. Echo and Wewe Gombel can only turn individual breakers off; every other ghost can turn individual breakers both on and off.</span>
                                 <span class="behavior-point"><strong>Radio interactions:</strong> TVs and alarm clocks do not count as Radio interactions. The Old Tape Recorder and Gramophone do count as Radio interactions.</span>
@@ -1389,6 +1389,7 @@
                                             "Can light candles"
                                 ],
                                 "tags": [
+                                            "can-light-candle",
                                             "lights-on",
                                             "lights-off",
                                             "radio-on",
@@ -1640,6 +1641,7 @@
                                             "Cannot deactivate FLX-PODs"
                                 ],
                                 "tags": [
+                                            "can-light-candle",
                                             "lights-on",
                                             "radio-on",
                                             "radio-off",
@@ -1674,6 +1676,7 @@
                                             "shadow-only",
                                             "radio-on",
                                             "no-extinguish",
+                                            "can-light-candle",
                                             "lights-on",
                                             "lights-off"
                                 ],
@@ -1834,6 +1837,7 @@
                                             "no-breaker",
                                             "lights-on",
                                             "no-extinguish",
+                                            "can-light-candle",
                                             "radio-on",
                                             "radio-off"
                                 ],
@@ -1942,7 +1946,7 @@
             losspeed: { property: 'losspeed', states: { 1: ['Very Slow'], 2: ['Slow'], 3: ['Medium'], 4: ['Fast'] } },
             losrange: { property: 'los', states: { 1: ['Near'], 2: ['Far'] } },
             holy: { property: 'hw', states: { 1: ['None'], 2: ['Low'], 3: ['High'] } },
-            candle: { states: { 1: { noTags: ['no-extinguish'] }, 2: { allTags: ['no-extinguish'] }, 3: { noTags: ['no-light-candle'] } } },
+            candle: { states: { 1: { noTags: ['no-extinguish'] }, 2: { allTags: ['no-extinguish'] }, 3: { allTags: ['can-light-candle'] } } },
             lights: { states: { 1: { allTags: ['lights-off'] }, 2: { allTags: ['lights-on'] }, 3: { allTags: ['lights-on', 'lights-off'] }, 4: { allTags: ['lights-ignore'] } } },
             radio: { states: { 1: { allTags: ['radio-off'] }, 2: { allTags: ['radio-on'] }, 3: { allTags: ['radio-on', 'radio-off'] }, 4: { allTags: ['radio-ignore'] } } },
             doors: { states: { 1: { noTags: ['no-doors'] }, 2: { allTags: ['no-doors'] } } },
@@ -2309,7 +2313,11 @@
         }
 
         function matchesSingleBehaviorFilter(ghost, key, state) {
-            if (ghost.behaviorWildcard) return true;
+            // Puca can imitate modeled ghost behaviors, but its inability to extinguish candles is fixed.
+            if (ghost.behaviorWildcard) {
+                if (key === 'candle' && state === 1 && ghost.tags.includes('no-extinguish')) return false;
+                return true;
+            }
             const filter = behaviorFilters[key];
             if (!filter || !state) return true;
             const rule = filter.states[state];
@@ -2337,7 +2345,10 @@
         }
 
         function getBehaviorSignature(ghost, key) {
-            if (ghost.behaviorWildcard) return 'Imitates / Wildcard';
+            if (ghost.behaviorWildcard) {
+                if (key === 'candle' && ghost.tags.includes('no-extinguish')) return 'Cannot Extinguish (Fixed) / Can Mimic Lighting';
+                return 'Imitates / Wildcard';
+            }
             switch (key) {
                 case 'bspeed': return ghost.speed;
                 case 'cooldown': return ghost.cooldown;
@@ -2345,12 +2356,12 @@
                 case 'losrange': return ghost.los;
                 case 'holy': return ghost.hw;
                 case 'candle': {
-                    const cannotLight = ghost.tags.includes('no-light-candle');
+                    const canLight = ghost.tags.includes('can-light-candle');
                     const cannotExtinguish = ghost.tags.includes('no-extinguish');
-                    if (cannotLight && cannotExtinguish) return 'Cannot Light / Cannot Extinguish';
-                    if (cannotLight) return 'Cannot Light / Can Extinguish';
-                    if (cannotExtinguish) return 'Can Light / Cannot Extinguish';
-                    return 'Can Light / Can Extinguish';
+                    if (canLight && cannotExtinguish) return 'Can Light / Cannot Extinguish';
+                    if (canLight) return 'Can Light / Can Extinguish';
+                    if (cannotExtinguish) return 'Cannot Extinguish';
+                    return 'Can Extinguish';
                 }
                 case 'breaker': return ghost.tags.includes('no-breaker') ? 'Cannot Interact Normally' : 'Turns On / Turns Off';
                 case 'indbreaker': return ghost.individualBreaker === 'Off' ? 'Turns Off Only' : ghost.individualBreaker === 'On' ? 'Turns On Only' : 'Turns On / Turns Off';
@@ -2407,7 +2418,7 @@
                 const values = behaviorComparable.map(g => getBehaviorSignature(g, key));
                 if (new Set(values).size > 1) {
                     const wildcardCount = candidates.length - behaviorComparable.length;
-                    const wildcardNote = wildcardCount ? ` • Puca remains possible: ${wildcardCount}` : '';
+                    const wildcardNote = wildcardCount ? ` • Puca can mimic most behaviors; Can Extinguish Candle rules it out` : '';
                     tests.push({ id, label: `Observe ${BEHAVIOR_DISPLAY_NAMES[key] || key}`, score: partitionEntropy(values), summary: `${partitionSummary(values)}${wildcardNote}`, kind: 'Behavior', key });
                 }
             });
@@ -2435,7 +2446,7 @@
             } else {
                 const best = tests[0];
                 const pucaNote = best.kind === 'Behavior' && currentCandidateGhosts.some(g => g.behaviorWildcard)
-                    ? `<div class="beta-help">Puca remains possible under behavior observations because it can imitate other ghost behaviors.</div>` : '';
+                    ? `<div class="beta-help">Puca can imitate most behavior observations, but observing the ghost extinguish a candle rules Puca out.</div>` : '';
                 html = `<div class="beta-status possible">${escapeHTML(best.kind)}</div><div class="detail-section"><div class="detail-title">Recommended: ${escapeHTML(best.label)}</div><div>${escapeHTML(best.summary)}</div><div class="beta-help">Ranked by how strongly the unused check separates the remaining ghosts. You can skip a test that is impractical for the current investigation.</div>${pucaNote}<button class="skip-test-btn" type="button" onclick="skipBestTest('${escapeHTML(best.id)}')">Skip This Test</button></div>`;
             }
             html += renderSkippedTestsHTML();
@@ -2711,7 +2722,16 @@
             Object.entries(states).forEach(([key, state]) => {
                 if (!state) return;
                 if (ghost.behaviorWildcard) {
-                    reasons.push({ note: true, text: `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${getBehaviorStateLabel(key, state)} does not rule out Puca because it can imitate other ghost behaviors.` });
+                    const pass = matchesSingleBehaviorFilter(ghost, key, state);
+                    if (key === 'candle' && state === 1) {
+                        reasons.push({ pass: false, text: `Candle: Can Extinguish conflicts with Puca's fixed inability to extinguish candles.` });
+                    } else if (key === 'candle' && state === 2) {
+                        reasons.push({ pass: true, text: `Candle: Cannot Extinguish matches Puca's fixed candle restriction.` });
+                    } else if (key === 'candle' && state === 3) {
+                        reasons.push({ note: true, text: `Candle: Can Light does not rule out Puca because it can imitate candle-lighting behavior.` });
+                    } else {
+                        reasons.push({ note: true, text: `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${getBehaviorStateLabel(key, state)} does not rule out Puca because it can imitate other ghost behaviors.` });
+                    }
                     return;
                 }
                 const pass = matchesSingleBehaviorFilter(ghost, key, state);
@@ -2742,7 +2762,7 @@
             html += `<div class="detail-section"><div class="detail-title">Evidence</div><div>${ghost.ev.map(ev => `<span class="evidence-tag" style="display:inline-block;margin:2px;">${escapeHTML(evidenceLabel(ev))}</span>`).join('')}${ghost.forced ? `<div style="margin-top:5px;color:var(--accent);font-weight:700;">Forced Evidence: ${escapeHTML(evidenceLabel(ghost.forced))}</div>` : ''}</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">Gameplay Behaviors</div>${getDisplayBehaviors(ghost).map(d => `<div class="behavior-point">${escapeHTML(d)}</div>`).join('')}</div>`;
             if (ghost.specialDiminishing) html += `<div class="detail-section"><div class="detail-title">Diminishing Evidence Rule</div><div>Marid can produce Diminishing Evidence even when the investigation is configured for 0 Diminishing Evidence. The tracker does not assume a maximum number.</div></div>`;
-            if (ghost.behaviorWildcard) html += `<div class="detail-section"><div class="detail-title">Behavior Filtering Rule</div><div>Puca remains possible when behavior filters are used because it can imitate other ghost behaviors. Evidence filters still apply normally.</div></div>`;
+            if (ghost.behaviorWildcard) html += `<div class="detail-section"><div class="detail-title">Behavior Filtering Rule</div><div>Puca can imitate other modeled ghost behaviors, but it cannot extinguish candles. Can Extinguish Candle rules Puca out; Cannot Extinguish and Can Light keep it possible. Evidence filters still apply normally.</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">General Behaviors</div>
                 <div class="stat-item"><span>Base Speed</span><span class="stat-val">${getBaseSpeedDisplay(ghost)}</span></div>
                 <div class="stat-item"><span>Hunt Cooldown</span><span class="stat-val">${getCooldownDisplay(ghost)}</span></div>
@@ -2784,7 +2804,7 @@
             const headers = varying.map(dim => `<th>${escapeHTML(dim.label)}</th>`).join('');
             const rows = compare.map(g => `<tr><td>${escapeHTML(g.name)}${pinnedGhosts.has(g.name) ? ' 📌' : ''}</td>${varying.map(dim => `<td>${escapeHTML(dim.value(g))}</td>`).join('')}</tr>`).join('');
             const sourceNote = usingPins ? `Comparing ${compare.length} pinned ghosts.` : `Comparing ${compare.length} currently possible ghosts.`;
-            const pucaNote = compare.some(g => g.behaviorWildcard) ? `<div class="beta-help">Puca's listed general stats are shown for reference, but behavior filters do not eliminate Puca because it can imitate other ghost behaviors.</div>` : '';
+            const pucaNote = compare.some(g => g.behaviorWildcard) ? `<div class="beta-help">Puca's listed general stats are shown for reference. It can imitate most modeled behaviors, but its inability to extinguish candles is fixed, so Can Extinguish Candle eliminates it.</div>` : '';
             const body = varying.length
                 ? `<div class="beta-help" style="margin-bottom:8px;">${escapeHTML(sourceNote)} Identical categories are hidden.</div>${pucaNote}<div class="comparison-wrap"><table class="comparison-table"><thead><tr><th>Ghost</th>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`
                 : `<div class="beta-help">The selected ghosts have no differences in the currently modeled comparison categories.</div>${pucaNote}`;
@@ -3289,25 +3309,7 @@
         }
 
         function matchesBehaviorFilters(ghost, states) {
-            if (ghost.behaviorWildcard) return true;
-            return Object.entries(behaviorFilters).every(([key, filter]) => {
-                const rule = filter.states[states[key]];
-                if (!rule) return true;
-
-                if (filter.property) {
-                    return rule.includes(ghost[filter.property]);
-                }
-
-                if (rule.allTags && !rule.allTags.every(tag => ghost.tags.includes(tag))) {
-                    return false;
-                }
-
-                if (rule.noTags && rule.noTags.some(tag => ghost.tags.includes(tag))) {
-                    return false;
-                }
-
-                return true;
-            });
+            return Object.keys(behaviorFilters).every(key => matchesSingleBehaviorFilter(ghost, key, states[key]));
         }
 
         function matchesEvidenceFilters(ghost, realEvidence, excludedEvidence) {
