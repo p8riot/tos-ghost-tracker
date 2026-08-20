@@ -837,7 +837,10 @@
                                 <span class="behavior-point"><strong>Sanctified Cross:</strong> can only be flipped in the ghost's favorite room.</span>
                                 <span class="behavior-point"><strong>Hunt heart-rate threshold:</strong> most ghosts can normally hunt at a 100 BPM average team heart rate. Demon, Hupia, and Wiederganger can hunt as early as 77 BPM. The threshold uses the average BPM of players inside the location.</span>
                                 <span class="behavior-point"><strong>Holy Water hunt blocks:</strong> special ghosts may temporarily replace their normal hunt cooldown after being sprayed. Demon and Wisp are blocked for 2 minutes; Tariaksuq is blocked for 90 seconds. Check the ghost's Unique Behaviors for its special Holy Water or cooldown rule.</span>
-                                <span class="behavior-point"><strong>Diminishing Evidence:</strong> this evidence becomes weaker or can stop appearing as the case continues. Freezing can never be Diminishing. Marid can produce Diminishing Evidence even when the investigation is set to 0 Diminishing Evidence.</span>
+                                <span class="behavior-point"><strong>Real vs Diminishing Evidence:</strong> real evidence reappears several times at full strength. Diminishing evidence may first appear at full strength a couple of times, then appears weaker over time. Freezing can never be Diminishing.</span>
+                                <span class="behavior-point"><strong>Diminishing filtering:</strong> on limited-evidence runs, a Diminishing evidence type can also be one of the ghost's assigned evidence types, so it does not rule that ghost out. When the run has all 3 Real Evidence, extra Diminishing evidence can be treated as outside the ghost's three assigned evidence types.</span>
+                                <span class="behavior-point"><strong>Marid evidence exception:</strong> Marid can leave extra Diminishing evidence on top of its assigned evidence, including on 0 Real Evidence runs.</span>
+                                <span class="behavior-point"><strong>Forced Evidence:</strong> forced evidence applies whenever the run has Real Evidence, regardless of the configured Diminishing Evidence count. It does not apply on 0 Real Evidence runs.</span>
                                 <span class="behavior-point"><strong>Ghost Orbs:</strong> normally require infrared vision to see, but an orb can also be photographed using the cellphone camera flash. Sluagh can produce multiple Ghost Orbs.</span>
                                 <span class="behavior-point"><strong>Puca:</strong> can imitate behaviors of other ghost types while passive or hunting, but it cannot extinguish candles. Observing a ghost extinguish a candle rules Puca out; other mimicked behavior observations do not.</span>
                                 <span class="behavior-point"><strong>Candles:</strong> Can Light is a specific identifying behavior for ghosts whose Notes list it. Cannot Extinguish is also a specific restriction. Puca may mimic candle-lighting behavior, but it still cannot extinguish candles.</span>
@@ -1021,7 +1024,7 @@
         const EVIDENCE_CONFIG = Object.freeze({
             Audio: Object.freeze({ enabled: true, color: "#ffa500", aliases: ["audio", "spirit box", "sound"], allowFake: true }),
             EMF: Object.freeze({ enabled: true, label: "EMF 20+", color: "#ff4444", aliases: ["emf", "e m f", "emf 20", "emf twenty"], allowFake: true }),
-            Freezing: Object.freeze({ enabled: true, color: "#44aaff", aliases: ["freezing", "cold", "freeze"], allowFake: false }),
+            Freezing: Object.freeze({ enabled: true, color: "#44aaff", aliases: ["freezing", "cold", "freeze", "thermal"], allowFake: false }),
             "Ghost Orb": Object.freeze({ enabled: true, color: "#ff66cc", aliases: ["ghost orb", "ghost orbs", "orb", "orbs"], allowFake: true, diminishingVerified: true }),
             Radiation: Object.freeze({ enabled: true, color: "#32cd32", aliases: ["radiation", "geiger", "rad"], allowFake: true }),
             UV: Object.freeze({ enabled: true, color: "#bc13fe", aliases: ["uv", "ultraviolet", "fingerprints"], allowFake: true }),
@@ -1641,7 +1644,7 @@
                                 "hw": "Low",
                                 "cooldown": "Medium",
                                 "cd_val": 2,
-                                "forced": null,
+                                "forced": "Ghost Orb",
                                 "desc": [
                                             "Can produce multiple ghost orbs",
                                             "Can light candles",
@@ -2337,11 +2340,12 @@
         }
 
         function ghostMatchesContext(ghost, context) {
-            // The only confirmed Diminishing-limit exception is Marid producing Diminishing Evidence
-            // when the investigation is configured for 0. Do not assume how many it can produce.
-            const zeroLimitContradiction = context.falseLimit === 0 && context.fakeEvidence.size > 0;
-            const diminishingLimitPass = !zeroLimitContradiction || !!ghost.specialDiminishing;
-            return diminishingLimitPass &&
+            // Real and Diminishing counts come from the configured investigation setup.
+            // Marid is the confirmed exception for extra Diminishing evidence, including 0 Real Evidence runs.
+            // Do not assume a maximum number of extra Marid Diminishing evidence types.
+            const realCountPass = context.realEvidence.size <= context.realLimit;
+            const diminishingCountPass = context.fakeEvidence.size <= context.falseLimit || !!ghost.specialDiminishing;
+            return realCountPass && diminishingCountPass &&
                 matchesEvidenceFilters(ghost, context.realEvidence, context.excludedEvidence) &&
                 matchesForcedEvidenceForLimit(ghost, context.realEvidence, context.realLimit) &&
                 matchesBehaviorFilters(ghost, context.states);
@@ -2666,7 +2670,7 @@
                 const missingEvidence = maridException.missingEvidence.map(evidenceLabel).join(' • ');
                 const relief = currentFilterMatches.length === 0 ? getContradictionReliefSuggestions() : [];
                 conflict.innerHTML = `<strong>Marid exception possible.</strong>` +
-                    `<div class="marid-exception-line">Marid can produce Diminishing Evidence even when the investigation is set to 0 Diminishing Evidence. One or more selected non-Freezing evidence types may be Diminishing.</div>` +
+                    `<div class="marid-exception-line">Marid can leave extra Diminishing Evidence on top of its assigned evidence, including on 0 Real Evidence runs. One or more selected non-Freezing evidence types may actually be Diminishing.</div>` +
                     `<div class="marid-exception-line"><span class="marid-exception-label">Possible Diminishing Evidence:</span> ${escapeHTML(possibleDiminishing)}</div>` +
                     `<div class="marid-exception-line"><span class="marid-exception-label">Marid Evidence Found:</span> ${escapeHTML(foundEvidence)}</div>` +
                     (missingEvidence
@@ -2794,11 +2798,20 @@
                 reasons.push({ pass, text: `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${getBehaviorStateLabel(key, state)}${pass ? ' matches' : ' conflicts'}` });
             });
             const context = getFilterContext();
+            if (context.realEvidence.size > context.realLimit) {
+                reasons.push({ pass: false, text: `${context.realEvidence.size} evidence types are marked real, but this investigation is configured for ${context.realLimit} Real Evidence.` });
+            }
+            if (context.fakeEvidence.size > context.falseLimit) {
+                const pass = !!ghost.specialDiminishing;
+                reasons.push({ pass, text: pass
+                    ? `${context.fakeEvidence.size} evidence types are marked Diminishing beyond the normal limit of ${context.falseLimit}; Marid can leave extra Diminishing Evidence.`
+                    : `${context.fakeEvidence.size} evidence types are marked Diminishing, but this investigation is configured for ${context.falseLimit} Diminishing Evidence.` });
+            }
             if (ghost.forced && context.realLimit > 0 && context.realLimit < GAME_RULES.maxRealEvidence && context.realEvidence.size >= context.realLimit) {
                 const pass = context.realEvidence.has(ghost.forced);
                 reasons.push({ pass, text: `Forced evidence ${evidenceLabel(ghost.forced)}${pass ? ' is present' : ' is required at this evidence setting but is not marked real'}` });
             }
-            if (ghost.specialDiminishing && falseLimit === 0) reasons.push({ note: true, text: 'Marid can still produce Diminishing Evidence when the investigation is set to 0 Diminishing Evidence.' });
+            if (ghost.specialDiminishing && (context.falseLimit === 0 || context.realLimit === 0)) reasons.push({ note: true, text: 'Marid can leave extra Diminishing Evidence beyond the normal evidence setup, including on 0 Real Evidence runs.' });
             if (!reasons.length) reasons.push({ note: true, text: 'No evidence or behavior filters are currently active.' });
             return reasons;
         }
@@ -2817,7 +2830,7 @@
             html += `<div class="detail-section"><div class="detail-title">In-Game Description</div><div>${escapeHTML(ghost.lore)}</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">Evidence</div><div>${ghost.ev.map(ev => `<span class="evidence-tag" style="display:inline-block;margin:2px;">${escapeHTML(evidenceLabel(ev))}</span>`).join('')}${ghost.forced ? `<div style="margin-top:5px;color:var(--accent);font-weight:700;">Forced Evidence: ${escapeHTML(evidenceLabel(ghost.forced))}</div>` : ''}</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">Gameplay Behaviors</div>${getDisplayBehaviors(ghost).map(d => `<div class="behavior-point">${escapeHTML(d)}</div>`).join('')}</div>`;
-            if (ghost.specialDiminishing) html += `<div class="detail-section"><div class="detail-title">Diminishing Evidence Rule</div><div>Marid can produce Diminishing Evidence even when the investigation is configured for 0 Diminishing Evidence. The tracker does not assume a maximum number.</div></div>`;
+            if (ghost.specialDiminishing) html += `<div class="detail-section"><div class="detail-title">Diminishing Evidence Rule</div><div>Marid can leave extra Diminishing Evidence on top of its assigned evidence, including on 0 Real Evidence runs. The tracker does not assume a maximum number of extra Diminishing evidence types.</div></div>`;
             if (ghost.behaviorWildcard) html += `<div class="detail-section"><div class="detail-title">Behavior Filtering Rule</div><div>Puca can imitate other modeled ghost behaviors, but it cannot extinguish candles. Can Extinguish Candle rules Puca out; Cannot Extinguish and Can Light keep it possible. Evidence filters still apply normally.</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">General Behaviors</div>
                 <div class="stat-item"><span>Base Speed</span><span class="stat-val">${getBaseSpeedDisplay(ghost)}</span></div>
@@ -3093,6 +3106,10 @@
         }
 
         function setEvidenceVoice(evType, state) {
+            if (realLimit === 0 && state === 1) {
+                showVoiceStatus('0 Real Evidence run: evidence cannot be marked Real. Mark a Marid observation as Diminishing instead.');
+                return;
+            }
             if (state === 2 && EVIDENCE_CONFIG[evType] && EVIDENCE_CONFIG[evType].allowFake === false) state = 3;
             if (evidenceStates[evType] === state) return;
             const stateLabel = state === 0 ? 'Cleared' : state === 1 ? 'Real' : state === 2 ? 'Diminishing' : 'Excluded';
@@ -3506,6 +3523,7 @@
             realLimit = nextLimit;
             if (realLimit === 0) {
                 falseLimit = 0;
+                Object.keys(evidenceStates).forEach(ev => { evidenceStates[ev] = 0; });
             }
             updateLimitDisplays();
             filterGhosts();
@@ -3532,15 +3550,18 @@
             const evBtns = document.querySelectorAll('.ev-btn');
 
             if (realLimit === 0) {
+                // Normal evidence is disabled on a 0 Real Evidence run, but Marid can still leave Diminishing evidence.
                 falseBtn.classList.add('disabled');
                 falseBtn.disabled = true;
                 evBtns.forEach(btn => {
-                    btn.classList.add('disabled');
-                    btn.disabled = true;
+                    btn.classList.remove('disabled');
+                    btn.disabled = false;
                     const ev = btn.getAttribute('data-ev');
-                    evidenceStates[ev] = 0;
-                    btn.setAttribute('data-state', '0');
-                    btn.setAttribute('aria-label', `${evidenceLabel(ev)} evidence: Cleared`);
+                    if (evidenceStates[ev] === 1) evidenceStates[ev] = 0;
+                    const state = evidenceStates[ev] || 0;
+                    const stateLabel = state === 0 ? 'Cleared' : state === 2 ? 'Diminishing' : 'Excluded';
+                    btn.setAttribute('data-state', String(state));
+                    btn.setAttribute('aria-label', `${evidenceLabel(ev)} evidence: ${stateLabel}`);
                 });
             } else {
                 falseBtn.classList.remove('disabled');
@@ -3550,12 +3571,21 @@
         }
 
         function cycleEvidenceState(btn, type) {
-            if (realLimit === 0) return;
-
             let currentState = evidenceStates[type] || 0;
-            let nextState = (currentState + 1) % 4;
-            if (nextState === 2 && EVIDENCE_CONFIG[type] && EVIDENCE_CONFIG[type].allowFake === false) {
-                nextState = 3;
+            let nextState;
+
+            if (realLimit === 0) {
+                // A 0 Real Evidence run has no normal Real state. Marid can still produce Diminishing evidence.
+                if (EVIDENCE_CONFIG[type] && EVIDENCE_CONFIG[type].allowFake === false) {
+                    nextState = currentState === 0 ? 3 : 0;
+                } else {
+                    nextState = currentState === 0 ? 2 : currentState === 2 ? 3 : 0;
+                }
+            } else {
+                nextState = (currentState + 1) % 4;
+                if (nextState === 2 && EVIDENCE_CONFIG[type] && EVIDENCE_CONFIG[type].allowFake === false) {
+                    nextState = 3;
+                }
             }
 
             const stateLabel = nextState === 0 ? 'Cleared' : nextState === 1 ? 'Real' : nextState === 2 ? 'Diminishing' : 'Excluded';
