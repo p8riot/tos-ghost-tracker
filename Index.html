@@ -401,8 +401,12 @@
         .evidence-tag.fake-tag { border-style: dashed !important; border-color: var(--warning-orange) !important; color: var(--warning-orange) !important; }
 
         .stats-container { margin-top: auto; padding-top: 10px; border-top: 1px dashed #444; }
-        .stat-item { margin-bottom: 8px; font-size: 0.75rem; color: #ffffff; display: flex; justify-content: space-between; }
-        .stat-val { font-weight: bold; }
+        .stat-item { margin-bottom: 8px; font-size: 0.75rem; color: #ffffff; display: flex; justify-content: space-between; gap: 10px; }
+        .stat-val { font-weight: bold; text-align: right; }
+        .stat-item.conditional-speed-stat { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 10px; row-gap: 2px; align-items: start; }
+        .conditional-speed-primary { white-space: nowrap; }
+        .conditional-speed-lines { grid-column: 2; display: flex; flex-direction: column; align-items: flex-end; gap: 1px; font-size: 0.68rem; line-height: 1.25; font-weight: 700; text-align: right; }
+        .conditional-speed-line { white-space: nowrap; }
 
         .hr-badge { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
         .hr-badge.normal { background-color: #32cd32; }
@@ -638,6 +642,9 @@
             .mobile-ghost-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
             .mobile-ghost-stat { border: 1px solid var(--border); border-radius: 5px; background: var(--bg-soft); padding: 6px; font-size: .64rem; color: var(--text-muted); }
             .mobile-ghost-stat strong { display: block; margin-top: 2px; color: #fff; font-size: .72rem; }
+            .mobile-ghost-stat.conditional-los { grid-column: 1 / -1; }
+            .mobile-conditional-speed-lines { display: flex; flex-direction: column; gap: 1px; margin-top: 3px; color: #fff; font-size: .68rem; line-height: 1.25; font-weight: 700; }
+            .mobile-conditional-speed-line { white-space: nowrap; }
             .mobile-ghost-actions { display: flex; gap: 6px; }
             .mobile-ghost-action {
                 flex: 1; min-height: 40px; border: 1px solid var(--border-strong); border-radius: 5px;
@@ -847,8 +854,8 @@
                                 <span class="behavior-point"><strong>Marid evidence exception:</strong> Marid can leave extra Diminishing evidence on top of its assigned evidence, including on 0 Real Evidence runs.</span>
                                 <span class="behavior-point"><strong>Forced Evidence:</strong> forced evidence applies whenever the run has Real Evidence, regardless of the configured Diminishing Evidence count. It does not apply on 0 Real Evidence runs.</span>
                                 <span class="behavior-point"><strong>Ghost Orbs:</strong> normally require infrared vision to see, but an orb can also be photographed using the cellphone camera flash. Sluagh can produce multiple Ghost Orbs.</span>
-                                <span class="behavior-point"><strong>Puca:</strong> can imitate behaviors of other ghost types while passive or hunting, but it cannot extinguish candles. Observing a ghost extinguish a candle rules Puca out; other mimicked behavior observations do not.</span>
-                                <span class="behavior-point"><strong>Candles:</strong> Can Light is a specific identifying behavior for ghosts whose Notes list it. Cannot Extinguish is also a specific restriction. Puca may mimic candle-lighting behavior, but it still cannot extinguish candles.</span>
+                                <span class="behavior-point"><strong>Puca:</strong> can imitate other ghost behaviors during hunts only, except Wiederganger's increase in BPM.</span>
+                                <span class="behavior-point"><strong>Candles:</strong> Can Light is a specific identifying behavior for ghosts whose Notes list it. Puca cannot extinguish candles and is not a Can Light ghost, so observing either Can Extinguish or Can Light rules Puca out.</span>
                                 <span class="behavior-point"><strong>Main Breaker:</strong> this is the main switch that controls the entire breaker box. Echo, Wewe Gombel, and Wisp cannot use the main breaker normally; the automatic breaker change after a hunt is an exception and should not be treated as an identifying interaction.</span>
                                 <span class="behavior-point"><strong>Individual Breakers:</strong> these are the room-specific switches inside the breaker box. All ghosts can turn individual breakers off. Echo and Wewe Gombel can only turn individual breakers off; every other ghost can turn individual breakers both on and off.</span>
                                 <span class="behavior-point"><strong>Radio interactions:</strong> TVs and alarm clocks do not count as Radio interactions. The Old Tape Recorder and Gramophone do count as Radio interactions.</span>
@@ -1523,7 +1530,7 @@
                                 "cd_val": 2,
                                 "forced": null,
                                 "desc": [
-                                            "Imitates behaviors of other ghost types, while hunting or passive",
+                                            "Can imitate other ghost behaviors during hunts only, except Wiederganger's BPM increase",
                                             "Cannot extinguish candles"
                                 ],
                                 "tags": [
@@ -1534,7 +1541,7 @@
                                             "radio-off"
                                 ],
                                 "starred": [],
-                                "behaviorWildcard": true,
+                                "huntBehaviorMimic": true,
                                 "lore": "Known for its unpredictable and mischievous nature, often toying with the living for its own amusement.",
                                 "verifiedNotes": true
                     },
@@ -1762,9 +1769,20 @@
                                 ],
                                 "starred": [
                                             "cooldown",
-                                            "hw"
+                                            "hw",
+                                            "losspeed"
                                 ],
                                 "conditionalSpeed": true,
+                                "speedProfile": {
+                                            "los": {
+                                                        "display": "Light: 2.50m/s | Darkness: 3.10m/s",
+                                                        "categories": ["Slow", "Fast"],
+                                                        "conditions": [
+                                                                    { "label": "Light", "cmps": 250 },
+                                                                    { "label": "Darkness", "cmps": 310 }
+                                                        ]
+                                            }
+                                },
                                 "lore": "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.",
                                 "verifiedNotes": true
                     },
@@ -1860,9 +1878,20 @@
                                 ],
                                 "starred": [
                                             "cooldown",
-                                            "hw"
+                                            "hw",
+                                            "losspeed"
                                 ],
                                 "conditionalSpeed": true,
+                                "speedProfile": {
+                                            "los": {
+                                                        "display": "Darkness: 2.70m/s | Light: 3.10m/s",
+                                                        "categories": ["Medium", "Fast"],
+                                                        "conditions": [
+                                                                    { "label": "Darkness", "cmps": 270 },
+                                                                    { "label": "Light", "cmps": 310 }
+                                                        ]
+                                            }
+                                },
                                 "lore": "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.",
                                 "verifiedNotes": true
                     },
@@ -1973,6 +2002,13 @@
             manifest: { states: { 1: { noTags: ['shadow-only'] }, 2: { allTags: ['shadow-only'] } } }
         };
 
+        // Behavior categories Puca can imitate during hunts.
+        const HUNT_MIMIC_BEHAVIOR_KEYS = Object.freeze(['bspeed', 'losspeed', 'losrange']);
+
+        function isHuntMimicBehavior(ghost, key) {
+            return !!ghost.huntBehaviorMimic && HUNT_MIMIC_BEHAVIOR_KEYS.includes(key);
+        }
+
         // =========================
         // SAFE APP HELPERS
         // =========================
@@ -2010,6 +2046,7 @@
         }
 
         function getBaseSpeedDisplay(ghost) {
+            if (isHuntMimicBehavior(ghost, 'bspeed')) return 'Hunt Mimic (varies)';
             const entry = SPEED_CONFIG.base[ghost.speed];
             const label = starredLabel(ghost, 'speed', ghost.speed);
             if (ghost.speedProfile && ghost.speedProfile.base) return `${label} (${formatSpeedProfile(ghost.speedProfile.base)})`;
@@ -2017,10 +2054,46 @@
         }
 
         function getLosSpeedDisplay(ghost) {
+            if (isHuntMimicBehavior(ghost, 'losspeed')) return 'Hunt Mimic (varies)';
             const entry = SPEED_CONFIG.los[ghost.losspeed];
             const label = starredLabel(ghost, 'losspeed', ghost.losspeed);
-            if (ghost.speedProfile && ghost.speedProfile.los) return `${label} (${formatSpeedProfile(ghost.speedProfile.los)})`;
+            const profile = ghost.speedProfile?.los;
+            if (profile) return `${label} • ${formatSpeedProfile(profile)}`;
             return entry && Number.isFinite(entry.cmps) ? `${label} (${cmpsToMps(entry.cmps)})` : label;
+        }
+
+        function hasConditionalLosProfile(ghost) {
+            return Array.isArray(ghost.speedProfile?.los?.conditions) && ghost.speedProfile.los.conditions.length > 0;
+        }
+
+        function getLosConditionColor(cmps) {
+            const match = Object.entries(SPEED_CONFIG.los).find(([, entry]) => entry.cmps === cmps);
+            const category = match ? match[0] : null;
+            return category === 'Fast' ? '#ff4444' : category === 'Medium' ? '#ffd700' : category === 'Slow' ? '#32cd32' : category === 'Very Slow' ? '#32cd32' : '#ffffff';
+        }
+
+        function getLosSpeedStatValueHTML(ghost) {
+            if (!hasConditionalLosProfile(ghost)) {
+                return `<span class="stat-val" style="color:${getStatColor('losspeed', ghost)}">${escapeHTML(getLosSpeedDisplay(ghost))}</span>`;
+            }
+            const label = escapeHTML(starredLabel(ghost, 'losspeed', ghost.losspeed));
+            const lines = ghost.speedProfile.los.conditions
+                .filter(condition => condition && Number.isFinite(condition.cmps))
+                .map(condition => `<span class="conditional-speed-line" style="color:${getLosConditionColor(condition.cmps)}">${escapeHTML(condition.label)}: ${escapeHTML(cmpsToMps(condition.cmps))}</span>`)
+                .join('');
+            const color = getStatColor('losspeed', ghost);
+            return `<span class="stat-val conditional-speed-primary" style="color:${color}">${label}</span><span class="conditional-speed-lines">${lines}</span>`;
+        }
+
+        function getMobileLosSpeedStatHTML(ghost) {
+            if (!hasConditionalLosProfile(ghost)) {
+                return `<div class="mobile-ghost-stat">LOS Speed<strong>${escapeHTML(String(getLosSpeedDisplay(ghost)))}</strong></div>`;
+            }
+            const lines = ghost.speedProfile.los.conditions
+                .filter(condition => condition && Number.isFinite(condition.cmps))
+                .map(condition => `<span class="mobile-conditional-speed-line" style="color:${getLosConditionColor(condition.cmps)}">${escapeHTML(condition.label)}: ${escapeHTML(cmpsToMps(condition.cmps))}</span>`)
+                .join('');
+            return `<div class="mobile-ghost-stat conditional-los">LOS Speed<strong style="color:${getStatColor('losspeed', ghost)}">${escapeHTML(starredLabel(ghost, 'losspeed', ghost.losspeed))}</strong><span class="mobile-conditional-speed-lines">${lines}</span></div>`;
         }
 
         function getCooldownDisplay(ghost) {
@@ -2036,10 +2109,12 @@
         }
 
         function getLosRangeDisplay(ghost) {
+            if (isHuntMimicBehavior(ghost, 'losrange')) return 'Hunt Mimic (varies)';
             return starredLabel(ghost, 'los', ghost.los);
         }
 
         function getStatColor(kind, ghost) {
+            if (ghost.huntBehaviorMimic && ['speed', 'losspeed', 'los'].includes(kind)) return 'var(--accent)';
             if (kind === 'speed') return ghost.speed === 'Fast' ? '#ff4444' : ghost.speed === 'Medium' ? '#ffd700' : '#32cd32';
             if (kind === 'losspeed') return ghost.losspeed === 'Fast' ? '#ff4444' : ghost.losspeed === 'Medium' ? '#ffd700' : '#32cd32';
             if (kind === 'cooldown') return ghost.cooldown === 'Short' ? '#ff4444' : ghost.cooldown === 'Medium' ? '#ffd700' : '#32cd32';
@@ -2199,6 +2274,12 @@
                                 if (!Number.isFinite(condition.cmps) || condition.cmps <= 0) errors.push(`${ghost.name}: ${kind} condition ${i + 1} has invalid cm/s.`);
                             });
                         }
+                        if (Array.isArray(profile.categories)) {
+                            const speedTable = SPEED_CONFIG[kind];
+                            profile.categories.forEach(category => {
+                                if (!speedTable || !(category in speedTable)) errors.push(`${ghost.name}: ${kind} conditional category "${category}" is not a recognized speed category.`);
+                            });
+                        }
                     });
                 }
             });
@@ -2330,16 +2411,20 @@
         }
 
         function matchesSingleBehaviorFilter(ghost, key, state) {
-            // Puca can imitate modeled ghost behaviors, but its inability to extinguish candles is fixed.
-            if (ghost.behaviorWildcard) {
-                if (key === 'candle' && state === 1 && ghost.tags.includes('no-extinguish')) return false;
-                return true;
-            }
+            if (!state) return true;
+            // Puca can mimic hunt observations only.
+            if (isHuntMimicBehavior(ghost, key)) return true;
             const filter = behaviorFilters[key];
-            if (!filter || !state) return true;
+            if (!filter) return true;
             const rule = filter.states[state];
             if (!rule) return true;
-            if (filter.property) return rule.includes(ghost[filter.property]);
+            if (filter.property) {
+                const conditionalCategories = key === 'losspeed' && Array.isArray(ghost.speedProfile?.los?.categories)
+                    ? ghost.speedProfile.los.categories
+                    : null;
+                const values = conditionalCategories && conditionalCategories.length ? conditionalCategories : [ghost[filter.property]];
+                return values.some(value => rule.includes(value));
+            }
             if (rule.allTags && !rule.allTags.every(tag => ghost.tags.includes(tag))) return false;
             if (rule.noTags && rule.noTags.some(tag => ghost.tags.includes(tag))) return false;
             return true;
@@ -2363,14 +2448,11 @@
         }
 
         function getBehaviorSignature(ghost, key) {
-            if (ghost.behaviorWildcard) {
-                if (key === 'candle' && ghost.tags.includes('no-extinguish')) return 'Cannot Extinguish (Fixed) / Can Mimic Lighting';
-                return 'Imitates / Wildcard';
-            }
+            if (isHuntMimicBehavior(ghost, key)) return 'Hunt Mimic (Varies)';
             switch (key) {
                 case 'bspeed': return ghost.speed;
                 case 'cooldown': return ghost.cooldown;
-                case 'losspeed': return ghost.losspeed;
+                case 'losspeed': return ghost.speedProfile?.los ? formatSpeedProfile(ghost.speedProfile.los) : ghost.losspeed;
                 case 'losrange': return ghost.los;
                 case 'holy': return ghost.hw;
                 case 'candle': {
@@ -2429,15 +2511,15 @@
                 if (new Set(values).size > 1) tests.push({ id, label: `Check ${evidenceLabel(ev)}`, score: partitionEntropy(values), summary: partitionSummary(values), kind: 'Evidence' });
             });
             const states = readBehaviorStates();
-            const behaviorComparable = candidates.filter(g => !g.behaviorWildcard);
             Object.keys(behaviorFilters).forEach(key => {
                 const id = `behavior:${key}`;
+                const behaviorComparable = candidates.filter(g => !isHuntMimicBehavior(g, key));
                 if (states[key] || skippedBestTests.has(id) || behaviorComparable.length < 2) return;
                 const values = behaviorComparable.map(g => getBehaviorSignature(g, key));
                 if (new Set(values).size > 1) {
-                    const wildcardCount = candidates.length - behaviorComparable.length;
-                    const wildcardNote = wildcardCount ? ` • Puca can mimic most behaviors; Can Extinguish Candle rules it out` : '';
-                    tests.push({ id, label: `Observe ${BEHAVIOR_DISPLAY_NAMES[key] || key}`, score: partitionEntropy(values), summary: `${partitionSummary(values)}${wildcardNote}`, kind: 'Behavior', key });
+                    const mimicCount = candidates.length - behaviorComparable.length;
+                    const mimicNote = mimicCount ? ` • Puca can mimic this hunt behavior and may match any result` : '';
+                    tests.push({ id, label: `Observe ${BEHAVIOR_DISPLAY_NAMES[key] || key}`, score: partitionEntropy(values), summary: `${partitionSummary(values)}${mimicNote}`, kind: 'Behavior', key });
                 }
             });
             return tests.sort((a,b) => b.score - a.score || a.label.localeCompare(b.label));
@@ -2463,8 +2545,8 @@
                 html = `<div class="beta-help">No unused modeled test currently separates the remaining ghosts. Restore a skipped test, use Compare, or continue investigating.</div>`;
             } else {
                 const best = tests[0];
-                const pucaNote = best.kind === 'Behavior' && currentCandidateGhosts.some(g => g.behaviorWildcard)
-                    ? `<div class="beta-help">Puca can imitate most behavior observations, but observing the ghost extinguish a candle rules Puca out.</div>` : '';
+                const pucaNote = best.kind === 'Behavior' && currentCandidateGhosts.some(g => isHuntMimicBehavior(g, best.key))
+                    ? `<div class="beta-help">Puca can imitate this kind of hunt behavior, so this observation cannot rule Puca out by itself.</div>` : '';
                 html = `<div class="beta-status possible">${escapeHTML(best.kind)}</div><div class="detail-section"><div class="detail-title">Recommended: ${escapeHTML(best.label)}</div><div>${escapeHTML(best.summary)}</div><div class="beta-help">Ranked by how strongly the unused check separates the remaining ghosts. You can skip a test that is impractical for the current investigation.</div>${pucaNote}<button class="skip-test-btn" type="button" onclick="skipBestTest('${escapeHTML(best.id)}')">Skip This Test</button></div>`;
             }
             html += renderSkippedTestsHTML();
@@ -2630,7 +2712,7 @@
                 stats.innerHTML = `
                     <div class="mobile-ghost-stat">Base Speed<strong>${escapeHTML(String(getBaseSpeedDisplay(g)))}</strong></div>
                     <div class="mobile-ghost-stat">Cooldown<strong>${escapeHTML(String(getCooldownDisplay(g)))}</strong></div>
-                    <div class="mobile-ghost-stat">LOS Speed<strong>${escapeHTML(String(getLosSpeedDisplay(g)))}</strong></div>
+                    ${getMobileLosSpeedStatHTML(g)}
                     <div class="mobile-ghost-stat">LOS Range<strong>${escapeHTML(String(getLosRangeDisplay(g)))}</strong></div>`;
                 detail.appendChild(stats);
 
@@ -2701,8 +2783,7 @@
             }
         }
 
-        // Display-only cleanup for card bullets. The stored ghost.desc text remains unchanged so
-        // source gameplay data can still be compared directly during tomorrow's update.
+        // Display cleanup for card bullets while preserving the stored gameplay data.
         const BEHAVIOR_TEXT_NORMALIZATION = Object.freeze({
             "Doesn't deactivate FLX-POD.": "Does not deactivate FLX-POD.",
             "Increased hunt cooldown.": "Long hunt cooldown.",
@@ -2755,7 +2836,7 @@
 
         function getMechanicBadges(ghost) {
             const badges = [];
-            if (ghost.behaviorWildcard) badges.push({ text:'Behavior Mimic', cls:'conditional' });
+            if (ghost.huntBehaviorMimic) badges.push({ text:'Hunt Behavior Mimic', cls:'conditional' });
             if (ghost.specialDiminishing) badges.push({ text:'Diminishing Override', cls:'conditional' });
             if (ghost.conditionalSpeed) badges.push({ text:'Conditional Speed', cls:'conditional' });
             if (ghost.desc.some(d => /multiple ghost orbs/i.test(d))) badges.push({ text:'Multiple Orbs' });
@@ -2787,21 +2868,12 @@
             const states = readBehaviorStates();
             Object.entries(states).forEach(([key, state]) => {
                 if (!state) return;
-                if (ghost.behaviorWildcard) {
-                    const pass = matchesSingleBehaviorFilter(ghost, key, state);
-                    if (key === 'candle' && state === 1) {
-                        reasons.push({ pass: false, text: `Candle: Can Extinguish conflicts with Puca's fixed inability to extinguish candles.` });
-                    } else if (key === 'candle' && state === 2) {
-                        reasons.push({ pass: true, text: `Candle: Cannot Extinguish matches Puca's fixed candle restriction.` });
-                    } else if (key === 'candle' && state === 3) {
-                        reasons.push({ note: true, text: `Candle: Can Light does not rule out Puca because it can imitate candle-lighting behavior.` });
-                    } else {
-                        reasons.push({ note: true, text: `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${getBehaviorStateLabel(key, state)} does not rule out Puca because it can imitate other ghost behaviors.` });
-                    }
+                if (isHuntMimicBehavior(ghost, key)) {
+                    reasons.push({ note: true, text: `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${getBehaviorStateLabel(key, state)} does not rule out Puca because it can imitate this behavior during a hunt.` });
                     return;
                 }
                 const pass = matchesSingleBehaviorFilter(ghost, key, state);
-                reasons.push({ pass, text: `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${getBehaviorStateLabel(key, state)}${pass ? ' matches' : ' conflicts'}` });
+                reasons.push({ pass, text: `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${getBehaviorStateLabel(key, state)}${pass ? ' matches' : ' conflicts'}.` });
             });
             const context = getFilterContext();
             if (context.realEvidence.size > context.realLimit) {
@@ -2837,11 +2909,11 @@
             html += `<div class="detail-section"><div class="detail-title">Evidence</div><div>${ghost.ev.map(ev => `<span class="evidence-tag" style="display:inline-block;margin:2px;">${escapeHTML(evidenceLabel(ev))}</span>`).join('')}${ghost.forced ? `<div style="margin-top:5px;color:var(--accent);font-weight:700;">Forced Evidence: ${escapeHTML(evidenceLabel(ghost.forced))}</div>` : ''}</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">Gameplay Behaviors</div>${getDisplayBehaviors(ghost).map(d => `<div class="behavior-point">${escapeHTML(d)}</div>`).join('')}</div>`;
             if (ghost.specialDiminishing) html += `<div class="detail-section"><div class="detail-title">Diminishing Evidence Rule</div><div>Marid can leave extra Diminishing Evidence on top of its assigned evidence, including on 0 Real Evidence runs. The tracker does not assume a maximum number of extra Diminishing evidence types.</div></div>`;
-            if (ghost.behaviorWildcard) html += `<div class="detail-section"><div class="detail-title">Behavior Filtering Rule</div><div>Puca can imitate other modeled ghost behaviors, but it cannot extinguish candles. Can Extinguish Candle rules Puca out; Cannot Extinguish and Can Light keep it possible. Evidence filters still apply normally.</div></div>`;
+            if (ghost.huntBehaviorMimic) html += `<div class="detail-section"><div class="detail-title">Hunt Mimic Rule</div><div>Puca can imitate other ghost behaviors during hunts only, except Wiederganger's BPM increase. Hunt speed and LOS observations do not rule Puca out. Puca cannot extinguish or light candles. Evidence filters still apply normally.</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">General Behaviors</div>
                 <div class="stat-item"><span>Base Speed</span><span class="stat-val">${getBaseSpeedDisplay(ghost)}</span></div>
                 <div class="stat-item"><span>Hunt Cooldown</span><span class="stat-val">${getCooldownDisplay(ghost)}</span></div>
-                <div class="stat-item"><span>LOS Speed</span><span class="stat-val">${getLosSpeedDisplay(ghost)}</span></div>
+                <div class="stat-item ${hasConditionalLosProfile(ghost) ? 'conditional-speed-stat' : ''}"><span>LOS Speed</span>${getLosSpeedStatValueHTML(ghost)}</div>
                 <div class="stat-item"><span>LOS Range</span><span class="stat-val">${getLosRangeDisplay(ghost)}</span></div>
                 <div class="stat-item"><span>Holy Water</span><span class="stat-val">${getHolyDisplay(ghost)}</span></div>
             </div>`;
@@ -2879,7 +2951,7 @@
             const headers = varying.map(dim => `<th>${escapeHTML(dim.label)}</th>`).join('');
             const rows = compare.map(g => `<tr><td>${escapeHTML(g.name)}${pinnedGhosts.has(g.name) ? ' 📌' : ''}</td>${varying.map(dim => `<td>${escapeHTML(dim.value(g))}</td>`).join('')}</tr>`).join('');
             const sourceNote = usingPins ? `Comparing ${compare.length} pinned ghosts.` : `Comparing ${compare.length} currently possible ghosts.`;
-            const pucaNote = compare.some(g => g.behaviorWildcard) ? `<div class="beta-help">Puca's listed general stats are shown for reference. It can imitate most modeled behaviors, but its inability to extinguish candles is fixed, so Can Extinguish Candle eliminates it.</div>` : '';
+            const pucaNote = compare.some(g => g.huntBehaviorMimic) ? `<div class="beta-help">Puca can imitate hunt behaviors, so its hunt speed and LOS values can vary.</div>` : '';
             const body = varying.length
                 ? `<div class="beta-help" style="margin-bottom:8px;">${escapeHTML(sourceNote)} Identical categories are hidden.</div>${pucaNote}<div class="comparison-wrap"><table class="comparison-table"><thead><tr><th>Ghost</th>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`
                 : `<div class="beta-help">The selected ghosts have no differences in the currently modeled comparison categories.</div>${pucaNote}`;
@@ -4026,7 +4098,7 @@
                     <div class="stats-container">
                         <div class="stat-item"><span>Base Speed</span> <span class="stat-val" style="color:${getStatColor('speed', g)}">${getBaseSpeedDisplay(g)}</span></div>
                         <div class="stat-item"><span>Hunt Cooldown</span> <span class="stat-val" style="color:${getStatColor('cooldown', g)}">${getCooldownDisplay(g)}</span></div>
-                        <div class="stat-item"><span>Line of Sight Speed</span> <span class="stat-val" style="color:${getStatColor('losspeed', g)}">${getLosSpeedDisplay(g)}</span></div>
+                        <div class="stat-item ${hasConditionalLosProfile(g) ? 'conditional-speed-stat' : ''}"><span>Line of Sight Speed</span>${getLosSpeedStatValueHTML(g)}</div>
                         <div class="stat-item"><span>Line of Sight Range</span> <span class="stat-val" style="color:${getStatColor('los', g)}">${getLosRangeDisplay(g)}</span></div>
                         <div class="stat-item"><span>Holy Water Effectiveness</span> <span class="stat-val" style="color:${getStatColor('hw', g)}">${getHolyDisplay(g)}</span></div>
                     </div>`;
