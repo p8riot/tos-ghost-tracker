@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- p8riotCore App Builder upgrade preview v4: static interaction guide + stacked evidence-limit controls; product logic/data preserved. -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -279,12 +280,12 @@
 
         .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
         .ev-btn {
-            padding: 6px 8px; background: #2c2c2c; border: 1px solid #333; color: #ffffff;
+            padding: 6px 8px; background: var(--bg-control); border: 1px solid var(--border); color: #ffffff;
             border-radius: 6px; cursor: pointer; text-align: center; font-size: 0.75rem;
             transition: 0.2s; user-select: none; font-weight: 600; min-height: 44px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;
         }
-        .ev-btn:hover { background: #333; }
+        .ev-btn:hover { background: var(--bg-control-hover); border-color: var(--border-strong); }
         .ev-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
         .ev-btn[data-ev="EMF"][data-state="1"] { background: rgba(255, 68, 68, 0.2) !important; border: 2px solid #ff4444 !important; color: #ff4444 !important; } 
@@ -713,7 +714,191 @@
                 display: block; width: 100%; padding: 0 15px 18px; background: var(--bg-content);
             }
         }
-    </style>
+    
+        /* ===== Upgrade preview: contextual controls and progressive disclosure ===== */
+        .section-heading-row {
+            display:flex; align-items:center; justify-content:space-between; gap:8px;
+            margin-bottom:12px; padding-bottom:5px; border-bottom:1px solid var(--border);
+        }
+        .section-heading-row h3 { margin:0; padding:0; border:0; }
+        .section-clear-btn {
+            min-height:34px; padding:5px 8px; border:1px solid var(--border-strong); border-radius:4px;
+            background:var(--bg-control); color:var(--text-muted); font-size:.62rem; font-weight:800;
+            text-transform:uppercase; cursor:pointer;
+        }
+        .section-clear-btn:hover { border-color:var(--danger-red); color:#fff; }
+        .section-clear-btn[hidden] { display:none !important; }
+        .section-clear-btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+        .active-filter-summary {
+            margin-top:0; margin-bottom:8px; padding:7px 9px; border:1px solid var(--border); border-radius:5px;
+            background:var(--bg-soft); color:var(--text-muted); font-size:.68rem; line-height:1.35;
+        }
+        .active-filter-summary strong { color:var(--accent); }
+        .active-filter-summary[hidden] { display:none !important; }
+
+        .instruction-bar { position:relative; }
+        .instruction-row { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; }
+        .guide-toggle {
+            flex:0 0 auto; min-height:34px; padding:4px 8px; border:1px solid var(--border-strong);
+            border-radius:4px; background:var(--bg-control); color:var(--text-muted);
+            font-size:.62rem; font-weight:800; text-transform:uppercase; cursor:pointer;
+        }
+        .guide-toggle:hover { border-color:var(--accent); color:#fff; }
+        .guide-toggle:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+        .instruction-bar.guide-compact { min-height:38px; padding:5px 8px; }
+        .instruction-bar.guide-compact .instruction-text { display:none; }
+
+        .beta-toolbar .beta-btn[hidden] { display:none !important; }
+        .beta-toolbar .beta-btn.priority-action {
+            border-color:var(--accent);
+            color:var(--accent);
+            background:var(--accent-soft);
+        }
+        .beta-assistant-next {
+            margin-top:7px; color:var(--text-muted); font-size:.7rem; line-height:1.35;
+        }
+        .beta-assistant-next strong { color:var(--accent); }
+
+        .reference-container.is-collapsed { display:none !important; }
+        .ref-mode-btn.secondary-toggle { color:var(--text-muted); }
+
+        @media screen and (max-width:600px) {
+            .mobile-ghost-bar-hint {
+                max-width:72vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+            }
+            .beta-toolbar { gap:6px; }
+            .beta-toolbar .beta-btn { flex:1 1 110px; }
+            .instruction-row { justify-content:space-between; }
+            .instruction-text { text-align:left; }
+        }
+
+    
+        /* ===== Upgrade preview v2: compact reference-card sizing ===== */
+        .reference-header,
+        .reference-container {
+            width:min(100%,1280px);
+            align-self:center;
+        }
+        .reference-header {
+            margin-left:auto;
+            margin-right:auto;
+            margin-bottom:14px;
+        }
+        .reference-container.tabs-mode {
+            width:min(100%,760px);
+            gap:10px;
+            padding-bottom:28px;
+        }
+        .reference-container.tabs-mode .tabs-wrapper { gap:10px; }
+        .reference-container.tabs-mode .tabs-nav {
+            gap:4px;
+            padding-bottom:6px;
+        }
+        .reference-container.tabs-mode .tabs-content {
+            display:flex;
+            justify-content:center;
+            width:100%;
+        }
+        .reference-container.tabs-mode .tabs-content .ghost-card.active-tab-panel {
+            width:min(100%,680px);
+            flex:0 1 680px;
+        }
+        .reference-container.all-mode {
+            width:min(100%,1280px);
+            grid-template-columns:repeat(auto-fit,minmax(260px,300px));
+            justify-content:center;
+            gap:14px;
+            padding-bottom:28px;
+        }
+        .reference-container .ghost-card {
+            padding:12px;
+            gap:8px;
+        }
+        .reference-container .ghost-name { font-size:1rem; }
+        .reference-container .ghost-behavior {
+            font-size:.8rem;
+            line-height:1.35;
+            padding-top:6px;
+        }
+        .reference-container .behavior-point { margin-bottom:3px; }
+        .reference-container .phrase-tag {
+            font-size:.68rem;
+            padding:3px 5px;
+        }
+        .reference-container.all-mode .ref-card-wheel #wheelCanvas {
+            width:min(100%,250px) !important;
+            height:auto !important;
+        }
+        .reference-container.all-mode .map-toggle-grid {
+            gap:5px;
+        }
+        .reference-container.all-mode .map-toggle-btn {
+            min-height:36px;
+            padding:4px 5px;
+            font-size:.62rem;
+        }
+        .reference-container.tabs-mode .ref-card-wheel #wheelCanvas {
+            width:min(100%,340px) !important;
+            height:auto !important;
+        }
+        .reference-container.tabs-mode .cheatsheet-image {
+            max-width:620px;
+        }
+        @media screen and (max-width:768px) {
+            .reference-header,
+            .reference-container.tabs-mode,
+            .reference-container.all-mode {
+                width:100%;
+                max-width:none;
+            }
+            .reference-container.all-mode {
+                grid-template-columns:1fr;
+            }
+            .reference-container.tabs-mode .tabs-content .ghost-card.active-tab-panel {
+                width:100%;
+                flex-basis:100%;
+            }
+        }
+
+
+        /* ===== Upgrade preview v4: static ghost controls + stacked evidence limits ===== */
+        .instruction-row {
+            justify-content:center !important;
+        }
+        .instruction-text {
+            text-align:center !important;
+        }
+        .guide-toggle {
+            display:none !important;
+        }
+
+        .limit-box {
+            min-height:54px;
+            padding:6px 8px;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:2px;
+            line-height:1.05;
+        }
+        .limit-label {
+            display:block;
+            font-size:.72rem;
+            font-weight:600;
+            line-height:1.1;
+            text-align:center;
+        }
+        .limit-value {
+            display:block;
+            font-size:.9rem;
+            font-weight:800;
+            line-height:1;
+            color:inherit;
+            text-align:center;
+        }
+
+</style>
 </head>
 <body>
 
@@ -735,18 +920,31 @@
                 <div class="sidebar-section">
                     <h3>Evidence Setup</h3>
                     <div class="limit-grid">
-                        <button type="button" class="toggle-box limit-box" id="btn-real-limit" onclick="cycleRealLimit()" aria-label="Real Evidence limit: 3">Real Evidence - 3</button>
-                        <button type="button" class="toggle-box limit-box" id="btn-false-limit" onclick="cycleFalseLimit()" aria-label="Diminishing Evidence limit: 0">Diminishing Evidence - 0</button>
+                        <button type="button" class="toggle-box limit-box" id="btn-real-limit" onclick="cycleRealLimit()" aria-label="Real Evidence limit: 3">
+                            <span class="limit-label">Real Evidence</span>
+                            <span class="limit-value" aria-hidden="true">3</span>
+                        </button>
+                        <button type="button" class="toggle-box limit-box" id="btn-false-limit" onclick="cycleFalseLimit()" aria-label="Diminishing Evidence limit: 0">
+                            <span class="limit-label">Diminishing Evidence</span>
+                            <span class="limit-value" aria-hidden="true">0</span>
+                        </button>
                     </div>
                 </div>
 
                 <div class="sidebar-section">
-                    <h3>Evidence Tracker</h3>
+                    <div class="section-heading-row">
+                        <h3>Evidence Tracker</h3>
+                        <button id="clearEvidenceBtn" class="section-clear-btn" type="button" onclick="clearEvidenceTracker()" hidden>Clear</button>
+                    </div>
                     <div class="evidence-grid" id="evidence-container"></div>
                 </div>
 
                 <div class="sidebar-section">
-                    <h3>Behaviors</h3>
+                    <div class="section-heading-row">
+                        <h3>Behaviors</h3>
+                        <button id="clearBehaviorsBtn" class="section-clear-btn" type="button" onclick="clearBehaviorTracker()" hidden>Clear</button>
+                    </div>
+                    <div id="activeFilterSummary" class="active-filter-summary" hidden></div>
                     <div class="behavior-grid">
                         <button type="button" class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Base Speed: Cleared"><span class="toggle-label">Base Speed</span></button>
                         <button type="button" class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Main Breaker: Cleared"><span class="toggle-label">Main Breaker</span></button>
@@ -786,11 +984,13 @@
         </div>
 
         <div class="content-area">
-            <div class="instruction-bar">
-                <div class="instruction-text">
-                    <span>Left Click/Tap:</span> Highlight Ghost <span>Right Click/Hold:</span> Eliminate Ghost
+            <div class="instruction-bar" id="interactionGuide">
+                <div class="instruction-row">
+                    <div class="instruction-text">
+                        <span>Left Click/Tap:</span> Highlight Ghost <span>Right Click/Hold:</span> Eliminate Ghost
+                    </div>
                 </div>
-                <div id="voiceStatus" class="voice-status"></div>
+                <div id="voiceStatus" class="voice-status" aria-live="polite"></div>
             </div>
             
             <div class="beta-assistant" id="betaAssistant" aria-label="Investigation assistant">
@@ -800,11 +1000,12 @@
                 </div>
                 <div class="beta-toolbar">
                     <button id="btnPossibleOnly" class="beta-btn" type="button" onclick="togglePossibleOnly()">Possible Only</button>
-                    <button id="btnUndo" class="beta-btn" type="button" onclick="undoLastAction()" disabled>Undo</button>
-                    <button class="beta-btn" type="button" onclick="toggleBestNextTests()">Best Test</button>
-                    <button class="beta-btn" type="button" onclick="openComparison()">Compare</button>
-                    <button class="beta-btn" type="button" onclick="toggleHistoryPanel()">History</button>
+                    <button id="btnUndo" class="beta-btn" type="button" onclick="undoLastAction()" disabled hidden>Undo</button>
+                    <button id="btnBestTest" class="beta-btn" type="button" onclick="toggleBestNextTests()">Best Test</button>
+                    <button id="btnCompare" class="beta-btn" type="button" onclick="openComparison()">Compare</button>
+                    <button id="btnHistory" class="beta-btn" type="button" onclick="toggleHistoryPanel()" hidden>History</button>
                 </div>
+                <div id="betaAssistantNext" class="beta-assistant-next"></div>
                 <div id="betaConflict" class="beta-conflict"></div>
             </div>
 
@@ -815,6 +1016,7 @@
                 <div class="ref-toggle-container">
                     <button id="ref-btn-tabs" class="ref-mode-btn active" onclick="setRefMode('tabs')">Tabs View</button>
                     <button id="ref-btn-all" class="ref-mode-btn" onclick="setRefMode('all')">Expand All</button>
+                    <button id="ref-btn-collapse" class="ref-mode-btn secondary-toggle" onclick="toggleReferenceWorkspace()" aria-expanded="true">Hide</button>
                     <button class="ref-mode-btn" onclick="scrollToTop()" aria-label="Return to top">Top</button>
                 </div>
             </div>
@@ -998,7 +1200,7 @@
         <button id="mobileGhostBar" class="mobile-ghost-bar" type="button" onclick="toggleMobileGhostDrawer()" aria-expanded="false" aria-controls="mobileGhostPanel">
             <span class="mobile-ghost-bar-main">
                 <span id="mobileGhostCount" class="mobile-ghost-bar-count">25 Possible Ghosts</span>
-                <span class="mobile-ghost-bar-hint">Tap to view without scrolling</span>
+                <span id="mobileGhostHint" class="mobile-ghost-bar-hint">Tap to view without scrolling</span>
             </span>
             <span class="mobile-ghost-chevron" aria-hidden="true">▲</span>
         </button>
@@ -2651,6 +2853,14 @@
             const maridException = getMaridExceptionInfo();
             countEl.textContent = maridException ? `${count} Normal • 1 Special` : `${count} Possible Ghost${count === 1 ? '' : 's'}`;
             titleEl.textContent = maridException ? `Marid Exception • ${count} Normal` : `${count} Possible Ghost${count === 1 ? '' : 's'}`;
+            const hintEl = document.getElementById('mobileGhostHint');
+            if (hintEl) {
+                const pinnedCount = currentCandidateGhosts.filter(g => pinnedGhosts.has(g.name)).length;
+                const names = currentCandidateGhosts.slice(0, 3).map(g => g.name);
+                if (!count) hintEl.textContent = undoStack.length ? 'No matches · Undo is available' : 'No matches · review observations';
+                else if (count <= 3) hintEl.textContent = `${names.join(' · ')}${pinnedCount ? ` · ${pinnedCount} pinned` : ''}`;
+                else hintEl.textContent = `${names.join(' · ')} +${count - names.length}${pinnedCount ? ` · ${pinnedCount} pinned` : ''}`;
+            }
             if (!isPhoneGhostDrawerViewport()) return;
 
             const activeNames = new Set(currentCandidateGhosts.map(g => g.name));
@@ -2737,6 +2947,114 @@
             });
         }
 
+
+        function getActiveObservationCounts() {
+            const evidenceCount = Object.values(evidenceStates).filter(state => Number(state) !== 0).length;
+            const behaviorButtons = [...document.querySelectorAll('.behavior-grid .toggle-box[data-state]')];
+            const behaviorCount = behaviorButtons.filter(btn => Number(btn.dataset.state) !== 0).length;
+            return { evidenceCount, behaviorCount };
+        }
+
+        function updateSidebarSectionActions() {
+            const { evidenceCount, behaviorCount } = getActiveObservationCounts();
+            const clearEvidence = document.getElementById('clearEvidenceBtn');
+            const clearBehaviors = document.getElementById('clearBehaviorsBtn');
+            const summary = document.getElementById('activeFilterSummary');
+            if (clearEvidence) clearEvidence.hidden = evidenceCount === 0;
+            if (clearBehaviors) clearBehaviors.hidden = behaviorCount === 0;
+            if (summary) {
+                const total = evidenceCount + behaviorCount;
+                summary.hidden = total === 0;
+                summary.innerHTML = total
+                    ? `<strong>Active:</strong> ${evidenceCount} evidence · ${behaviorCount} behavior${behaviorCount === 1 ? '' : 's'}`
+                    : '';
+            }
+        }
+
+        function clearEvidenceTracker() {
+            if (!Object.values(evidenceStates).some(state => Number(state) !== 0)) return;
+            recordInvestigationAction('Cleared evidence tracker');
+            evidenceTypes.forEach(ev => evidenceStates[ev] = 0);
+            document.querySelectorAll('.ev-btn').forEach(btn => {
+                btn.dataset.state = '0';
+                btn.setAttribute('aria-label', `${evidenceLabel(btn.dataset.ev)} evidence: Cleared`);
+            });
+            skippedBestTests.clear();
+            filterGhosts();
+        }
+
+        function clearBehaviorTracker() {
+            const active = [...document.querySelectorAll('.behavior-grid .toggle-box[data-state]')]
+                .some(btn => Number(btn.dataset.state) !== 0);
+            if (!active) return;
+            recordInvestigationAction('Cleared behavior tracker');
+            document.querySelectorAll('.behavior-grid .toggle-box[data-state]').forEach(btn => {
+                btn.dataset.state = '0';
+                const key = btn.id.replace('btn-', '');
+                btn.setAttribute('aria-label', `${BEHAVIOR_DISPLAY_NAMES[key] || key}: Cleared`);
+            });
+            skippedBestTests.clear();
+            filterGhosts();
+        }
+
+        function updateContextualAssistantControls() {
+            const candidateCount = currentCandidateGhosts.length;
+            const total = ghosts.length;
+            const possible = document.getElementById('btnPossibleOnly');
+            const undo = document.getElementById('btnUndo');
+            const best = document.getElementById('btnBestTest');
+            const compare = document.getElementById('btnCompare');
+            const history = document.getElementById('btnHistory');
+            const next = document.getElementById('betaAssistantNext');
+
+            if (possible) possible.hidden = !(showPossibleOnly || candidateCount < total);
+            if (undo) undo.hidden = undoStack.length === 0;
+            if (best) best.hidden = candidateCount < 2;
+            if (compare) compare.hidden = candidateCount < 2 || candidateCount > 6;
+            if (history) history.hidden = actionHistory.length === 0;
+
+            [possible, undo, best, compare, history].filter(Boolean).forEach(btn => btn.classList.remove('priority-action'));
+            if (candidateCount >= 2 && best) best.classList.add('priority-action');
+            else if (undoStack.length && undo) undo.classList.add('priority-action');
+
+            if (next) {
+                if (candidateCount === 1) {
+                    next.innerHTML = `<strong>One possibility remains.</strong> Review its card/details before selecting it in game.`;
+                } else if (candidateCount >= 2) {
+                    next.innerHTML = `<strong>${candidateCount} possibilities.</strong> Best Test prioritizes the observation most likely to separate them.`;
+                } else if (undoStack.length) {
+                    next.innerHTML = `<strong>No active possibilities.</strong> Undo the last observation or review the conflict guidance below.`;
+                } else {
+                    next.textContent = '';
+                }
+            }
+        }
+
+
+        function toggleReferenceWorkspace() {
+            const container = document.getElementById('referenceContainer');
+            const button = document.getElementById('ref-btn-collapse');
+            if (!container || !button) return;
+            const collapsed = !container.classList.contains('is-collapsed');
+            container.classList.toggle('is-collapsed', collapsed);
+            button.textContent = collapsed ? 'Show' : 'Hide';
+            button.classList.toggle('active', collapsed);
+            button.setAttribute('aria-expanded', String(!collapsed));
+            safeStorageSet('pms-reference-collapsed', collapsed ? '1' : '0');
+        }
+
+        function restoreReferenceWorkspaceState() {
+            const container = document.getElementById('referenceContainer');
+            const button = document.getElementById('ref-btn-collapse');
+            if (!container || !button) return;
+            const collapsed = safeStorageGet('pms-reference-collapsed') === '1';
+            container.classList.toggle('is-collapsed', collapsed);
+            button.textContent = collapsed ? 'Show' : 'Hide';
+            button.classList.toggle('active', collapsed);
+            button.setAttribute('aria-expanded', String(!collapsed));
+        }
+
+
         function updateBetaAssistant() {
             const maridException = getMaridExceptionInfo();
             const remaining = document.getElementById('betaRemaining');
@@ -2749,6 +3067,8 @@
             const possibleBtn = document.getElementById('btnPossibleOnly');
             if (possibleBtn) possibleBtn.classList.toggle('active', showPossibleOnly);
             updateUndoAndHistoryUI();
+            updateSidebarSectionActions();
+            updateContextualAssistantControls();
             const conflict = document.getElementById('betaConflict');
             if (!conflict) return;
             conflict.classList.toggle('marid-exception', !!maridException);
@@ -3602,7 +3922,9 @@
             initTheme();
             updateLimitDisplays();
             filterGhosts();
-            switchTab('notes');
+            setRefMode(safeStorageGet('pms-ref-mode') || 'tabs', false);
+            switchTab(safeStorageGet('pms-ref-tab') || 'notes', false);
+            restoreReferenceWorkspaceState();
             initMapSelector();
             drawWheel();
             initVoiceRecognition();
@@ -3645,9 +3967,11 @@
             const realBtn = document.getElementById('btn-real-limit');
             const falseBtn = document.getElementById('btn-false-limit');
 
-            realBtn.innerText = `Real Evidence - ${realLimit}`;
+            const realValue = realBtn.querySelector('.limit-value');
+            const falseValue = falseBtn.querySelector('.limit-value');
+            if (realValue) realValue.textContent = String(realLimit);
+            if (falseValue) falseValue.textContent = String(falseLimit);
             realBtn.setAttribute('aria-label', `Real Evidence limit: ${realLimit}`);
-            falseBtn.innerText = `Diminishing Evidence - ${falseLimit}`;
             falseBtn.setAttribute('aria-label', `Diminishing Evidence limit: ${falseLimit}`);
 
             const evBtns = document.querySelectorAll('.ev-btn');
@@ -3700,12 +4024,13 @@
             filterGhosts();
         }
 
-        function setRefMode(mode) {
+        function setRefMode(mode, persist = true) {
             const container = document.getElementById('referenceContainer');
             const btnTabs = document.getElementById('ref-btn-tabs');
             const btnAll = document.getElementById('ref-btn-all');
-            
-            if(mode === 'tabs') {
+            const normalizedMode = mode === 'all' ? 'all' : 'tabs';
+
+            if(normalizedMode === 'tabs') {
                 container.classList.remove('all-mode');
                 container.classList.add('tabs-mode');
                 btnTabs.classList.add('active');
@@ -3716,14 +4041,18 @@
                 btnTabs.classList.remove('active');
                 btnAll.classList.add('active');
             }
+            if (persist) safeStorageSet('pms-ref-mode', normalizedMode);
         }
 
-        function switchTab(tabId) {
+        function switchTab(tabId, persist = true) {
             const tabs = document.querySelectorAll('.tabs-nav .tab-btn[data-tab-id]');
             const panels = document.querySelectorAll('.tabs-content > .ghost-card[data-tab-panel]');
-            
-            tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tabId === tabId));
-            panels.forEach(panel => panel.classList.toggle('active-tab-panel', panel.dataset.tabPanel === tabId));
+            const valid = [...tabs].some(tab => tab.dataset.tabId === tabId);
+            const targetId = valid ? tabId : 'notes';
+
+            tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tabId === targetId));
+            panels.forEach(panel => panel.classList.toggle('active-tab-panel', panel.dataset.tabPanel === targetId));
+            if (persist) safeStorageSet('pms-ref-tab', targetId);
         }
 
         function getActiveMaps() {
