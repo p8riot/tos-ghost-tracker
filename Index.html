@@ -143,6 +143,7 @@
         .reference-container.all-mode .tabs-nav { display: none; }
         .reference-container.all-mode .tabs-content .ghost-card { display: flex !important; }
         .behavior-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .behavior-grid .behavior-wide { grid-column: 1 / -1; }
 
         .reference-container.tabs-mode .ref-card-hr #playerInputs {
             display: grid;
@@ -190,6 +191,9 @@
         .toggle-box.breaker[data-state="3"]::after { content: "BOTH"; color: #d39cff; }
         .toggle-box.breaker[data-state="4"] { background: rgba(128, 128, 128, 0.15); border-color: #888; }
         .toggle-box.breaker[data-state="4"]::after { content: "CANNOT INTERACT"; color: #bbbbbb; }
+        #btn-breaker[data-state="1"]::after { content: "DIRECT OFF"; }
+        #btn-breaker[data-state="2"]::after { content: "DIRECT ON"; }
+        #btn-breaker[data-state="3"]::after { content: "DIRECT BOTH"; }
 
         .toggle-box.candle[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
         .toggle-box.candle[data-state="1"]::after { content: "CAN EXTINGUISH"; color: #ff8888; }
@@ -455,11 +459,14 @@
         }
         .beta-conflict.show { display: block; }
         .beta-conflict strong { color: #ff8888; }
-        .beta-conflict.marid-exception {
+        .beta-conflict.marid-exception,
+        .beta-conflict.breaker-check {
             border-color: var(--warning-orange);
             background: rgba(255,165,0,0.08);
         }
-        .beta-conflict.marid-exception strong { color: #ffd08a; }
+        .beta-conflict.marid-exception strong,
+        .beta-conflict.breaker-check strong { color: #ffd08a; }
+        .beta-conflict.breaker-check { margin-bottom: 8px; }
         .marid-exception-line { margin-top: 4px; }
         .marid-exception-label { color: #ffd08a; font-weight: 800; }
         .history-list { display: flex; flex-direction: column; gap: 4px; }
@@ -717,7 +724,7 @@
     
         /* ===== Upgrade preview: contextual controls and progressive disclosure ===== */
         .section-heading-row {
-            display:flex; align-items:center; justify-content:space-between; gap:8px;
+            display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:34px;
             margin-bottom:12px; padding-bottom:5px; border-bottom:1px solid var(--border);
         }
         .section-heading-row h3 { margin:0; padding:0; border:0; }
@@ -761,7 +768,8 @@
         .beta-assistant-next strong { color:var(--accent); }
 
         .reference-container.is-collapsed { display:none !important; }
-        .ref-mode-btn.secondary-toggle { color:var(--text-muted); }
+        .ref-mode-btn.secondary-toggle { color:var(--text-muted); transition:background-color 0.2s; }
+        .ref-mode-btn.secondary-toggle.active { color:#000; }
 
         @media screen and (max-width:600px) {
             .mobile-ghost-bar-hint {
@@ -946,19 +954,25 @@
                     </div>
                     <div id="activeFilterSummary" class="active-filter-summary" hidden></div>
                     <div class="behavior-grid">
-                        <button type="button" class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Base Speed: Cleared"><span class="toggle-label">Base Speed</span></button>
                         <button type="button" class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Main Breaker: Cleared"><span class="toggle-label">Main Breaker</span></button>
-                        <button type="button" class="toggle-box action breaker" id="btn-indbreaker" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Individual Breakers: Cleared"><span class="toggle-label">Individual Breakers</span></button>
-                        <button type="button" class="toggle-box candle" id="btn-candle" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Candle: Cleared"><span class="toggle-label">Candle</span></button>
                         <button type="button" class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Doors: Cleared"><span class="toggle-label">Doors</span></button>
-                        <button type="button" class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="FLX-POD: Cleared"><span class="toggle-label">FLX-POD</span></button>
+
+                        <button type="button" class="toggle-box action breaker" id="btn-indbreaker" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Individual Breakers: Cleared"><span class="toggle-label">Individual Breakers</span></button>
                         <button type="button" class="toggle-box holy" id="btn-holy" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Holy Water: Cleared"><span class="toggle-label">Holy Water</span></button>
-                        <button type="button" class="toggle-box cooldown" id="btn-cooldown" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Cooldown: Cleared"><span class="toggle-label">Cooldown</span></button>
+
                         <button type="button" class="toggle-box lights" id="btn-lights" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Lights: Cleared"><span class="toggle-label">Lights</span></button>
-                        <button type="button" class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="LOS Range: Cleared"><span class="toggle-label">LOS Range</span></button>
-                        <button type="button" class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="LOS Speed: Cleared"><span class="toggle-label">LOS Speed</span></button>
-                        <button type="button" class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Manifest: Cleared"><span class="toggle-label">Manifest</span></button>
+                        <button type="button" class="toggle-box cooldown" id="btn-cooldown" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Hunt Cooldown: Cleared"><span class="toggle-label">Hunt Cooldown</span></button>
+
                         <button type="button" class="toggle-box radio" id="btn-radio" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Radio: Cleared"><span class="toggle-label">Radio</span></button>
+                        <button type="button" class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="LOS Range: Cleared"><span class="toggle-label">LOS Range</span></button>
+
+                        <button type="button" class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="FLX-POD: Cleared"><span class="toggle-label">FLX-POD</span></button>
+                        <button type="button" class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="LOS Speed: Cleared"><span class="toggle-label">LOS Speed</span></button>
+
+                        <button type="button" class="toggle-box candle" id="btn-candle" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Candle: Cleared"><span class="toggle-label">Candle</span></button>
+                        <button type="button" class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Base Speed: Cleared"><span class="toggle-label">Base Speed</span></button>
+
+                        <button type="button" class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Manifest: Cleared"><span class="toggle-label">Manifest</span></button>
                     </div>
 
                     <div class="timer-container">
@@ -1006,6 +1020,7 @@
                     <button id="btnHistory" class="beta-btn" type="button" onclick="toggleHistoryPanel()" hidden>History</button>
                 </div>
                 <div id="betaAssistantNext" class="beta-assistant-next"></div>
+                <div id="betaBreakerCheck" class="beta-conflict breaker-check"></div>
                 <div id="betaConflict" class="beta-conflict"></div>
             </div>
 
@@ -1050,18 +1065,18 @@
                                 <span class="behavior-point"><strong>Favorite room:</strong> ghosts have a favorite room, but evidence can appear elsewhere inside the location. The Infrasound Receiver must be in the favorite room to capture Audio evidence.</span>
                                 <span class="behavior-point"><strong>Sanctified Cross:</strong> can only be flipped in the ghost's favorite room.</span>
                                 <span class="behavior-point"><strong>Hunt heart-rate threshold:</strong> most ghosts can normally hunt at a 100 BPM average team heart rate. Demon, Hupia, and Wiederganger can hunt as early as 77 BPM. The threshold uses the average BPM of players inside the location.</span>
-                                <span class="behavior-point"><strong>Holy Water hunt blocks:</strong> special ghosts may temporarily replace their normal hunt cooldown after being sprayed. Demon and Wisp are blocked for 2 minutes; Tariaksuq is blocked for 90 seconds. Check the ghost's Unique Behaviors for its special Holy Water or cooldown rule.</span>
+                                <span class="behavior-point"><strong>Holy Water hunt blocks:</strong> special ghosts may temporarily replace their normal hunt cooldown after being sprayed. Demon and Wisp are blocked for 2 minutes; Tariaksuq is blocked for 90 seconds. Puca can imitate the Holy Water Effectiveness of the ghost it is copying during a hunt, so Holy Water Effectiveness alone does not rule Puca out. Check the ghost's Unique Behaviors for special Holy Water or cooldown rules.</span>
                                 <span class="behavior-point"><strong>Real vs Diminishing Evidence:</strong> real evidence reappears several times at full strength. Diminishing evidence may first appear at full strength a couple of times, then appears weaker over time. Freezing can never be Diminishing.</span>
                                 <span class="behavior-point"><strong>Diminishing filtering:</strong> on limited-evidence runs, a Diminishing evidence type can also be one of the ghost's assigned evidence types, so it does not rule that ghost out. When the run has all 3 Real Evidence, extra Diminishing evidence can be treated as outside the ghost's three assigned evidence types.</span>
                                 <span class="behavior-point"><strong>Marid evidence exception:</strong> Marid can leave extra Diminishing evidence on top of its assigned evidence, including on 0 Real Evidence runs.</span>
                                 <span class="behavior-point"><strong>Forced Evidence:</strong> forced evidence applies whenever the run has Real Evidence, regardless of the configured Diminishing Evidence count. It does not apply on 0 Real Evidence runs.</span>
                                 <span class="behavior-point"><strong>Ghost Orbs:</strong> normally require infrared vision to see, but an orb can also be photographed using the cellphone camera flash. Sluagh can produce multiple Ghost Orbs.</span>
-                                <span class="behavior-point"><strong>Puca:</strong> can imitate other ghost behaviors during hunts only, except Wiederganger's increase in BPM.</span>
+                                <span class="behavior-point"><strong>Puca:</strong> imitates the full hunt behavior of another ghost, never passive behaviors. This includes Base Speed, LOS Speed, and Holy Water Effectiveness. Hunt LOS Range and Hunt Cooldown stay locked to Puca's own values. Forced-hunt behavior and Wiederganger's nearby anxiety-rate effect are not copied, and Puca cannot imitate the same ghost type back-to-back.</span>
                                 <span class="behavior-point"><strong>Candles:</strong> Can Light is a specific identifying behavior for ghosts whose Notes list it. Puca cannot extinguish candles and is not a Can Light ghost, so observing either Can Extinguish or Can Light rules Puca out.</span>
-                                <span class="behavior-point"><strong>Main Breaker:</strong> this is the main switch that controls the entire breaker box. Echo, Wewe Gombel, and Wisp cannot use the main breaker normally; the automatic breaker change after a hunt is an exception and should not be treated as an identifying interaction.</span>
-                                <span class="behavior-point"><strong>Individual Breakers:</strong> these are the room-specific switches inside the breaker box. All ghosts can turn individual breakers off. Echo and Wewe Gombel can only turn individual breakers off; every other ghost can turn individual breakers both on and off.</span>
+                                <span class="behavior-point"><strong>Main Breaker:</strong> this is the main switch that controls the entire breaker box. Treat Direct Off/On/Both as direct ghost interaction only. Echo, Wewe Gombel, and Wisp cannot directly use the main breaker normally. The automatic end-of-hunt breaker trigger shared by all ghosts is not identifying. If the power goes out, check the light-switch positions before recording Direct Off or Direct Both: an overload from too many active lights can trip the breaker without the ghost directly using it. If all light switches have reset to OFF, treat an overload as possible and do not use that event to rule out ghosts that cannot use the main breaker.</span>
+                                <span class="behavior-point"><strong>Individual Breakers:</strong> these are the room-specific switches inside the breaker box. Wisp cannot interact with individual breakers. Echo and Wewe Gombel can only turn individual breakers off; every other ghost can turn individual breakers both on and off.</span>
                                 <span class="behavior-point"><strong>Radio interactions:</strong> TVs and alarm clocks do not count as Radio interactions. The Old Tape Recorder and Gramophone do count as Radio interactions.</span>
-                                <span class="behavior-point"><strong>Lights:</strong> a light exploding counts as the ghost turning a light off. Player illumination is now dynamic, so being closer to active light sources provides more protection from anxiety than simply standing somewhere in a lit room.</span>
+                                <span class="behavior-point"><strong>Lights:</strong> a light exploding counts as the ghost turning a light off. Wisp can turn lights on but cannot turn them off. Players can also turn lights on, and too many active lights can trip/overload the main breaker; that resulting power loss is not a direct main-breaker interaction. Player illumination is dynamic, so being closer to active light sources provides more protection from anxiety than simply standing somewhere in a lit room.</span>
 
                             </div>
                         </div>
@@ -1487,8 +1502,8 @@
                                 "cd_val": 2,
                                 "forced": null,
                                 "desc": [
-                                            "Cannot use the main breaker outside the automatic post-hunt breaker change",
-                                            "Can only turn individual breaker switches off",
+                                            "Main Breaker: Cannot Directly Interact",
+                                            "Individual Breakers: Turns Off",
                                             "Cannot turn on or off lights",
                                             "Cannot turn on or off radios",
                                             "Cannot deactivate FLX-PODs",
@@ -1732,7 +1747,10 @@
                                 "cd_val": 2,
                                 "forced": null,
                                 "desc": [
-                                            "Can imitate other ghost behaviors during hunts only, except Wiederganger's BPM increase",
+                                            "During hunts, can imitate another ghost's full hunt behavior, including Base Speed, LOS Speed, and Holy Water Effectiveness",
+                                            "LOS Range and Hunt Cooldown stay locked to Puca's own values while mimicking",
+                                            "Does not copy forced-hunt behavior or Wiederganger's nearby anxiety-rate increase",
+                                            "Cannot imitate the same ghost type in consecutive hunts",
                                             "Cannot extinguish candles"
                                 ],
                                 "tags": [
@@ -2003,8 +2021,8 @@
                                 "cd_val": 1,
                                 "forced": null,
                                 "desc": [
-                                            "Cannot use the main breaker outside the automatic post-hunt breaker change",
-                                            "Can only turn individual breaker switches off",
+                                            "Main Breaker: Cannot Directly Interact",
+                                            "Individual Breakers: Turns Off",
                                             "Cannot turn on lights"
                                 ],
                                 "tags": [
@@ -2063,8 +2081,9 @@
                                 "desc": [
                                             "Holy water stops the ghost from hunting for 2 minutes after being sprayed",
                                             "Prefers interacting with lights",
-                                            "Cannot use the main breaker outside the automatic post-hunt breaker change",
-                                            "Can turn individual breaker switches on and off",
+                                            "Main Breaker: Cannot Directly Interact",
+                                            "Individual Breakers: Cannot Interact",
+                                            "Lights: Turns On",
                                             "Cannot turn off lights",
                                             "Can light candles",
                                             "Cannot extinguish candles",
@@ -2132,9 +2151,11 @@
         ];
 
         // Individual breaker switches are separate from the main breaker.
-        // Confirmed rule: Echo and Wewe Gombel can turn individual switches OFF only; all other ghosts can turn them ON and OFF.
+        // Confirmed rule: Wisp cannot interact with individual switches; Echo and Wewe Gombel can turn them OFF only; all other ghosts can turn them ON and OFF.
         ghosts.forEach(ghost => {
-            ghost.individualBreaker = (ghost.name === 'Echo' || ghost.name === 'Wewe Gombel') ? 'Off' : 'Both';
+            if (ghost.name === 'Wisp') ghost.individualBreaker = 'None';
+            else if (ghost.name === 'Echo' || ghost.name === 'Wewe Gombel') ghost.individualBreaker = 'Off';
+            else ghost.individualBreaker = 'Both';
         });
 
         let realLimit = GAME_RULES.maxRealEvidence;
@@ -2170,23 +2191,36 @@
 
         const BEHAVIOR_STATE_LABELS = Object.freeze({
             bspeed: { 1: 'Slow', 2: 'Medium', 3: 'Fast' },
-            breaker: { 1: 'Turns Off', 2: 'Turns On', 3: 'Both', 4: 'Cannot Interact' },
-            indbreaker: { 1: 'Turns Off', 2: 'Turns On', 3: 'Both' },
-            candle: { 1: 'Can Extinguish', 2: 'Cannot Extinguish', 3: 'Can Light' },
-            doors: { 1: 'Can Close / Lock', 2: 'Cannot Close / Lock' },
-            flx: { 1: 'Can Deactivate', 2: 'Cannot Deactivate' },
+            breaker: { 1: 'Can directly turn off', 2: 'Can directly turn on', 3: 'Can directly turn on / off', 4: 'Cannot directly interact' },
+            indbreaker: { 1: 'Can turn off', 2: 'Can turn on', 3: 'Can turn on / off', 4: 'Cannot interact' },
+            candle: { 1: 'Can extinguish', 2: 'Cannot extinguish', 3: 'Can light' },
+            doors: { 1: 'Can close / lock', 2: 'Cannot close / lock' },
+            flx: { 1: 'Can deactivate', 2: 'Cannot deactivate' },
             holy: { 1: 'None', 2: 'Low (3s)', 3: 'High (5s)' },
             cooldown: { 1: 'Short (40s)', 2: 'Medium (60s)', 3: 'Long (90s)' },
-            lights: { 1: 'Turns Off', 2: 'Turns On', 3: 'Both', 4: 'Cannot Interact' },
+            lights: { 1: 'Can turn off', 2: 'Can turn on', 3: 'Can turn on / off', 4: 'Cannot interact' },
             losrange: { 1: 'Near', 2: 'Far' },
             losspeed: { 1: 'Very Slow', 2: 'Slow', 3: 'Medium', 4: 'Fast' },
-            manifest: { 1: 'Full Form Possible', 2: 'Shadow Only' },
-            radio: { 1: 'Turns Off', 2: 'Turns On', 3: 'Both', 4: 'Cannot Interact' }
+            manifest: { 1: 'Full form possible', 2: 'Shadow only' },
+            radio: { 1: 'Can turn off', 2: 'Can turn on', 3: 'Can turn on / off', 4: 'Cannot interact' }
         });
         const BEHAVIOR_DISPLAY_NAMES = Object.freeze({
             bspeed:'Base Speed', breaker:'Main Breaker', indbreaker:'Individual Breakers', candle:'Candle', doors:'Doors', flx:'FLX-POD', holy:'Holy Water',
-            cooldown:'Cooldown', lights:'Lights', losrange:'LOS Range', losspeed:'LOS Speed', manifest:'Manifest', radio:'Radio'
+            cooldown:'Hunt Cooldown', lights:'Lights', losrange:'LOS Range', losspeed:'LOS Speed', manifest:'Manifest', radio:'Radio'
         });
+
+        // Ghost cards show unique tells first, then only the interaction behaviors.
+        // Speed, cooldown, LOS range, and Holy Water effectiveness stay in the dedicated stat block.
+        const BEHAVIOR_CARD_ORDER = Object.freeze([
+            'breaker',
+            'indbreaker',
+            'lights',
+            'radio',
+            'flx',
+            'candle',
+            'manifest',
+            'doors'
+        ]);
 
         const behaviorFilters = {
             bspeed: { property: 'speed', states: { 1: ['Slow'], 2: ['Medium'], 3: ['Fast'] } },
@@ -2200,12 +2234,12 @@
             doors: { states: { 1: { noTags: ['no-doors'] }, 2: { allTags: ['no-doors'] } } },
             flx: { states: { 1: { noTags: ['flx-ignore'] }, 2: { allTags: ['flx-ignore'] } } },
             breaker: { states: { 1: { noTags: ['no-breaker'] }, 2: { noTags: ['no-breaker'] }, 3: { noTags: ['no-breaker'] }, 4: { allTags: ['no-breaker'] } } },
-            indbreaker: { property: 'individualBreaker', states: { 1: ['Off', 'Both'], 2: ['On', 'Both'], 3: ['Both'] } },
+            indbreaker: { property: 'individualBreaker', states: { 1: ['Off', 'Both'], 2: ['On', 'Both'], 3: ['Both'], 4: ['None'] } },
             manifest: { states: { 1: { noTags: ['shadow-only'] }, 2: { allTags: ['shadow-only'] } } }
         };
 
-        // Behavior categories Puca can imitate during hunts.
-        const HUNT_MIMIC_BEHAVIOR_KEYS = Object.freeze(['bspeed', 'losspeed', 'losrange']);
+        // Puca imitates hunt behavior. LOS Range and Hunt Cooldown remain locked to Puca's own values.
+        const HUNT_MIMIC_BEHAVIOR_KEYS = Object.freeze(['bspeed', 'losspeed', 'holy']);
 
         function isHuntMimicBehavior(ghost, key) {
             return !!ghost.huntBehaviorMimic && HUNT_MIMIC_BEHAVIOR_KEYS.includes(key);
@@ -2248,7 +2282,6 @@
         }
 
         function getBaseSpeedDisplay(ghost) {
-            if (isHuntMimicBehavior(ghost, 'bspeed')) return 'Hunt Mimic (varies)';
             const entry = SPEED_CONFIG.base[ghost.speed];
             const label = starredLabel(ghost, 'speed', ghost.speed);
             if (ghost.speedProfile && ghost.speedProfile.base) return `${label} (${formatSpeedProfile(ghost.speedProfile.base)})`;
@@ -2256,7 +2289,6 @@
         }
 
         function getLosSpeedDisplay(ghost) {
-            if (isHuntMimicBehavior(ghost, 'losspeed')) return 'Hunt Mimic (varies)';
             const entry = SPEED_CONFIG.los[ghost.losspeed];
             const label = starredLabel(ghost, 'losspeed', ghost.losspeed);
             const profile = ghost.speedProfile?.los;
@@ -2271,7 +2303,7 @@
         function getLosConditionColor(cmps) {
             const match = Object.entries(SPEED_CONFIG.los).find(([, entry]) => entry.cmps === cmps);
             const category = match ? match[0] : null;
-            return category === 'Fast' ? '#ff4444' : category === 'Medium' ? '#ffd700' : category === 'Slow' ? '#32cd32' : category === 'Very Slow' ? '#32cd32' : '#ffffff';
+            return category === 'Fast' ? '#ff4444' : category === 'Medium' ? '#ffd700' : category === 'Slow' ? '#32cd32' : category === 'Very Slow' ? '#32cd32' : '#7dd3fc';
         }
 
         function getLosSpeedStatValueHTML(ghost) {
@@ -2289,7 +2321,7 @@
 
         function getMobileLosSpeedStatHTML(ghost) {
             if (!hasConditionalLosProfile(ghost)) {
-                return `<div class="mobile-ghost-stat">LOS Speed<strong>${escapeHTML(String(getLosSpeedDisplay(ghost)))}</strong></div>`;
+                return `<div class="mobile-ghost-stat">LOS Speed<strong style="color:${getStatColor('losspeed', ghost)}">${escapeHTML(String(getLosSpeedDisplay(ghost)))}</strong></div>`;
             }
             const lines = ghost.speedProfile.los.conditions
                 .filter(condition => condition && Number.isFinite(condition.cmps))
@@ -2311,17 +2343,15 @@
         }
 
         function getLosRangeDisplay(ghost) {
-            if (isHuntMimicBehavior(ghost, 'losrange')) return 'Hunt Mimic (varies)';
             return starredLabel(ghost, 'los', ghost.los);
         }
 
         function getStatColor(kind, ghost) {
-            if (ghost.huntBehaviorMimic && ['speed', 'losspeed', 'los'].includes(kind)) return 'var(--accent)';
             if (kind === 'speed') return ghost.speed === 'Fast' ? '#ff4444' : ghost.speed === 'Medium' ? '#ffd700' : '#32cd32';
             if (kind === 'losspeed') return ghost.losspeed === 'Fast' ? '#ff4444' : ghost.losspeed === 'Medium' ? '#ffd700' : '#32cd32';
             if (kind === 'cooldown') return ghost.cooldown === 'Short' ? '#ff4444' : ghost.cooldown === 'Medium' ? '#ffd700' : '#32cd32';
             if (kind === 'los') return ghost.los === 'Near' ? '#32cd32' : '#ff4444';
-            if (kind === 'hw') return ghost.hw === 'High' ? '#32cd32' : ghost.hw === 'None' ? '#bbbbbb' : '#ff4444';
+            if (kind === 'hw') return ghost.hw === 'High' ? '#32cd32' : ghost.hw === 'None' ? '#7dd3fc' : '#ff4444';
             return '#ffffff';
         }
 
@@ -2620,6 +2650,7 @@
             if (!filter) return true;
             const rule = filter.states[state];
             if (!rule) return true;
+            if (rule.neutral) return true;
             if (filter.property) {
                 const conditionalCategories = key === 'losspeed' && Array.isArray(ghost.speedProfile?.los?.categories)
                     ? ghost.speedProfile.los.categories
@@ -2650,40 +2681,7 @@
         }
 
         function getBehaviorSignature(ghost, key) {
-            if (isHuntMimicBehavior(ghost, key)) return 'Hunt Mimic (Varies)';
-            switch (key) {
-                case 'bspeed': return ghost.speed;
-                case 'cooldown': return ghost.cooldown;
-                case 'losspeed': return ghost.speedProfile?.los ? formatSpeedProfile(ghost.speedProfile.los) : ghost.losspeed;
-                case 'losrange': return ghost.los;
-                case 'holy': return ghost.hw;
-                case 'candle': {
-                    const canLight = ghost.tags.includes('can-light-candle');
-                    const cannotExtinguish = ghost.tags.includes('no-extinguish');
-                    if (canLight && cannotExtinguish) return 'Can Light / Cannot Extinguish';
-                    if (canLight) return 'Can Light / Can Extinguish';
-                    if (cannotExtinguish) return 'Cannot Extinguish';
-                    return 'Can Extinguish';
-                }
-                case 'breaker': return ghost.tags.includes('no-breaker') ? 'Cannot Interact Normally' : 'Turns On / Turns Off';
-                case 'indbreaker': return ghost.individualBreaker === 'Off' ? 'Turns Off Only' : ghost.individualBreaker === 'On' ? 'Turns On Only' : 'Turns On / Turns Off';
-                case 'doors': return ghost.tags.includes('no-doors') ? 'Cannot Close / Lock' : 'Can Close / Lock';
-                case 'flx': return ghost.tags.includes('flx-ignore') ? 'Cannot Deactivate' : 'Can Deactivate';
-                case 'manifest': return ghost.tags.includes('shadow-only') ? 'Shadow Only' : 'Full Form Possible';
-                case 'lights':
-                    if (ghost.tags.includes('lights-ignore')) return 'Cannot Interact';
-                    if (ghost.tags.includes('lights-on') && ghost.tags.includes('lights-off')) return 'Both';
-                    if (ghost.tags.includes('lights-on')) return 'Turns On';
-                    if (ghost.tags.includes('lights-off')) return 'Turns Off';
-                    return 'Unknown';
-                case 'radio':
-                    if (ghost.tags.includes('radio-ignore')) return 'Cannot Interact';
-                    if (ghost.tags.includes('radio-on') && ghost.tags.includes('radio-off')) return 'Both';
-                    if (ghost.tags.includes('radio-on')) return 'Turns On';
-                    if (ghost.tags.includes('radio-off')) return 'Turns Off';
-                    return 'Unknown';
-                default: return 'Unknown';
-            }
+            return getCanonicalBehaviorValue(ghost, key);
         }
 
         function partitionSummary(values) {
@@ -2716,7 +2714,8 @@
             Object.keys(behaviorFilters).forEach(key => {
                 const id = `behavior:${key}`;
                 const behaviorComparable = candidates.filter(g => !isHuntMimicBehavior(g, key));
-                if (states[key] || skippedBestTests.has(id) || behaviorComparable.length < 2) return;
+                const hasIdentifyingObservation = !!states[key];
+                if (hasIdentifyingObservation || skippedBestTests.has(id) || behaviorComparable.length < 2) return;
                 const values = behaviorComparable.map(g => getBehaviorSignature(g, key));
                 if (new Set(values).size > 1) {
                     const mimicCount = candidates.length - behaviorComparable.length;
@@ -2920,10 +2919,11 @@
                 const stats = document.createElement('div');
                 stats.className = 'mobile-ghost-stats';
                 stats.innerHTML = `
-                    <div class="mobile-ghost-stat">Base Speed<strong>${escapeHTML(String(getBaseSpeedDisplay(g)))}</strong></div>
-                    <div class="mobile-ghost-stat">Cooldown<strong>${escapeHTML(String(getCooldownDisplay(g)))}</strong></div>
+                    <div class="mobile-ghost-stat">Base Speed<strong style="color:${getStatColor('speed', g)}">${escapeHTML(String(getBaseSpeedDisplay(g)))}</strong></div>
                     ${getMobileLosSpeedStatHTML(g)}
-                    <div class="mobile-ghost-stat">LOS Range<strong>${escapeHTML(String(getLosRangeDisplay(g)))}</strong></div>`;
+                    <div class="mobile-ghost-stat">LOS Range<strong style="color:${getStatColor('los', g)}">${escapeHTML(String(getLosRangeDisplay(g)))}</strong></div>
+                    <div class="mobile-ghost-stat">Hunt Cooldown<strong style="color:${getStatColor('cooldown', g)}">${escapeHTML(String(getCooldownDisplay(g)))}</strong></div>
+                    <div class="mobile-ghost-stat">Holy Water Effectiveness<strong style="color:${getStatColor('hw', g)}">${escapeHTML(String(getHolyDisplay(g)))}</strong></div>`;
                 detail.appendChild(stats);
 
                 const actions = document.createElement('div');
@@ -3069,6 +3069,19 @@
             updateUndoAndHistoryUI();
             updateSidebarSectionActions();
             updateContextualAssistantControls();
+
+            const breakerCheck = document.getElementById('betaBreakerCheck');
+            const breakerState = readBehaviorStates().breaker;
+            const breakerOffObserved = breakerState === 1 || breakerState === 3;
+            if (breakerCheck) {
+                breakerCheck.classList.toggle('show', breakerOffObserved);
+                breakerCheck.innerHTML = breakerOffObserved
+                    ? `<strong>Verify the breaker-off observation.</strong>` +
+                      `<div class="marid-exception-line">Before treating this as a direct ghost interaction, inspect the light switches. If all switches have reset to OFF, the power may have tripped from too many active lights; clear the Main Breaker observation unless you can confirm a direct interaction. If switches remain in their previous positions, that supports a direct main-breaker shutoff.</div>` +
+                      `<div class="beta-help">The automatic end-of-hunt breaker event is not identifying.</div>`
+                    : '';
+            }
+
             const conflict = document.getElementById('betaConflict');
             if (!conflict) return;
             conflict.classList.toggle('marid-exception', !!maridException);
@@ -3130,28 +3143,92 @@
             return BEHAVIOR_TEXT_NORMALIZATION[text] || text;
         }
 
-        function getBehaviorDisplayPriority(text) {
-            const t = text.toLowerCase();
-            // Most useful/unique identifying tells first.
-            if (/favorite room|spirit box|scream|distressed sound|heart rate|stamina|hot temp|throws multiple|shapeshift|no feet|targets specific|hardest to id|room gets cold|electrical interference/.test(t)) return 10;
-            // Movement and chase behavior next.
-            if (/line of sight|\blos\b|speed/.test(t)) return 20;
-            // Hunt timing, thresholds and Holy Water next.
-            if (/hunt cooldown|\bhunts? at\b|holy water|cooldown/.test(t)) return 30;
-            // Visibility and manifestation behavior.
-            if (/manifest|shadow event|appears fully/.test(t)) return 40;
-            // Environmental interaction rules.
-            if (/breaker|light|radio|flx|door/.test(t)) return 50;
-            // Candle behavior is common, except unusually specific candle tells.
-            if (/candle/.test(t)) return /up to 10/.test(t) ? 10 : 60;
-            return 15;
+        const STANDARD_BEHAVIOR_DESCRIPTIONS = new Set([
+            'Main Breaker: Cannot Directly Interact',
+            'Individual Breakers: Turns Off',
+            'Individual Breakers: Cannot Interact',
+            'Lights: Turns On',
+            'Cannot turn on or off lights',
+            'Cannot turn on lights',
+            'Cannot turn off lights',
+            'Can turn radios on and off',
+            'Cannot turn on or off radios',
+            'Cannot turn on radios',
+            'Cannot turn off radios',
+            'Cannot deactivate FLX-PODs',
+            'Cannot extinguish candles',
+            'Can light candles',
+            'Cannot manifest in full-form outside of a hunt',
+            'Holy water is ineffective',
+            'Cannot move doors towards the closed position',
+            'Cannot slam doors (excludes hiding and location entrance doors when a hunt starts)',
+            'Cannot lock doors (excludes hiding and location entrance doors when a hunt starts)'
+        ]);
+
+        function isStandardBehaviorDescription(text) {
+            return STANDARD_BEHAVIOR_DESCRIPTIONS.has(text) || STANDARD_BEHAVIOR_DESCRIPTIONS.has(normalizeBehaviorText(text));
+        }
+
+        function getCanonicalBehaviorValue(ghost, key) {
+            if (isHuntMimicBehavior(ghost, key)) return 'Hunt mimic (varies)';
+            switch (key) {
+                case 'bspeed':
+                    return getBaseSpeedDisplay(ghost);
+                case 'losspeed':
+                    return getLosSpeedDisplay(ghost);
+                case 'losrange':
+                    return getLosRangeDisplay(ghost);
+                case 'cooldown':
+                    return getCooldownDisplay(ghost);
+                case 'breaker':
+                    return ghost.tags.includes('no-breaker') ? 'Cannot directly interact' : 'Can directly turn on / off';
+                case 'indbreaker':
+                    if (ghost.individualBreaker === 'None') return 'Cannot interact';
+                    if (ghost.individualBreaker === 'Off') return 'Can turn off';
+                    if (ghost.individualBreaker === 'On') return 'Can turn on';
+                    return 'Can turn on / off';
+                case 'lights':
+                    if (ghost.tags.includes('lights-ignore')) return 'Cannot interact';
+                    if (ghost.tags.includes('lights-on') && ghost.tags.includes('lights-off')) return 'Can turn on / off';
+                    if (ghost.tags.includes('lights-on')) return 'Can turn on';
+                    if (ghost.tags.includes('lights-off')) return 'Can turn off';
+                    return 'Unknown';
+                case 'radio':
+                    if (ghost.tags.includes('radio-ignore')) return 'Cannot interact';
+                    if (ghost.tags.includes('radio-on') && ghost.tags.includes('radio-off')) return 'Can turn on / off';
+                    if (ghost.tags.includes('radio-on')) return 'Can turn on';
+                    if (ghost.tags.includes('radio-off')) return 'Can turn off';
+                    return 'Unknown';
+                case 'doors':
+                    return ghost.tags.includes('no-doors') ? 'Cannot close / lock' : 'Can close / lock';
+                case 'flx':
+                    return ghost.tags.includes('flx-ignore') ? 'Cannot deactivate' : 'Can deactivate';
+                case 'candle': {
+                    const canLight = ghost.tags.includes('can-light-candle');
+                    const cannotExtinguish = ghost.tags.includes('no-extinguish');
+                    if (canLight && cannotExtinguish) return 'Can light / cannot extinguish';
+                    if (canLight) return 'Can light / can extinguish';
+                    if (cannotExtinguish) return 'Cannot extinguish';
+                    return 'Can extinguish';
+                }
+                case 'holy':
+                    return getHolyDisplay(ghost);
+                case 'manifest':
+                    return ghost.tags.includes('shadow-only') ? 'Shadow only' : 'Full form possible';
+                default:
+                    return 'Unknown';
+            }
+        }
+
+        function getCanonicalBehaviorLines(ghost) {
+            return BEHAVIOR_CARD_ORDER.map(key => `${BEHAVIOR_DISPLAY_NAMES[key]}: ${getCanonicalBehaviorValue(ghost, key)}`);
         }
 
         function getDisplayBehaviors(ghost) {
-            return ghost.desc
-                .map((raw, index) => ({ text: normalizeBehaviorText(raw), priority: getBehaviorDisplayPriority(raw), index }))
-                .sort((a, b) => a.priority - b.priority || a.index - b.index)
-                .map(item => item.text);
+            const unique = ghost.desc
+                .filter(raw => !isStandardBehaviorDescription(raw))
+                .map(raw => normalizeBehaviorText(raw));
+            return [...unique, ...getCanonicalBehaviorLines(ghost)];
         }
 
         function getMechanicBadges(ghost) {
@@ -3160,11 +3237,6 @@
             if (ghost.specialDiminishing) badges.push({ text:'Diminishing Override', cls:'conditional' });
             if (ghost.conditionalSpeed) badges.push({ text:'Conditional Speed', cls:'conditional' });
             if (ghost.desc.some(d => /multiple ghost orbs/i.test(d))) badges.push({ text:'Multiple Orbs' });
-            if (ghost.tags.includes('shadow-only')) badges.push({ text:'Shadow Only' });
-            if (ghost.tags.includes('no-breaker')) badges.push({ text:'Main Breaker Restricted' });
-            if (ghost.tags.includes('no-doors')) badges.push({ text:'No Door Close' });
-            if (ghost.tags.includes('no-extinguish')) badges.push({ text:'No Candle Extinguish' });
-            if (ghost.tags.includes('flx-ignore')) badges.push({ text:'FLX Resistant' });
             if (ghost.desc.some(d => /targets only one player/i.test(d))) badges.push({ text:'Targets Player' });
             if (ghost.desc.some(d => /stamina/i.test(d))) badges.push({ text:'Stamina Effect' });
             return badges.slice(0, 3);
@@ -3229,13 +3301,13 @@
             html += `<div class="detail-section"><div class="detail-title">Evidence</div><div>${ghost.ev.map(ev => `<span class="evidence-tag" style="display:inline-block;margin:2px;">${escapeHTML(evidenceLabel(ev))}</span>`).join('')}${ghost.forced ? `<div style="margin-top:5px;color:var(--accent);font-weight:700;">Forced Evidence: ${escapeHTML(evidenceLabel(ghost.forced))}</div>` : ''}</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">Gameplay Behaviors</div>${getDisplayBehaviors(ghost).map(d => `<div class="behavior-point">${escapeHTML(d)}</div>`).join('')}</div>`;
             if (ghost.specialDiminishing) html += `<div class="detail-section"><div class="detail-title">Diminishing Evidence Rule</div><div>Marid can leave extra Diminishing Evidence on top of its assigned evidence, including on 0 Real Evidence runs. The tracker does not assume a maximum number of extra Diminishing evidence types.</div></div>`;
-            if (ghost.huntBehaviorMimic) html += `<div class="detail-section"><div class="detail-title">Hunt Mimic Rule</div><div>Puca can imitate other ghost behaviors during hunts only, except Wiederganger's BPM increase. Hunt speed and LOS observations do not rule Puca out. Puca cannot extinguish or light candles. Evidence filters still apply normally.</div></div>`;
+            if (ghost.huntBehaviorMimic) html += `<div class="detail-section"><div class="detail-title">Hunt Mimic Rule</div><div>Puca imitates the full hunt behavior of another ghost, never passive behaviors. Base Speed, LOS Speed, and Holy Water Effectiveness can match the imitated ghost, so those observations do not rule Puca out by themselves. LOS Range and Hunt Cooldown remain locked to Puca's own values. Forced-hunt behavior and Wiederganger's nearby anxiety-rate effect are not copied, and Puca cannot imitate the same ghost type in consecutive hunts. Passive behaviors, including candle interactions, still identify normally.</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">General Behaviors</div>
-                <div class="stat-item"><span>Base Speed</span><span class="stat-val">${getBaseSpeedDisplay(ghost)}</span></div>
-                <div class="stat-item"><span>Hunt Cooldown</span><span class="stat-val">${getCooldownDisplay(ghost)}</span></div>
-                <div class="stat-item ${hasConditionalLosProfile(ghost) ? 'conditional-speed-stat' : ''}"><span>LOS Speed</span>${getLosSpeedStatValueHTML(ghost)}</div>
-                <div class="stat-item"><span>LOS Range</span><span class="stat-val">${getLosRangeDisplay(ghost)}</span></div>
-                <div class="stat-item"><span>Holy Water</span><span class="stat-val">${getHolyDisplay(ghost)}</span></div>
+                <div class="stat-item"><span>Base Speed</span><span class="stat-val" style="color:${getStatColor('speed', ghost)}">${getBaseSpeedDisplay(ghost)}</span></div>
+                <div class="stat-item ${hasConditionalLosProfile(ghost) ? 'conditional-speed-stat' : ''}"><span>Line of Sight Speed</span>${getLosSpeedStatValueHTML(ghost)}</div>
+                <div class="stat-item"><span>Line of Sight Range</span><span class="stat-val" style="color:${getStatColor('los', ghost)}">${getLosRangeDisplay(ghost)}</span></div>
+                <div class="stat-item"><span>Hunt Cooldown</span><span class="stat-val" style="color:${getStatColor('cooldown', ghost)}">${getCooldownDisplay(ghost)}</span></div>
+                <div class="stat-item"><span>Holy Water Effectiveness</span><span class="stat-val" style="color:${getStatColor('hw', ghost)}">${getHolyDisplay(ghost)}</span></div>
             </div>`;
             html += `<div class="detail-section"><div class="detail-title">Why ${statusText}?</div>${reasons.map(r => `<div class="reason-row"><span class="reason-icon ${r.note ? 'note' : r.pass ? 'pass' : 'fail'}">${r.note ? '•' : r.pass ? '✓' : '✕'}</span><span>${escapeHTML(r.text)}</span></div>`).join('')}${manuallyEliminated ? `<div class="reason-row"><span class="reason-icon note">•</span><span>This ghost was manually eliminated by the player.</span></div>` : ''}</div>`;
             openBetaModal(`${ghost.name} - Gameplay Details`, html);
@@ -3243,7 +3315,9 @@
 
         function getComparisonBehaviorSummary(ghost) {
             const parts = [];
-            ['lights','radio','candle','breaker','indbreaker','doors','flx','manifest'].forEach(key => parts.push(`${BEHAVIOR_DISPLAY_NAMES[key]}: ${getBehaviorSignature(ghost,key)}`));
+            BEHAVIOR_CARD_ORDER
+                .filter(key => !['bspeed', 'losspeed', 'losrange', 'cooldown', 'holy'].includes(key))
+                .forEach(key => parts.push(`${BEHAVIOR_DISPLAY_NAMES[key]}: ${getBehaviorSignature(ghost, key)}`));
             return parts.join(' | ');
         }
 
@@ -3261,9 +3335,9 @@
             const dimensions = [
                 { key:'evidence', label:'Evidence', value:g => g.ev.map(evidenceLabel).join(', ') },
                 { key:'base', label:'Base Speed', value:g => getBaseSpeedDisplay(g) },
-                { key:'cooldown', label:'Cooldown', value:g => getCooldownDisplay(g) },
                 { key:'losspeed', label:'LOS Speed', value:g => getLosSpeedDisplay(g) },
                 { key:'losrange', label:'LOS Range', value:g => getLosRangeDisplay(g) },
+                { key:'cooldown', label:'Cooldown', value:g => getCooldownDisplay(g) },
                 { key:'holy', label:'Holy Water', value:g => getHolyDisplay(g) },
                 { key:'behavior', label:'Behavior Differences', value:g => getComparisonBehaviorSummary(g) }
             ];
@@ -3271,7 +3345,7 @@
             const headers = varying.map(dim => `<th>${escapeHTML(dim.label)}</th>`).join('');
             const rows = compare.map(g => `<tr><td>${escapeHTML(g.name)}${pinnedGhosts.has(g.name) ? ' 📌' : ''}</td>${varying.map(dim => `<td>${escapeHTML(dim.value(g))}</td>`).join('')}</tr>`).join('');
             const sourceNote = usingPins ? `Comparing ${compare.length} pinned ghosts.` : `Comparing ${compare.length} currently possible ghosts.`;
-            const pucaNote = compare.some(g => g.huntBehaviorMimic) ? `<div class="beta-help">Puca can imitate hunt behaviors, so its hunt speed and LOS values can vary.</div>` : '';
+            const pucaNote = compare.some(g => g.huntBehaviorMimic) ? `<div class="beta-help">Puca can imitate Base Speed, LOS Speed, and Holy Water Effectiveness during hunts. Its LOS Range and Hunt Cooldown remain locked to Puca's own values.</div>` : '';
             const body = varying.length
                 ? `<div class="beta-help" style="margin-bottom:8px;">${escapeHTML(sourceNote)} Identical categories are hidden.</div>${pucaNote}<div class="comparison-wrap"><table class="comparison-table"><thead><tr><th>Ghost</th>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`
                 : `<div class="beta-help">The selected ghosts have no differences in the currently modeled comparison categories.</div>${pucaNote}`;
@@ -3645,9 +3719,7 @@
             // Individual breaker switches (room-specific switches inside the breaker box)
             if (text.includes("individual breaker") || text.includes("individual switch") || text.includes("room breaker") || text.includes("room switch")) {
                 if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-indbreaker", 0);
-                else if (text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("no interact")) {
-                    showVoiceStatus("All ghosts can interact with individual breakers. Say on, off, both, or clear.");
-                }
+                else if (text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("no interact")) setBehaviorState("btn-indbreaker", 4);
                 else if (text.includes("both") || text.includes("on and off") || text.includes("off and on")) setBehaviorState("btn-indbreaker", 3);
                 else if (text.includes("turn on") || text.includes("turned on") || text.includes("switch on") || text.includes("switched on") || text.includes("breaker on")) setBehaviorState("btn-indbreaker", 2);
                 else if (text.includes("turn off") || text.includes("turned off") || text.includes("switch off") || text.includes("switched off") || text.includes("breaker off")) setBehaviorState("btn-indbreaker", 1);
@@ -3655,7 +3727,16 @@
                 return;
             }
 
-            // Main breaker switch. A generic "breaker" voice command continues to mean the main breaker.
+            // A breaker trip/overload is not an identifying Main Breaker state.
+            if (
+                (text.includes("trip") || text.includes("tripped") || text.includes("overload") || text.includes("too many lights")) &&
+                (text.includes("breaker") || text.includes("power") || text.includes("light"))
+            ) {
+                showVoiceStatus("Breaker trip/overload is not an identifying Main Breaker state. Check light-switch positions before recording Direct Off.");
+                return;
+            }
+
+            // A generic "breaker" voice command continues to mean the main breaker.
             if (text.includes("main breaker") || text.includes("main switch") || text.includes("breaker") || text.includes("fuse")) {
                 if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-breaker", 0);
                 else if (text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("ignore") || text.includes("no interact")) setBehaviorState("btn-breaker", 4);
@@ -3997,6 +4078,20 @@
             }
         }
 
+        function filterGhostsKeepingSidebarControl(btn) {
+            const sidebarScroller = btn && btn.closest ? btn.closest('.sidebar-scroll') : null;
+            const beforeTop = btn && btn.getBoundingClientRect ? btn.getBoundingClientRect().top : null;
+            const sidebarCanScroll = sidebarScroller && ['auto', 'scroll'].includes(getComputedStyle(sidebarScroller).overflowY);
+            const scrollTarget = sidebarCanScroll ? sidebarScroller : document.scrollingElement;
+            filterGhosts();
+            if (!scrollTarget || !btn || !btn.isConnected || !Number.isFinite(beforeTop)) return;
+            const afterTop = btn.getBoundingClientRect().top;
+            const delta = afterTop - beforeTop;
+            if (Math.abs(delta) <= 0.5) return;
+            if (scrollTarget === document.scrollingElement) window.scrollBy(0, delta);
+            else scrollTarget.scrollTop += delta;
+        }
+
         function cycleEvidenceState(btn, type) {
             let currentState = evidenceStates[type] || 0;
             let nextState;
@@ -4021,7 +4116,7 @@
             btn.setAttribute('data-state', nextState);
             btn.setAttribute('aria-label', `${evidenceLabel(type)} evidence: ${stateLabel}`);
 
-            filterGhosts();
+            filterGhostsKeepingSidebarControl(btn);
         }
 
         function setRefMode(mode, persist = true) {
@@ -4253,7 +4348,7 @@
             recordInvestigationAction(`${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${stateLabel}`);
             btn.dataset.state = nextState;
             btn.setAttribute('aria-label', `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${stateLabel}`);
-            filterGhosts();
+            filterGhostsKeepingSidebarControl(btn);
         }
 
         function resetAll() {
@@ -4426,9 +4521,9 @@
                     <div class="ghost-behavior">${descHTML}</div>
                     <div class="stats-container">
                         <div class="stat-item"><span>Base Speed</span> <span class="stat-val" style="color:${getStatColor('speed', g)}">${getBaseSpeedDisplay(g)}</span></div>
-                        <div class="stat-item"><span>Hunt Cooldown</span> <span class="stat-val" style="color:${getStatColor('cooldown', g)}">${getCooldownDisplay(g)}</span></div>
                         <div class="stat-item ${hasConditionalLosProfile(g) ? 'conditional-speed-stat' : ''}"><span>Line of Sight Speed</span>${getLosSpeedStatValueHTML(g)}</div>
                         <div class="stat-item"><span>Line of Sight Range</span> <span class="stat-val" style="color:${getStatColor('los', g)}">${getLosRangeDisplay(g)}</span></div>
+                        <div class="stat-item"><span>Hunt Cooldown</span> <span class="stat-val" style="color:${getStatColor('cooldown', g)}">${getCooldownDisplay(g)}</span></div>
                         <div class="stat-item"><span>Holy Water Effectiveness</span> <span class="stat-val" style="color:${getStatColor('hw', g)}">${getHolyDisplay(g)}</span></div>
                     </div>`;
                 const pin = card.querySelector('.pin-action');
