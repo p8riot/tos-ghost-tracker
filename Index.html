@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- p8riotCore App Builder upgrade preview v4: static interaction guide + stacked evidence-limit controls; product logic/data preserved. -->
+<!-- p8riotCore App Builder data refresh preview for P.M.S. 2.0.9.6: wiki-supplied speed/range values and selected ghost logic/details; Puca own stats preserved. -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -234,11 +234,11 @@
         .toggle-box.holy[data-state="3"]::after { content: "HIGH (5s)"; color: #32cd32; }
 
         .toggle-box.bspeed[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; }
-        .toggle-box.bspeed[data-state="1"]::after { content: "SLOW"; color: #32cd32; }
+        .toggle-box.bspeed[data-state="1"]::after { content: "SLOW (2.42m/s)"; color: #32cd32; }
         .toggle-box.bspeed[data-state="2"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; }
-        .toggle-box.bspeed[data-state="2"]::after { content: "MEDIUM (2.42m/s)"; color: #ffd700; }
+        .toggle-box.bspeed[data-state="2"]::after { content: "MEDIUM (2.60m/s)"; color: #ffd700; }
         .toggle-box.bspeed[data-state="3"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
-        .toggle-box.bspeed[data-state="3"]::after { content: "FAST (2.60m/s)"; color: #ff8888; }
+        .toggle-box.bspeed[data-state="3"]::after { content: "FAST (3.10m/s)"; color: #ff8888; }
 
         .toggle-box.cooldown[data-state="1"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
         .toggle-box.cooldown[data-state="1"]::after { content: "SHORT (40s)"; color: #ff8888; }
@@ -250,16 +250,16 @@
         .toggle-box.losspeed[data-state="1"] { background: rgba(70, 190, 100, 0.15); border-color: #32cd32; }
         .toggle-box.losspeed[data-state="1"]::after { content: "VERY SLOW (2.00m/s)"; color: #32cd32; }
         .toggle-box.losspeed[data-state="2"] { background: rgba(80, 210, 120, 0.15); border-color: #45dd76; }
-        .toggle-box.losspeed[data-state="2"]::after { content: "SLOW (2.50m/s)"; color: #45dd76; }
+        .toggle-box.losspeed[data-state="2"]::after { content: "SLOW (2.42m/s)"; color: #45dd76; }
         .toggle-box.losspeed[data-state="3"] { background: rgba(255, 215, 0, 0.15); border-color: #ffd700; }
         .toggle-box.losspeed[data-state="3"]::after { content: "MEDIUM (2.70m/s)"; color: #ffd700; }
         .toggle-box.losspeed[data-state="4"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
         .toggle-box.losspeed[data-state="4"]::after { content: "FAST (3.10m/s)"; color: #ff8888; }
 
         .toggle-box.losrange[data-state="1"] { background: rgba(50, 205, 50, 0.15); border-color: #32cd32; }
-        .toggle-box.losrange[data-state="1"]::after { content: "NEAR"; color: #32cd32; }
+        .toggle-box.losrange[data-state="1"]::after { content: "NEAR (15m)"; color: #32cd32; }
         .toggle-box.losrange[data-state="2"] { background: rgba(255, 68, 68, 0.15); border-color: #ff4444; }
-        .toggle-box.losrange[data-state="2"]::after { content: "FAR"; color: #ff8888; }
+        .toggle-box.losrange[data-state="2"]::after { content: "FAR (45m)"; color: #ff8888; }
 
         .timer-container {
             background: var(--bg-soft); border: 1px solid var(--border); border-radius: 6px; padding: 15px;
@@ -1068,9 +1068,10 @@
                                 <span class="behavior-point"><strong>Holy Water hunt blocks:</strong> special ghosts may temporarily replace their normal hunt cooldown after being sprayed. Demon and Wisp are blocked for 2 minutes; Tariaksuq is blocked for 90 seconds. Puca can imitate the Holy Water Effectiveness of the ghost it is copying during a hunt, so Holy Water Effectiveness alone does not rule Puca out. Check the ghost's Unique Behaviors for special Holy Water or cooldown rules.</span>
                                 <span class="behavior-point"><strong>Real vs Diminishing Evidence:</strong> real evidence reappears several times at full strength. Diminishing evidence may first appear at full strength a couple of times, then appears weaker over time. Freezing can never be Diminishing.</span>
                                 <span class="behavior-point"><strong>Diminishing filtering:</strong> on limited-evidence runs, a Diminishing evidence type can also be one of the ghost's assigned evidence types, so it does not rule that ghost out. When the run has all 3 Real Evidence, extra Diminishing evidence can be treated as outside the ghost's three assigned evidence types.</span>
-                                <span class="behavior-point"><strong>Marid evidence exception:</strong> Marid can leave extra Diminishing evidence on top of its assigned evidence, including on 0 Real Evidence runs.</span>
+                                <span class="behavior-point"><strong>Marid evidence exception:</strong> Marid can add exactly 1 behavior-generated Diminishing evidence beyond the configured Diminishing limit. It can overlap one of Marid's assigned evidence types, cannot be Freezing, and can occur on 0 Real Evidence runs.</span>
                                 <span class="behavior-point"><strong>Forced Evidence:</strong> forced evidence applies whenever the run has Real Evidence, regardless of the configured Diminishing Evidence count. It does not apply on 0 Real Evidence runs.</span>
-                                <span class="behavior-point"><strong>Ghost Orbs:</strong> normally require infrared vision to see, but an orb can also be photographed using the cellphone camera flash. Sluagh can produce multiple Ghost Orbs.</span>
+                                <span class="behavior-point"><strong>0-evidence behavior tells:</strong> Bhoot can still cause its pre-hunt freezing-temperature behavior and Sluagh can still show Ghost Orbs on 0 Real Evidence runs. Treat those as special ghost behaviors rather than ordinary Real Evidence.</span>
+                                <span class="behavior-point"><strong>Ghost Orbs:</strong> normally require infrared vision to see, but an orb can also be photographed using the cellphone camera flash. Sluagh can produce Orbs on 0 Real Evidence runs and has a 33% chance to show a cluster of 4 when displaying them.</span>
                                 <span class="behavior-point"><strong>Puca:</strong> imitates the full hunt behavior of another ghost, never passive behaviors. This includes Base Speed, LOS Speed, and Holy Water Effectiveness. Hunt LOS Range and Hunt Cooldown stay locked to Puca's own values. Forced-hunt behavior and Wiederganger's nearby anxiety-rate effect are not copied, and Puca cannot imitate the same ghost type back-to-back.</span>
                                 <span class="behavior-point"><strong>Candles:</strong> Can Light is a specific identifying behavior for ghosts whose Notes list it. Puca cannot extinguish candles and is not a Can Light ghost, so observing either Can Extinguish or Can Light rules Puca out.</span>
                                 <span class="behavior-point"><strong>Main Breaker:</strong> this is the main switch that controls the entire breaker box. Treat Direct Off/On/Both as direct ghost interaction only. Echo, Wewe Gombel, and Wisp cannot directly use the main breaker normally. The automatic end-of-hunt breaker trigger shared by all ghosts is not identifying. If the power goes out, check the light-switch positions before recording Direct Off or Direct Both: an overload from too many active lights can trip the breaker without the ghost directly using it. If all light switches have reset to OFF, treat an overload as possible and do not use that event to rule out ghosts that cannot use the main breaker.</span>
@@ -1266,20 +1267,21 @@
 
         function evidenceLabel(name) { return (EVIDENCE_CONFIG[name] && EVIDENCE_CONFIG[name].label) || name; }
 
-        // Known source values are stored as developer-native cm/s, then formatted to m/s.
-        // Base Slow currently has no confirmed numeric value, so the category remains fully usable without a number.
+        // Current source values are stored as developer-native cm/s, then formatted to m/s.
+        // LOS range values remain in source-native centimeters for direct comparison with game/wiki references.
         const SPEED_CONFIG = Object.freeze({
             base: Object.freeze({
-                Slow: Object.freeze({ label: "Slow", cmps: null }),
-                Medium: Object.freeze({ label: "Medium", cmps: 242 }),
-                Fast: Object.freeze({ label: "Fast", cmps: 260 })
+                Slow: Object.freeze({ label: "Slow", cmps: 242 }),
+                Medium: Object.freeze({ label: "Medium", cmps: 260 }),
+                Fast: Object.freeze({ label: "Fast", cmps: 310 })
             }),
             los: Object.freeze({
                 "Very Slow": Object.freeze({ label: "Very Slow", cmps: 200 }),
-                Slow: Object.freeze({ label: "Slow", cmps: 250 }),
+                Slow: Object.freeze({ label: "Slow", cmps: 242 }),
                 Medium: Object.freeze({ label: "Medium", cmps: 270 }),
                 Fast: Object.freeze({ label: "Fast", cmps: 310 })
             }),
+            losRangeMeters: Object.freeze({ Near: 15, Far: 45 }),
             cooldownSeconds: Object.freeze({ Short: 40, Medium: 60, Long: 90 }),
             holySeconds: Object.freeze({ None: null, Low: 3, High: 5 })
         });
@@ -1339,816 +1341,889 @@
         // VERIFIED CURRENT GAME DATA
         // =========================
         const ghosts = [
+    {
+        "name": "Ataphoi",
+        "ev": [
+            "Audio",
+            "EMF",
+            "Ghost Orb"
+        ],
+        "speed": "Medium",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "High",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "LOS speed increases by 10% per Holy Water spray in subsequent hunts",
+            "No manifest events; Shadow events only",
+            "Cannot turn on or off lights",
+            "Can turn radios on and off"
+        ],
+        "tags": [
+            "shadow-only",
+            "lights-ignore",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [
+            "losspeed"
+        ],
+        "conditionalSpeed": true,
+        "lore": "A restless spirit from ancient Greek lore, believed to bring misfortune and sickness to the living. Investigators report rarely seeing the Ataphoi in full form.",
+        "verifiedNotes": true,
+        "speedProfile": {
+            "los": {
+                "display": "Normal: 2.70m/s | +10% per spray in subsequent hunts",
+                "conditions": [
                     {
-                                "name": "Ataphoi",
-                                "ev": [
-                                            "Audio",
-                                            "EMF",
-                                            "Ghost Orb"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "High",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "After being sprayed, its line-of-sight speed will be increased in subsequent hunts",
-                                            "Cannot manifest in full-form outside of a hunt",
-                                            "Cannot turn on or off lights",
-                                            "Can turn radios on and off"
-                                ],
-                                "tags": [
-                                            "shadow-only",
-                                            "lights-ignore",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [
-                                            "losspeed"
-                                ],
-                                "conditionalSpeed": true,
-                                "lore": "A restless spirit from ancient Greek lore, believed to bring misfortune and sickness to the living. Investigators report rarely seeing the Ataphoi in full form.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Banshee",
-                                "ev": [
-                                            "Audio",
-                                            "EMF",
-                                            "Radiation"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Slow",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": "Audio",
-                                "desc": [
-                                            "Screams may be heard through audio equipment and radios"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Banshee is a chilling presence tied to omens of death, amplifying fear through its signature piercing screams and erratic electrical interference. Investigators close with death claim to hear the Banshee's cries.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Bhoot",
-                                "ev": [
-                                            "Freezing",
-                                            "Radiation",
-                                            "Writing"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Slow",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Long",
-                                "cd_val": 3,
-                                "forced": "Freezing",
-                                "desc": [
-                                            "Drops temperature in the room it's currently in moments before a hunt",
-                                            "Can leave cold temperatures on objects it touches"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Bhoot is a tormented soul, bound to the place of its suffering and fueled by a need for vengeance. Investigators report experiencing intense cold when the Bhoot is nearing.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Demon",
-                                "ev": [
-                                            "Radiation",
-                                            "UV",
-                                            "Writing"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Very Slow",
-                                "los": "Far",
-                                "hw": "High",
-                                "cooldown": "Short",
-                                "cd_val": 1,
-                                "forced": null,
-                                "desc": [
-                                            "Holy water stops the ghost from hunting for 2 minutes after being sprayed",
-                                            "Can leave hot temperatures on objects it touches",
-                                            "Can hunt as early as 77 BPM (average team heart rate)",
-                                            "Can randomly lock doors and at a much higher frequency"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [
-                                            "cooldown",
-                                            "hw"
-                                ],
-                                "lore": "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Doppelganger",
-                                "ev": [
-                                            "Ghost Orb",
-                                            "UV",
-                                            "Writing"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Slow",
-                                "los": "Near",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Returns to its favorite location before starting a hunt"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Doppelganger is a deceptive spirit, often tricking its intended targets. Investigators report feeling alone moments before the ghost hunts. Where does it go?",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Echo",
-                                "ev": [
-                                            "Freezing",
-                                            "Ghost Orb",
-                                            "UV"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Slow",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Main Breaker: Cannot Directly Interact",
-                                            "Individual Breakers: Turns Off",
-                                            "Cannot turn on or off lights",
-                                            "Cannot turn on or off radios",
-                                            "Cannot deactivate FLX-PODs",
-                                            "Cannot extinguish candles"
-                                ],
-                                "tags": [
-                                            "no-breaker",
-                                            "lights-ignore",
-                                            "radio-ignore",
-                                            "flx-ignore",
-                                            "no-extinguish"
-                                ],
-                                "starred": [],
-                                "lore": "The Echo is a passive, residual spirit. Investigators report an eerily silent atmosphere, with lights never being affected by this ghost.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Forgotten",
-                                "ev": [
-                                            "Ghost Orb",
-                                            "Radiation",
-                                            "Writing"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Cannot manifest in full-form outside of a hunt",
-                                            "Cannot deactivate FLX-PODs"
-                                ],
-                                "tags": [
-                                            "shadow-only",
-                                            "flx-ignore",
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Forgotten has a nearly silent presence. Passive, cold, and elusive, as if it's barely there at all. Investigators report minimal activity, no defining behavior, and a feeling of safety, until the Forgotten strikes.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Hupia",
-                                "ev": [
-                                            "EMF",
-                                            "Ghost Orb",
-                                            "Writing"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Medium",
-                                "los": "Near",
-                                "hw": "None",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Holy water is ineffective",
-                                            "Can hunt as early as 77 BPM (average team heart rate)",
-                                            "Cannot extinguish candles",
-                                            "Cannot deactivate FLX-PODs"
-                                ],
-                                "tags": [
-                                            "no-extinguish",
-                                            "flx-ignore",
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [
-                                            "hw"
-                                ],
-                                "lore": "A spirit from Taino Folklore, the Hupia is a nocturnal spirit, known to be incredibly active after-dark. Investigators report feeling ill-prepared for the aggression the Hupia shows.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Iblis",
-                                "ev": [
-                                            "Audio",
-                                            "Freezing",
-                                            "Writing"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Can shapeshift appearance during hunts"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Marid",
-                                "ev": [
-                                            "Ghost Orb",
-                                            "Radiation",
-                                            "UV"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Can leave diminishing evidence behind",
-                                            "Can light candles"
-                                ],
-                                "tags": [
-                                            "can-light-candle",
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "specialDiminishing": true,
-                                "lore": "A powerful spirit from Arabic Folklore, it is believed to wield great supernatural influence, bringing misfortune and twisting the reality of those who encounter it.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Nasnas",
-                                "ev": [
-                                            "Audio",
-                                            "Freezing",
-                                            "Ghost Orb"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Very Slow",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Can dramatically increase its line-of-sight speed to close the distance of its target",
-                                            "Cannot turn on lights",
-                                            "Cannot deactivate FLX-PODs"
-                                ],
-                                "tags": [
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off",
-                                            "flx-ignore"
-                                ],
-                                "starred": [
-                                            "losspeed"
-                                ],
-                                "conditionalSpeed": true,
-                                "lore": "Known for its relentless speed, the Nas Nas darts and lunges with unpredictable bursts of movement, losing distances in an instant, and turning any encounter into a race.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Phantom",
-                                "ev": [
-                                            "Audio",
-                                            "Ghost Orb",
-                                            "UV"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Slow",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": "UV",
-                                "desc": [
-                                            "Cannot manifest in full-form outside of a hunt",
-                                            "Cannot turn on radios",
-                                            "Cannot deactivate FLX-PODs",
-                                            "Cannot extinguish candles"
-                                ],
-                                "tags": [
-                                            "shadow-only",
-                                            "radio-off",
-                                            "flx-ignore",
-                                            "no-extinguish",
-                                            "lights-on",
-                                            "lights-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Phantom is a sinister entity born from pure darkness, operating in silence and shadows. Investigators report frequent radio frequency interruptions, though they've never seen the phantom in full-form, only in the shadows.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Poltergeist",
-                                "ev": [
-                                            "EMF",
-                                            "Radiation",
-                                            "Writing"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": "EMF",
-                                "desc": [
-                                            "Frequently throws objects"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Poltergeist is a chaotic and mischievous entity, notorious for its disruptive presence. Investigators report that this ghost thrives on manipulating the environment, throwing more objects than any other spirit.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Puca",
-                                "ev": [
-                                            "EMF",
-                                            "Freezing",
-                                            "Ghost Orb"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "During hunts, can imitate another ghost's full hunt behavior, including Base Speed, LOS Speed, and Holy Water Effectiveness",
-                                            "LOS Range and Hunt Cooldown stay locked to Puca's own values while mimicking",
-                                            "Does not copy forced-hunt behavior or Wiederganger's nearby anxiety-rate increase",
-                                            "Cannot imitate the same ghost type in consecutive hunts",
-                                            "Cannot extinguish candles"
-                                ],
-                                "tags": [
-                                            "no-extinguish",
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "huntBehaviorMimic": true,
-                                "lore": "Known for its unpredictable and mischievous nature, often toying with the living for its own amusement.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Revenant",
-                                "ev": [
-                                            "EMF",
-                                            "UV",
-                                            "Writing"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Slow",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Reduces a targeted player's stamina by half for the remainder of the contract"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Revenant is a relentless, high-threat entity known for its aggressive presence. Investigators report that being hunted by one feels like literal suffocation, making it harder to outrun.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Shura",
-                                "ev": [
-                                            "Freezing",
-                                            "Ghost Orb",
-                                            "Writing"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Fast",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Short",
-                                "cd_val": 1,
-                                "forced": "Writing",
-                                "desc": [
-                                            "Harder to lose line-of-sight"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Shura is a cursed spirit of pure rage, trapped between worlds by a fate even the underworld rejects. Fueled by violence, investigators warn of their aggression, speed, and keen eyes.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Skia",
-                                "ev": [
-                                            "Audio",
-                                            "EMF",
-                                            "UV"
-                                ],
-                                "speed": "Fast",
-                                "losspeed": "Fast",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Long",
-                                "cd_val": 3,
-                                "forced": "Audio",
-                                "desc": [
-                                            "Greatly reduced hunt line-of-sight speed when close to its targeted player (3.10m/s down to 2.35m/s within 2 meters)",
-                                            "Player may hear cries when near death",
-                                            "Less aggressive phrases may be heard through audio equipment",
-                                            "Cannot deactivate FLX-PODs",
-                                            "Cannot extinguish candles"
-                                ],
-                                "tags": [
-                                            "flx-ignore",
-                                            "no-extinguish",
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [
-                                            "losspeed"
-                                ],
-                                "conditionalSpeed": true,
-                                "speedProfile": {
-                                            "los": {
-                                                        "display": "3.10→2.35m/s within 2m",
-                                                        "conditions": [
-                                                                    { "label": "Farther than 2m", "cmps": 310 },
-                                                                    { "label": "Within 2m", "cmps": 235 }
-                                                        ]
-                                            }
-                                },
-                                "lore": "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Sluagh",
-                                "ev": [
-                                            "EMF",
-                                            "Ghost Orb",
-                                            "UV"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Fast",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": "Ghost Orb",
-                                "desc": [
-                                            "Can produce multiple ghost orbs",
-                                            "Can light candles",
-                                            "Cannot turn off lights",
-                                            "Cannot deactivate FLX-PODs"
-                                ],
-                                "tags": [
-                                            "can-light-candle",
-                                            "lights-on",
-                                            "radio-on",
-                                            "radio-off",
-                                            "flx-ignore"
-                                ],
-                                "starred": [],
-                                "lore": "A host of restless spirits in Irish and Scottish folklore, said to travel together as a dark force.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Strigoi",
-                                "ev": [
-                                            "Freezing",
-                                            "UV",
-                                            "Writing"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Increases anxiety rate of players in the same room as it",
-                                            "Cannot manifest in full-form outside of a hunt",
-                                            "Cannot turn off radios",
-                                            "Can light candles",
-                                            "Cannot extinguish candles"
-                                ],
-                                "tags": [
-                                            "shadow-only",
-                                            "radio-on",
-                                            "no-extinguish",
-                                            "can-light-candle",
-                                            "lights-on",
-                                            "lights-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Strigoi is a restless, undead spirit drawn from old legends, believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Tantalus",
-                                "ev": [
-                                            "EMF",
-                                            "Freezing",
-                                            "UV"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Cannot move doors towards the closed position",
-                                            "Cannot slam doors (excludes hiding and location entrance doors when a hunt starts)",
-                                            "Cannot lock doors (excludes hiding and location entrance doors when a hunt starts)",
-                                            "Cannot deactivate FLX-PODs"
-                                ],
-                                "tags": [
-                                            "no-doors",
-                                            "flx-ignore",
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Tariaksuq",
-                                "ev": [
-                                            "Audio",
-                                            "EMF",
-                                            "Freezing"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Slow",
-                                "los": "Far",
-                                "hw": "Low",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Holy water stops the ghost from hunting for 90 seconds after being sprayed",
-                                            "Can extinguish multiple candles in proximity at once",
-                                            "Cannot manifest in full-form outside of a hunt",
-                                            "Cannot turn on lights",
-                                            "Faster in darkness and slower in light"
-                                ],
-                                "tags": [
-                                            "shadow-only",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [
-                                            "cooldown",
-                                            "hw",
-                                            "losspeed"
-                                ],
-                                "conditionalSpeed": true,
-                                "speedProfile": {
-                                            "los": {
-                                                        "display": "Light: 2.50m/s | Darkness: 3.10m/s",
-                                                        "categories": ["Slow", "Fast"],
-                                                        "conditions": [
-                                                                    { "label": "Light", "cmps": 250 },
-                                                                    { "label": "Darkness", "cmps": 310 }
-                                                        ]
-                                            }
-                                },
-                                "lore": "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Wewe Gombel",
-                                "ev": [
-                                            "EMF",
-                                            "Freezing",
-                                            "Radiation"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Fast",
-                                "los": "Far",
-                                "hw": "High",
-                                "cooldown": "Short",
-                                "cd_val": 1,
-                                "forced": null,
-                                "desc": [
-                                            "Main Breaker: Cannot Directly Interact",
-                                            "Individual Breakers: Turns Off",
-                                            "Cannot turn on lights"
-                                ],
-                                "tags": [
-                                            "no-breaker",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "The Wewe Gombel is a vengeful and malicious spirit, rooted in folklore as an unforgiving force that punishes those it deems deserving. Investigators report this ghost as incredibly fast, deeming Holy Water a necessity when having an encounter.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Wiederganger",
-                                "ev": [
-                                            "Audio",
-                                            "Ghost Orb",
-                                            "Writing"
-                                ],
-                                "speed": "Slow",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "High",
-                                "cooldown": "Short",
-                                "cd_val": 1,
-                                "forced": null,
-                                "desc": [
-                                            "Targeted player during hunt has increased stamina",
-                                            "Being near the ghost while hunting will increase anxiety rate dramatically",
-                                            "Can hunt as early as 77 BPM (average team heart rate)"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "lore": "A dead soul that returns to the living world with unfinished business. It is often tied to vengeance or unrest, bringing increased dread to those who it seeks out.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Wisp",
-                                "ev": [
-                                            "Freezing",
-                                            "Ghost Orb",
-                                            "Radiation"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Medium",
-                                "los": "Far",
-                                "hw": "High",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "Holy water stops the ghost from hunting for 2 minutes after being sprayed",
-                                            "Prefers interacting with lights",
-                                            "Main Breaker: Cannot Directly Interact",
-                                            "Individual Breakers: Cannot Interact",
-                                            "Lights: Turns On",
-                                            "Cannot turn off lights",
-                                            "Can light candles",
-                                            "Cannot extinguish candles",
-                                            "Faster in light and slower in darkness"
-                                ],
-                                "tags": [
-                                            "no-breaker",
-                                            "lights-on",
-                                            "no-extinguish",
-                                            "can-light-candle",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [
-                                            "cooldown",
-                                            "hw",
-                                            "losspeed"
-                                ],
-                                "conditionalSpeed": true,
-                                "speedProfile": {
-                                            "los": {
-                                                        "display": "Darkness: 2.70m/s | Light: 3.10m/s",
-                                                        "categories": ["Medium", "Fast"],
-                                                        "conditions": [
-                                                                    { "label": "Darkness", "cmps": 270 },
-                                                                    { "label": "Light", "cmps": 310 }
-                                                        ]
-                                            }
-                                },
-                                "lore": "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.",
-                                "verifiedNotes": true
-                    },
-                    {
-                                "name": "Wraith",
-                                "ev": [
-                                            "Audio",
-                                            "Freezing",
-                                            "UV"
-                                ],
-                                "speed": "Medium",
-                                "losspeed": "Fast",
-                                "los": "Far",
-                                "hw": "High",
-                                "cooldown": "Medium",
-                                "cd_val": 2,
-                                "forced": null,
-                                "desc": [
-                                            "No visible feet during hunts",
-                                            "No footstep sounds during hunts",
-                                            "Targets only one player during hunts",
-                                            "Reduced line-of-sight speed for the remainder of the hunt after sprayed with holy water",
-                                            "Easier to lose line-of-sight"
-                                ],
-                                "tags": [
-                                            "lights-on",
-                                            "lights-off",
-                                            "radio-on",
-                                            "radio-off"
-                                ],
-                                "starred": [],
-                                "conditionalSpeed": true,
-                                "lore": "The Wraith is a swift and vengeful entity, fueled by deep sorrow and rage. Investigators report them as incredibly fast entities, and report feeling targeted. You'll want Holy Water on hand for this ghost.",
-                                "verifiedNotes": true
+                        "label": "Normal",
+                        "cmps": 270
                     }
-        ];
+                ]
+            }
+        }
+    },
+    {
+        "name": "Banshee",
+        "ev": [
+            "Audio",
+            "EMF",
+            "Radiation"
+        ],
+        "speed": "Slow",
+        "losspeed": "Slow",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": "Audio",
+        "desc": [
+            "25% chance to hear a Banshee scream after returning from the Astral Realm",
+            "Can scream through radios when it turns them on",
+            "Higher heart rate increases the chance of screaming through audio equipment and radios"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Banshee is a chilling presence tied to omens of death, amplifying fear through its signature piercing screams and erratic electrical interference. Investigators close with death claim to hear the Banshee's cries.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Bhoot",
+        "ev": [
+            "Freezing",
+            "Radiation",
+            "Writing"
+        ],
+        "speed": "Slow",
+        "losspeed": "Slow",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Long",
+        "cd_val": 3,
+        "forced": "Freezing",
+        "desc": [
+            "About 3 seconds before a hunt, the room the ghost starts hunting from can drop roughly 30°F / 16.67°C from its current temperature",
+            "This pre-hunt cold behavior still applies on 0 Real Evidence runs and can show freezing",
+            "Can leave freezing temperatures on interacted objects",
+            "Its long hunt cooldown can also delay the first hunt"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Bhoot is a tormented soul, bound to the place of its suffering and fueled by a need for vengeance. Investigators report experiencing intense cold when the Bhoot is nearing.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Demon",
+        "ev": [
+            "Radiation",
+            "UV",
+            "Writing"
+        ],
+        "speed": "Medium",
+        "losspeed": "Very Slow",
+        "los": "Far",
+        "hw": "High",
+        "cooldown": "Short",
+        "cd_val": 1,
+        "forced": null,
+        "desc": [
+            "Holy Water blocks the next hunt for 2 minutes after the last spray; after that hunt, the cooldown returns to normal unless sprayed again",
+            "Can leave hot temperatures on interacted objects",
+            "Can hunt as early as 77 BPM average heart rate for investigators inside the investigation area",
+            "Can randomly lock doors and does so at a much higher frequency, even when door locks are disabled"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [
+            "cooldown",
+            "hw"
+        ],
+        "lore": "The Demon is an unrelenting force of malice, driven purely by its desire to harm. Investigators report intense bouts of aggression, and items becoming hot to the touch. Holy water seems to keep the Demon at bay, for a short while.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Doppelganger",
+        "ev": [
+            "Ghost Orb",
+            "UV",
+            "Writing"
+        ],
+        "speed": "Slow",
+        "losspeed": "Slow",
+        "los": "Near",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Returns to its favorite room and starts the hunt from the middle of it",
+            "Only ghost that is obligated to hunt from its favorite room"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Doppelganger is a deceptive spirit, often tricking its intended targets. Investigators report feeling alone moments before the ghost hunts. Where does it go?",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Echo",
+        "ev": [
+            "Freezing",
+            "Ghost Orb",
+            "UV"
+        ],
+        "speed": "Slow",
+        "losspeed": "Slow",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Main Breaker: Cannot Directly Interact",
+            "Individual Breakers: Turns Off",
+            "Cannot turn on or off lights",
+            "Cannot turn on or off radios",
+            "Cannot deactivate FLX-PODs",
+            "Cannot extinguish candles"
+        ],
+        "tags": [
+            "no-breaker",
+            "lights-ignore",
+            "radio-ignore",
+            "flx-ignore",
+            "no-extinguish"
+        ],
+        "starred": [],
+        "lore": "The Echo is a passive, residual spirit. Investigators report an eerily silent atmosphere, with lights never being affected by this ghost.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Forgotten",
+        "ev": [
+            "Ghost Orb",
+            "Radiation",
+            "Writing"
+        ],
+        "speed": "Medium",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Cannot manifest in full-form outside of a hunt",
+            "Cannot deactivate FLX-PODs"
+        ],
+        "tags": [
+            "shadow-only",
+            "flx-ignore",
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Forgotten has a nearly silent presence. Passive, cold, and elusive, as if it's barely there at all. Investigators report minimal activity, no defining behavior, and a feeling of safety, until the Forgotten strikes.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Hupia",
+        "ev": [
+            "EMF",
+            "Ghost Orb",
+            "Writing"
+        ],
+        "speed": "Slow",
+        "losspeed": "Medium",
+        "los": "Near",
+        "hw": "None",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Immune to Holy Water and will laugh when sprayed",
+            "Can hunt as early as 77 BPM average heart rate for investigators inside the investigation area",
+            "Cannot extinguish candles",
+            "Cannot deactivate FLX-PODs"
+        ],
+        "tags": [
+            "no-extinguish",
+            "flx-ignore",
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [
+            "hw"
+        ],
+        "lore": "A spirit from Taino Folklore, the Hupia is a nocturnal spirit, known to be incredibly active after-dark. Investigators report feeling ill-prepared for the aggression the Hupia shows.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Iblis",
+        "ev": [
+            "Audio",
+            "Freezing",
+            "Writing"
+        ],
+        "speed": "Medium",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Shapeshifts during hunts; the changes are cosmetic only"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Iblis is a powerful and enigmatic entity, rooted in ancient lore and associated with magic, and free will. Investigators report seeing the ghost appear to change form, appearing more \"alive\".",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Marid",
+        "ev": [
+            "Ghost Orb",
+            "Radiation",
+            "UV"
+        ],
+        "speed": "Medium",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Provides 1 false Diminishing evidence by leaving diminished evidence levels behind",
+            "The false evidence can be one of Marid's own assigned evidence types",
+            "Cannot fake Freezing evidence",
+            "Can provide its 1 false evidence even on 0 Real Evidence runs",
+            "Can light candles"
+        ],
+        "tags": [
+            "can-light-candle",
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "specialDiminishing": true,
+        "lore": "A powerful spirit from Arabic Folklore, it is believed to wield great supernatural influence, bringing misfortune and twisting the reality of those who encounter it.",
+        "verifiedNotes": true,
+        "specialDiminishingExtra": 1
+    },
+    {
+        "name": "Nasnas",
+        "ev": [
+            "Audio",
+            "Freezing",
+            "Ghost Orb"
+        ],
+        "speed": "Slow",
+        "losspeed": "Very Slow",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "33% chance every 7.5 seconds during a hunt to enter a 5.00m/s burst state",
+            "Burst state continues until it gets within 250cm of its target, then enters a 10-second cooldown",
+            "Cooldown base speed is 2.42m/s and cooldown LOS speed is 2.70m/s",
+            "Cannot turn on lights",
+            "Cannot deactivate FLX-PODs"
+        ],
+        "tags": [
+            "lights-off",
+            "radio-on",
+            "radio-off",
+            "flx-ignore"
+        ],
+        "starred": [
+            "losspeed"
+        ],
+        "conditionalSpeed": true,
+        "lore": "Known for its relentless speed, the Nas Nas darts and lunges with unpredictable bursts of movement, losing distances in an instant, and turning any encounter into a race.",
+        "verifiedNotes": true,
+        "speedProfile": {
+            "los": {
+                "display": "Normal: 2.00m/s | Burst: 5.00m/s | Cooldown: 2.70m/s",
+                "conditions": [
+                    {
+                        "label": "Normal",
+                        "cmps": 200
+                    },
+                    {
+                        "label": "Burst",
+                        "cmps": 500
+                    },
+                    {
+                        "label": "Cooldown",
+                        "cmps": 270
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "name": "Phantom",
+        "ev": [
+            "Audio",
+            "Ghost Orb",
+            "UV"
+        ],
+        "speed": "Slow",
+        "losspeed": "Slow",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": "UV",
+        "desc": [
+            "Cannot manifest in full-form outside of a hunt",
+            "Cannot turn on radios",
+            "Cannot deactivate FLX-PODs",
+            "Cannot extinguish candles"
+        ],
+        "tags": [
+            "shadow-only",
+            "radio-off",
+            "flx-ignore",
+            "no-extinguish",
+            "lights-on",
+            "lights-off"
+        ],
+        "starred": [],
+        "lore": "The Phantom is a sinister entity born from pure darkness, operating in silence and shadows. Investigators report frequent radio frequency interruptions, though they've never seen the phantom in full-form, only in the shadows.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Poltergeist",
+        "ev": [
+            "EMF",
+            "Radiation",
+            "Writing"
+        ],
+        "speed": "Slow",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": "EMF",
+        "desc": [
+            "Frequently throws more objects than other ghosts"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Poltergeist is a chaotic and mischievous entity, notorious for its disruptive presence. Investigators report that this ghost thrives on manipulating the environment, throwing more objects than any other spirit.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Puca",
+        "ev": [
+            "EMF",
+            "Freezing",
+            "Ghost Orb"
+        ],
+        "speed": "Medium",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "During hunts, can imitate another ghost's full hunt behavior, including Base Speed, LOS Speed, and Holy Water Effectiveness",
+            "LOS Range and Hunt Cooldown stay locked to Puca's own values while mimicking",
+            "Does not copy forced-hunt behavior or Wiederganger's nearby anxiety-rate increase",
+            "Cannot imitate the same ghost type in consecutive hunts",
+            "Cannot extinguish candles"
+        ],
+        "tags": [
+            "no-extinguish",
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "huntBehaviorMimic": true,
+        "lore": "Known for its unpredictable and mischievous nature, often toying with the living for its own amusement.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Revenant",
+        "ev": [
+            "EMF",
+            "UV",
+            "Writing"
+        ],
+        "speed": "Slow",
+        "losspeed": "Slow",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Targeted player's stamina is reduced for the remainder of the contract, cutting sprint time from about 7 seconds to about 4 seconds"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Revenant is a relentless, high-threat entity known for its aggressive presence. Investigators report that being hunted by one feels like literal suffocation, making it harder to outrun.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Shura",
+        "ev": [
+            "Freezing",
+            "Ghost Orb",
+            "Writing"
+        ],
+        "speed": "Medium",
+        "losspeed": "Fast",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Short",
+        "cd_val": 1,
+        "forced": "Writing",
+        "desc": [
+            "Far LOS range is hard to break",
+            "High LOS speed and range plus a short hunt cooldown make it difficult to escape"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Shura is a cursed spirit of pure rage, trapped between worlds by a fate even the underworld rejects. Fueled by violence, investigators warn of their aggression, speed, and keen eyes.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Skia",
+        "ev": [
+            "Audio",
+            "EMF",
+            "UV"
+        ],
+        "speed": "Fast",
+        "losspeed": "Fast",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Long",
+        "cd_val": 3,
+        "forced": "Audio",
+        "desc": [
+            "Within 350cm of its target, LOS speed drops from 3.10m/s to 2.35m/s; farther than 350cm is considered far",
+            "33% chance every 5 seconds during a hunt to make a distressed/crying sound near a player",
+            "Has unique non-aggressive audio responses",
+            "Cannot deactivate FLX-PODs",
+            "Cannot extinguish candles"
+        ],
+        "tags": [
+            "flx-ignore",
+            "no-extinguish",
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [
+            "losspeed"
+        ],
+        "conditionalSpeed": true,
+        "speedProfile": {
+            "los": {
+                "display": "Farther than 350cm: 3.10m/s | Within 350cm: 2.35m/s",
+                "conditions": [
+                    {
+                        "label": "Farther than 350cm",
+                        "cmps": 310
+                    },
+                    {
+                        "label": "Within 350cm",
+                        "cmps": 235
+                    }
+                ]
+            }
+        },
+        "lore": "The Skia is a guardian spirit. Revered in lore as a protector of people, places, or legacies. While not innately dangerous, investigators report distressed sounds, and unusual spirit box activity. Do not let your guard down.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Sluagh",
+        "ev": [
+            "EMF",
+            "Ghost Orb",
+            "UV"
+        ],
+        "speed": "Medium",
+        "losspeed": "Fast",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": "Ghost Orb",
+        "desc": [
+            "Can produce multiple Ghost Orbs: 33% chance to show a cluster of 4 orbs when displaying them",
+            "Can give Ghost Orbs on 0 Real Evidence runs",
+            "Can light candles",
+            "Cannot turn off lights",
+            "Cannot deactivate FLX-PODs"
+        ],
+        "tags": [
+            "can-light-candle",
+            "lights-on",
+            "radio-on",
+            "radio-off",
+            "flx-ignore"
+        ],
+        "starred": [],
+        "lore": "A host of restless spirits in Irish and Scottish folklore, said to travel together as a dark force.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Strigoi",
+        "ev": [
+            "Freezing",
+            "UV",
+            "Writing"
+        ],
+        "speed": "Medium",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Increases investigators' heart rate by 50% while in the same room, which can lead to earlier hunts",
+            "No manifest events; Shadow events only",
+            "Can only turn radios on, not off",
+            "Can light candles",
+            "Cannot extinguish candles"
+        ],
+        "tags": [
+            "shadow-only",
+            "radio-on",
+            "no-extinguish",
+            "can-light-candle",
+            "lights-on",
+            "lights-off"
+        ],
+        "starred": [],
+        "lore": "The Strigoi is a restless, undead spirit drawn from old legends, believed to rise from the grave to torment the living, especially under cover of night. Investigators report never seeing a Strigoi in full form, and feeling extra panicked when one is nearby.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Tantalus",
+        "ev": [
+            "EMF",
+            "Freezing",
+            "UV"
+        ],
+        "speed": "Medium",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Never makes a closing motion to doors: if a door is open it cannot close it halfway, but if a door is closed it can open it halfway",
+            "Cannot lock doors, even when door locks are enabled, except hiding and location entrance doors when a hunt starts",
+            "Never slams doors except during a hunt",
+            "Cannot deactivate FLX-PODs"
+        ],
+        "tags": [
+            "no-doors",
+            "flx-ignore",
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Tantalus is an aggressive spirit drawn to those who have encountered death, feeding off the emotional residue left behind. Investigators report this ghost as being quieter than others, and warn of less effective Holy Water.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Tariaksuq",
+        "ev": [
+            "Audio",
+            "EMF",
+            "Freezing"
+        ],
+        "speed": "Slow",
+        "losspeed": "Slow",
+        "los": "Far",
+        "hw": "Low",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Holy Water blocks the next hunt for 90 seconds after the last spray; after that hunt, the cooldown returns to normal unless sprayed again",
+            "Faster in darkness; a lit lighter, headlamp, or flashlight pointed at it slows it to its regular LOS speed (phone flashlight does not count)",
+            "Turns off lights more frequently than other ghosts",
+            "Can blow out up to 10 candles at a time within proximity",
+            "No manifest events; Shadow events only",
+            "Cannot turn on lights",
+            "Cannot deactivate FLX-PODs"
+        ],
+        "tags": [
+            "shadow-only",
+            "lights-off",
+            "radio-on",
+            "radio-off",
+            "flx-ignore"
+        ],
+        "starred": [
+            "cooldown",
+            "hw",
+            "losspeed"
+        ],
+        "conditionalSpeed": true,
+        "speedProfile": {
+            "los": {
+                "display": "Light: 2.42m/s | Darkness: 3.10m/s",
+                "categories": [
+                    "Slow",
+                    "Fast"
+                ],
+                "conditions": [
+                    {
+                        "label": "Light",
+                        "cmps": 242
+                    },
+                    {
+                        "label": "Darkness",
+                        "cmps": 310
+                    }
+                ]
+            }
+        },
+        "lore": "The Tariaksuq is a shadowy, elusive entity tied to darkness, death, and the unseen. Investigators report it as being impartial to the dark, often tinkering with any light source that dares to expose it.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Wewe Gombel",
+        "ev": [
+            "EMF",
+            "Freezing",
+            "Radiation"
+        ],
+        "speed": "Slow",
+        "losspeed": "Fast",
+        "los": "Far",
+        "hw": "High",
+        "cooldown": "Short",
+        "cd_val": 1,
+        "forced": null,
+        "desc": [
+            "Cannot directly interact with the main breaker except after a hunt",
+            "Can turn individual breakers off",
+            "Cannot turn on lights"
+        ],
+        "tags": [
+            "no-breaker",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "The Wewe Gombel is a vengeful and malicious spirit, rooted in folklore as an unforgiving force that punishes those it deems deserving. Investigators report this ghost as incredibly fast, deeming Holy Water a necessity when having an encounter.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Wiederganger",
+        "ev": [
+            "Audio",
+            "Ghost Orb",
+            "Writing"
+        ],
+        "speed": "Slow",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "High",
+        "cooldown": "Short",
+        "cd_val": 1,
+        "forced": null,
+        "desc": [
+            "Targeted player has increased stamina during a hunt, increasing sprint time from about 7 seconds to about 14 seconds",
+            "Being close to the ghost while it is hunting increases anxiety rate dramatically",
+            "Can hunt as early as 77 BPM average heart rate for investigators inside the investigation area"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "lore": "A dead soul that returns to the living world with unfinished business. It is often tied to vengeance or unrest, bringing increased dread to those who it seeks out.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Wisp",
+        "ev": [
+            "Freezing",
+            "Ghost Orb",
+            "Radiation"
+        ],
+        "speed": "Medium",
+        "losspeed": "Medium",
+        "los": "Far",
+        "hw": "High",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "Holy Water blocks the next hunt for 2 minutes after the last spray; after that hunt, the cooldown returns to normal unless sprayed again",
+            "Faster while in the light; turn off nearby light sources so it returns to its regular LOS speed (phone flashlight can stay on)",
+            "Turns lights on significantly more than other ghosts",
+            "Cannot interact with the main breaker or individual breakers",
+            "Can light candles",
+            "Cannot extinguish candles"
+        ],
+        "tags": [
+            "no-breaker",
+            "lights-on",
+            "no-extinguish",
+            "can-light-candle",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [
+            "cooldown",
+            "hw",
+            "losspeed"
+        ],
+        "conditionalSpeed": true,
+        "speedProfile": {
+            "los": {
+                "display": "Darkness: 2.70m/s | Light: 3.10m/s",
+                "categories": [
+                    "Medium",
+                    "Fast"
+                ],
+                "conditions": [
+                    {
+                        "label": "Darkness",
+                        "cmps": 270
+                    },
+                    {
+                        "label": "Light",
+                        "cmps": 310
+                    }
+                ]
+            }
+        },
+        "lore": "The Wisp is a fast, deceptive and alluring spirit, often portrayed in folklore as a guiding light that leads the curious to their doom. Investigators report lights turning on frequently, and feel misguided by the Wisp's true intentions. Holy Water seems to keep the Wisp at bay.",
+        "verifiedNotes": true
+    },
+    {
+        "name": "Wraith",
+        "ev": [
+            "Audio",
+            "Freezing",
+            "UV"
+        ],
+        "speed": "Medium",
+        "losspeed": "Fast",
+        "los": "Far",
+        "hw": "High",
+        "cooldown": "Medium",
+        "cd_val": 2,
+        "forced": null,
+        "desc": [
+            "No visible feet during hunts",
+            "No footstep sounds during hunts",
+            "Targets one specific investigator when hunting but can kill anyone in its path",
+            "If its primary target is alive and outside, it chooses a different target who is inside",
+            "Reduced line-of-sight speed for the remainder of the hunt after being sprayed with Holy Water",
+            "Easier to lose line-of-sight"
+        ],
+        "tags": [
+            "lights-on",
+            "lights-off",
+            "radio-on",
+            "radio-off"
+        ],
+        "starred": [],
+        "conditionalSpeed": true,
+        "lore": "The Wraith is a swift and vengeful entity, fueled by deep sorrow and rage. Investigators report them as incredibly fast entities, and report feeling targeted. You'll want Holy Water on hand for this ghost.",
+        "verifiedNotes": true,
+        "speedProfile": {
+            "base": {
+                "cmps": 270
+            }
+        }
+    }
+];
 
         // Individual breaker switches are separate from the main breaker.
         // Confirmed rule: Wisp cannot interact with individual switches; Echo and Wewe Gombel can turn them OFF only; all other ghosts can turn them ON and OFF.
@@ -2199,7 +2274,7 @@
             holy: { 1: 'None', 2: 'Low (3s)', 3: 'High (5s)' },
             cooldown: { 1: 'Short (40s)', 2: 'Medium (60s)', 3: 'Long (90s)' },
             lights: { 1: 'Can turn off', 2: 'Can turn on', 3: 'Can turn on / off', 4: 'Cannot interact' },
-            losrange: { 1: 'Near', 2: 'Far' },
+            losrange: { 1: 'Near (15 m)', 2: 'Far (45 m)' },
             losspeed: { 1: 'Very Slow', 2: 'Slow', 3: 'Medium', 4: 'Fast' },
             manifest: { 1: 'Full form possible', 2: 'Shadow only' },
             radio: { 1: 'Can turn off', 2: 'Can turn on', 3: 'Can turn on / off', 4: 'Cannot interact' }
@@ -2343,7 +2418,9 @@
         }
 
         function getLosRangeDisplay(ghost) {
-            return starredLabel(ghost, 'los', ghost.los);
+            const meters = SPEED_CONFIG.losRangeMeters[ghost.los];
+            const label = starredLabel(ghost, 'los', ghost.los);
+            return Number.isFinite(meters) ? `${label} (${meters}m)` : label;
         }
 
         function getStatColor(kind, ghost) {
@@ -2663,14 +2740,31 @@
             return true;
         }
 
+        function getSpecialDiminishingAllowance(ghost) {
+            if (!ghost.specialDiminishing) return 0;
+            const configured = Number(ghost.specialDiminishingExtra);
+            return Number.isInteger(configured) && configured > 0 ? configured : 1;
+        }
+
         function ghostMatchesContext(ghost, context) {
             // Real and Diminishing counts come from the configured investigation setup.
-            // Marid is the confirmed exception for extra Diminishing evidence, including 0 Real Evidence runs.
-            // Do not assume a maximum number of extra Marid Diminishing evidence types.
+            // Marid can add one behavior-generated Diminishing evidence beyond the configured limit,
+            // including on 0 Real Evidence runs. That one extra can overlap Marid's own assigned evidence.
+            const extraDiminishingAllowance = getSpecialDiminishingAllowance(ghost);
             const realCountPass = context.realEvidence.size <= context.realLimit;
-            const diminishingCountPass = context.fakeEvidence.size <= context.falseLimit || !!ghost.specialDiminishing;
+            const diminishingCountPass = context.fakeEvidence.size <= context.falseLimit + extraDiminishingAllowance;
+
+            let effectiveExcludedEvidence = context.excludedEvidence;
+            if (extraDiminishingAllowance > 0) {
+                const overlappingDiminishing = [...context.fakeEvidence].filter(ev => ghost.ev.includes(ev));
+                if (overlappingDiminishing.length > extraDiminishingAllowance) return false;
+                effectiveExcludedEvidence = new Set(
+                    [...context.excludedEvidence].filter(ev => !context.fakeEvidence.has(ev))
+                );
+            }
+
             return realCountPass && diminishingCountPass &&
-                matchesEvidenceFilters(ghost, context.realEvidence, context.excludedEvidence) &&
+                matchesEvidenceFilters(ghost, context.realEvidence, effectiveExcludedEvidence) &&
                 matchesForcedEvidenceForLimit(ghost, context.realEvidence, context.realLimit) &&
                 matchesBehaviorFilters(ghost, context.states);
         }
@@ -2787,7 +2881,7 @@
         }
 
         function getMaridExceptionInfo() {
-            // Marid's extra Diminishing Evidence can make otherwise valid observations look contradictory.
+            // Marid's one extra behavior-generated Diminishing Evidence can make otherwise valid observations look contradictory.
             // Keep Marid out of the normal match count when an extra observation conflicts with its
             // normal evidence, but surface it as a special possibility whenever at least two of its
             // normal evidence types are real and every extra real evidence type can be Diminishing.
@@ -2802,7 +2896,7 @@
             const extraEvidence = selectedReal.filter(ev => !marid.ev.includes(ev));
             const missingEvidence = marid.ev.filter(ev => !context.realEvidence.has(ev));
 
-            if (matchingEvidence.length < 2 || extraEvidence.length === 0) return null;
+            if (matchingEvidence.length < 2 || extraEvidence.length !== 1) return null;
             if (extraEvidence.some(ev => EVIDENCE_CONFIG[ev]?.allowFake !== true)) return null;
             if (missingEvidence.some(ev => context.excludedEvidence.has(ev))) return null;
 
@@ -3091,7 +3185,7 @@
                 const missingEvidence = maridException.missingEvidence.map(evidenceLabel).join(' • ');
                 const relief = currentFilterMatches.length === 0 ? getContradictionReliefSuggestions() : [];
                 conflict.innerHTML = `<strong>Marid exception possible.</strong>` +
-                    `<div class="marid-exception-line">Marid can leave extra Diminishing Evidence on top of its assigned evidence, including on 0 Real Evidence runs. One or more selected non-Freezing evidence types may actually be Diminishing.</div>` +
+                    `<div class="marid-exception-line">Marid can add 1 behavior-generated Diminishing Evidence on top of the configured setup, including on 0 Real Evidence runs. The selected non-Freezing extra evidence may actually be Diminishing.</div>` +
                     `<div class="marid-exception-line"><span class="marid-exception-label">Possible Diminishing Evidence:</span> ${escapeHTML(possibleDiminishing)}</div>` +
                     `<div class="marid-exception-line"><span class="marid-exception-label">Marid Evidence Found:</span> ${escapeHTML(foundEvidence)}</div>` +
                     (missingEvidence
@@ -3272,16 +3366,17 @@
                 reasons.push({ pass: false, text: `${context.realEvidence.size} evidence types are marked real, but this investigation is configured for ${context.realLimit} Real Evidence.` });
             }
             if (context.fakeEvidence.size > context.falseLimit) {
-                const pass = !!ghost.specialDiminishing;
+                const allowance = getSpecialDiminishingAllowance(ghost);
+                const pass = context.fakeEvidence.size <= context.falseLimit + allowance;
                 reasons.push({ pass, text: pass
-                    ? `${context.fakeEvidence.size} evidence types are marked Diminishing beyond the normal limit of ${context.falseLimit}; Marid can leave extra Diminishing Evidence.`
-                    : `${context.fakeEvidence.size} evidence types are marked Diminishing, but this investigation is configured for ${context.falseLimit} Diminishing Evidence.` });
+                    ? `${context.fakeEvidence.size} evidence types are marked Diminishing; Marid can add 1 behavior-generated Diminishing Evidence beyond the configured limit of ${context.falseLimit}.`
+                    : `${context.fakeEvidence.size} evidence types are marked Diminishing, exceeding this ghost's allowed total for a ${context.falseLimit}-Diminishing setup.` });
             }
             if (ghost.forced && context.realLimit > 0 && context.realLimit < GAME_RULES.maxRealEvidence && context.realEvidence.size >= context.realLimit) {
                 const pass = context.realEvidence.has(ghost.forced);
                 reasons.push({ pass, text: `Forced evidence ${evidenceLabel(ghost.forced)}${pass ? ' is present' : ' is required at this evidence setting but is not marked real'}` });
             }
-            if (ghost.specialDiminishing && (context.falseLimit === 0 || context.realLimit === 0)) reasons.push({ note: true, text: 'Marid can leave extra Diminishing Evidence beyond the normal evidence setup, including on 0 Real Evidence runs.' });
+            if (ghost.specialDiminishing && (context.falseLimit === 0 || context.realLimit === 0)) reasons.push({ note: true, text: 'Marid can add 1 behavior-generated Diminishing Evidence beyond the normal evidence setup, including on 0 Real Evidence runs.' });
             if (!reasons.length) reasons.push({ note: true, text: 'No evidence or behavior filters are currently active.' });
             return reasons;
         }
@@ -3300,7 +3395,7 @@
             html += `<div class="detail-section"><div class="detail-title">In-Game Description</div><div>${escapeHTML(ghost.lore)}</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">Evidence</div><div>${ghost.ev.map(ev => `<span class="evidence-tag" style="display:inline-block;margin:2px;">${escapeHTML(evidenceLabel(ev))}</span>`).join('')}${ghost.forced ? `<div style="margin-top:5px;color:var(--accent);font-weight:700;">Forced Evidence: ${escapeHTML(evidenceLabel(ghost.forced))}</div>` : ''}</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">Gameplay Behaviors</div>${getDisplayBehaviors(ghost).map(d => `<div class="behavior-point">${escapeHTML(d)}</div>`).join('')}</div>`;
-            if (ghost.specialDiminishing) html += `<div class="detail-section"><div class="detail-title">Diminishing Evidence Rule</div><div>Marid can leave extra Diminishing Evidence on top of its assigned evidence, including on 0 Real Evidence runs. The tracker does not assume a maximum number of extra Diminishing evidence types.</div></div>`;
+            if (ghost.specialDiminishing) html += `<div class="detail-section"><div class="detail-title">Diminishing Evidence Rule</div><div>Marid can add exactly 1 behavior-generated Diminishing Evidence beyond the configured Diminishing limit, including on 0 Real Evidence runs. That one false evidence can overlap Marid's assigned evidence, but it cannot be Freezing.</div></div>`;
             if (ghost.huntBehaviorMimic) html += `<div class="detail-section"><div class="detail-title">Hunt Mimic Rule</div><div>Puca imitates the full hunt behavior of another ghost, never passive behaviors. Base Speed, LOS Speed, and Holy Water Effectiveness can match the imitated ghost, so those observations do not rule Puca out by themselves. LOS Range and Hunt Cooldown remain locked to Puca's own values. Forced-hunt behavior and Wiederganger's nearby anxiety-rate effect are not copied, and Puca cannot imitate the same ghost type in consecutive hunts. Passive behaviors, including candle interactions, still identify normally.</div></div>`;
             html += `<div class="detail-section"><div class="detail-title">General Behaviors</div>
                 <div class="stat-item"><span>Base Speed</span><span class="stat-val" style="color:${getStatColor('speed', ghost)}">${getBaseSpeedDisplay(ghost)}</span></div>
@@ -3579,7 +3674,7 @@
 
         function setEvidenceVoice(evType, state) {
             if (realLimit === 0 && state === 1) {
-                showVoiceStatus('0 Real Evidence run: evidence cannot be marked Real. Mark a Marid observation as Diminishing instead.');
+                showVoiceStatus('0 Real Evidence run: normal evidence cannot be marked Real. Marid can still be Diminishing; Bhoot freezing and Sluagh orbs are special behavior tells.');
                 return;
             }
             if (state === 2 && EVIDENCE_CONFIG[evType] && EVIDENCE_CONFIG[evType].allowFake === false) state = 3;
@@ -4058,7 +4153,7 @@
             const evBtns = document.querySelectorAll('.ev-btn');
 
             if (realLimit === 0) {
-                // Normal evidence is disabled on a 0 Real Evidence run, but Marid can still leave Diminishing evidence.
+                // Normal Real Evidence is disabled on a 0 Real Evidence run. Marid can still leave one Diminishing evidence; Bhoot/Sluagh zero-evidence tells are documented as special behaviors.
                 falseBtn.classList.add('disabled');
                 falseBtn.disabled = true;
                 evBtns.forEach(btn => {
@@ -4097,7 +4192,7 @@
             let nextState;
 
             if (realLimit === 0) {
-                // A 0 Real Evidence run has no normal Real state. Marid can still produce Diminishing evidence.
+                // A 0 Real Evidence run has no normal Real state. Marid can still produce one Diminishing evidence; Bhoot/Sluagh special tells are tracked as behavior knowledge, not normal Real Evidence.
                 if (EVIDENCE_CONFIG[type] && EVIDENCE_CONFIG[type].allowFake === false) {
                     nextState = currentState === 0 ? 3 : 0;
                 } else {
