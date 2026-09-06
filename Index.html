@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- p8riotCore App Builder data refresh preview for P.M.S. 2.0.9.6: wiki-supplied speed/range values and selected ghost logic/details; Puca own stats preserved. -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -422,10 +421,6 @@
 
 
 
-        /* =========================
-           EXPERIMENTAL BETA FEATURES
-           UI-only helpers layered over the existing identification engine.
-           ========================= */
         .beta-assistant {
             background: var(--bg-soft); border: 1px solid var(--border); border-left: 3px solid var(--accent);
             border-radius: 6px; padding: 7px 8px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px;
@@ -473,7 +468,6 @@
         .history-item { display: flex; gap: 7px; align-items: flex-start; }
         .history-num { color: var(--accent); font-weight: 800; min-width: 18px; }
 
-        /* Ruled-out cards stay visually disabled, but beta detail buttons remain usable so players can ask why. */
         .ghost-card.ruled-out { pointer-events: auto; cursor: default; }
         .ghost-card.pinned { box-shadow: inset 0 3px 0 #ffd700, 0 4px 6px rgba(0,0,0,0.3); }
         .ghost-mechanic-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: -2px; }
@@ -722,7 +716,7 @@
             }
         }
     
-        /* ===== Upgrade preview: contextual controls and progressive disclosure ===== */
+        /* ===== Contextual controls and progressive disclosure ===== */
         .section-heading-row {
             display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:34px;
             margin-bottom:12px; padding-bottom:5px; border-bottom:1px solid var(--border);
@@ -782,7 +776,7 @@
         }
 
     
-        /* ===== Upgrade preview v2: compact reference-card sizing ===== */
+        /* ===== Compact reference-card sizing ===== */
         .reference-header,
         .reference-container {
             width:min(100%,1280px);
@@ -870,7 +864,7 @@
         }
 
 
-        /* ===== Upgrade preview v4: static ghost controls + stacked evidence limits ===== */
+        /* ===== Static ghost controls + stacked evidence limits ===== */
         .instruction-row {
             justify-content:center !important;
         }
@@ -985,8 +979,8 @@
                     </div>
                 </div>
 
-                <div id="footerWikiLink" class="footer-link">The Other Side <a href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank">Wiki</a> - Created by nena</div>
-                <div id="footerCreditsLink" class="footer-link">P.M.S. Tracker (Identify Assistant) and <a href="https://p8riot.github.io/tos-cleanse-assistant/cleanse.html" target="_blank">A.S.S. Profiler</a> (Cleanse Assistant) - Created by <a href="https://linktr.ee/p8riot" target="_blank">p8riot</a></div>
+                <div id="footerWikiLink" class="footer-link">The Other Side <a href="https://theotherside-game.fandom.com/wiki/The_Other_Side_Wiki" target="_blank" rel="noopener noreferrer">Wiki</a> - Created by nena</div>
+                <div id="footerCreditsLink" class="footer-link">P.M.S. Tracker (Identify Assistant) and <a href="https://p8riot.github.io/tos-cleanse-assistant/cleanse.html" target="_blank" rel="noopener noreferrer">A.S.S. Profiler</a> (Cleanse Assistant) - Created by <a href="https://linktr.ee/p8riot" target="_blank" rel="noopener noreferrer">p8riot</a></div>
                 <div id="footerThemeControl" class="theme-control">
                     <label for="themeSelect">Theme</label>
                     <select id="themeSelect" class="theme-select" onchange="setTheme(this.value)" aria-label="Color theme">
@@ -1250,7 +1244,6 @@
             })
         });
 
-        // 0.9.8.1 evidence and behavior data are mapped from verified in-game Identifier information.
         // The internal allowFake property is retained for engine compatibility; player-facing wording is Diminishing.
         const EVIDENCE_CONFIG = Object.freeze({
             Audio: Object.freeze({ enabled: true, color: "#ffa500", aliases: ["audio", "spirit box", "sound"], allowFake: true }),
@@ -1338,7 +1331,6 @@
         ]);
 
         // =========================
-        // VERIFIED CURRENT GAME DATA
         // =========================
         const ghosts = [
     {
@@ -2031,15 +2023,13 @@
             "Turns off lights more frequently than other ghosts",
             "Can blow out up to 10 candles at a time within proximity",
             "No manifest events; Shadow events only",
-            "Cannot turn on lights",
-            "Cannot deactivate FLX-PODs"
+            "Cannot turn on lights"
         ],
         "tags": [
             "shadow-only",
             "lights-off",
             "radio-on",
-            "radio-off",
-            "flx-ignore"
+            "radio-off"
         ],
         "starred": [
             "cooldown",
@@ -2251,7 +2241,6 @@
         let recognition = null;
         let isListening = false;
 
-        // Experimental beta state. None of these values change game data.
         let showPossibleOnly = false;
         const pinnedGhosts = new Set();
         const undoStack = [];
@@ -2619,10 +2608,6 @@
         }
 
 
-        // =========================
-        // EXPERIMENTAL INVESTIGATION ASSISTANT
-        // These helpers consume the existing verified ghost/filter data but never modify it.
-        // =========================
         function getBehaviorStateLabel(key, state) {
             return (BEHAVIOR_STATE_LABELS[key] && BEHAVIOR_STATE_LABELS[key][state]) || `State ${state}`;
         }
