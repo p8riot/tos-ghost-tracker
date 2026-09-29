@@ -1,0 +1,16 @@
+P.M.S. Tracker 2.2.0 - Installable Web App Package
+
+Upload these items together to the same web directory:
+- Index.html
+- manifest.webmanifest
+- service-worker.js
+- TOS_Cheat_Sheet_QB.png
+- icons/ (entire folder)
+
+Important:
+- Keep the filenames and relative folder structure unchanged unless you also update the paths in the HTML, manifest, and service worker.
+- PWA installation/service workers require HTTPS or localhost for testing. Opening Index.html directly with file:// will still run the tracker, but installation/offline caching will not activate.
+- The Install button only appears when a supporting browser reports that the site is eligible to install. It hides after installation. After an uninstall/removal, the browser can make the site eligible again on a later visit and the button will return.
+- On iPhone/iPad, a small note appears in normal browser mode explaining Share > Add to Home Screen. It is hidden when the tracker runs as a Home Screen app.
+- This 2.2.0 package uses a new service-worker cache identity so obsolete P.M.S. Tracker caches are cleaned up when the new worker activates.
+- For a future tracker release, bump CACHE_NAME in service-worker.js again so the next app shell is cached separately.
