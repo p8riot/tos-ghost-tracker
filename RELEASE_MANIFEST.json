@@ -1,0 +1,66 @@
+{
+  "product": "P.M.S. Tracker - The Other Side",
+  "version": "2.3.0",
+  "release_status": "stable",
+  "release_class": "MINOR",
+  "baseline": "2.2.0",
+  "schema_version": 2,
+  "generated_date": "2026-09-30",
+  "files": [
+    {
+      "path": "BUILD_HANDOFF.md",
+      "size_bytes": 1578,
+      "sha256": "704546bf676f1d6b7fdb959cb35e91add7af17806ff2fe8d33cd4eed00e652e7"
+    },
+    {
+      "path": "DEPLOYMENT.txt",
+      "size_bytes": 1253,
+      "sha256": "40e64c0774081cf15eb16def0a2652ea7d696c5595eccb6facce98c93f93402a"
+    },
+    {
+      "path": "Index.html",
+      "size_bytes": 647031,
+      "sha256": "5421cc1ba43a99e3094469d3cfb1d6209ce714bb3cda8ced4cf0cbc6c9dc2ce9"
+    },
+    {
+      "path": "QA_REPORT.md",
+      "size_bytes": 4283,
+      "sha256": "706f60211d8055755fc04b13f299eaa2bd26d418e64077974fd112dd7b5edb09"
+    },
+    {
+      "path": "RELEASE_NOTES.md",
+      "size_bytes": 2033,
+      "sha256": "a09287f8ae77c9bad5c101c3d4e7bc093b1ff1dd22cb8372437f70b9722b1f45"
+    },
+    {
+      "path": "TOS_Cheat_Sheet_QB.png",
+      "size_bytes": 1151039,
+      "sha256": "f6a0b8911ec7a8a3414e9d9ca5cec725bac726151bccb5d097b7bb6b4048537e"
+    },
+    {
+      "path": "icons/apple-touch-icon.png",
+      "size_bytes": 48173,
+      "sha256": "feb99da0f8f21b6746f34efbed2e01686f3d34e9d96ff5d9ea9842c3a852308a"
+    },
+    {
+      "path": "icons/pms-192.png",
+      "size_bytes": 54116,
+      "sha256": "bc2b8f65e9230ea70d135c74192a3d4e27f321e19f2fa567cf9a0206f22d0cf7"
+    },
+    {
+      "path": "icons/pms-512.png",
+      "size_bytes": 355286,
+      "sha256": "241c7c9a8b2aab11eff84198711b46046bd2b667d321f129bca0b3df83d0442f"
+    },
+    {
+      "path": "manifest.webmanifest",
+      "size_bytes": 624,
+      "sha256": "8d6b1763f7150a315ef29481611ce1f286913d3427e6edca3ce6288378d82a34"
+    },
+    {
+      "path": "service-worker.js",
+      "size_bytes": 1738,
+      "sha256": "61dfa253363dda3ef547e7c1b0c8c22cf4c966821c78c9738029d3231463558f"
+    }
+  ]
+}

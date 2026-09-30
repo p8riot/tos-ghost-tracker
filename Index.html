@@ -3,7 +3,7 @@
 <head>
 
 <!--
-P.M.S. Tracker 2.2.0
+P.M.S. Tracker 2.3.0
 Structured source edition
 
 Source map
@@ -376,11 +376,80 @@ h1 {
 }
 .behavior-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 6px;
 }
-.behavior-grid .behavior-wide {
-    grid-column: 1 / -1;
+.behavior-control {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px;
+    border: 1px solid var(--border-strong);
+    border-radius: 7px;
+    background: var(--bg-card);
+}
+.behavior-control-label {
+    min-width: 0;
+    min-height: 2.2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2px;
+    color: #e7e7e7;
+    font-size: 0.61rem;
+    font-weight: 800;
+    line-height: 1.04;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+.behavior-control-label .behavior-direction {
+    color: #ffffff;
+    font-size: 0.58rem;
+    font-weight: 700;
+}
+.behavior-control .toggle-box {
+    min-width: 0;
+    min-height: 44px;
+    padding: 5px 4px;
+    font-size: 0.68rem;
+    border-color: var(--border);
+}
+.behavior-control .toggle-box .toggle-label {
+    color: #ffffff;
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.behavior-control .toggle-box[data-state]:not([data-state="0"]) {
+    padding: 5px 4px;
+}
+.behavior-control .toggle-box[data-state]:not([data-state="0"]) .toggle-label {
+    display: none;
+}
+.behavior-control .toggle-box[data-state]:not([data-state="0"])::after {
+    align-items: center;
+    padding: 0 3px;
+    font-size: 0.64rem;
+    line-height: 1.05;
+    white-space: normal;
+}
+.toggle-box.split-capability[data-state="1"] {
+    background: rgba(50, 205, 50, 0.15);
+    border-color: #32cd32;
+}
+.toggle-box.split-capability[data-state="1"]::after {
+    content: "CAN";
+    color: #32cd32;
+}
+.toggle-box.split-capability[data-state="2"] {
+    background: rgba(255, 68, 68, 0.15);
+    border-color: #ff4444;
+}
+.toggle-box.split-capability[data-state="2"]::after {
+    content: "CANNOT";
+    color: #ff8888;
 }
 .reference-container.tabs-mode .ref-card-hr #playerInputs {
     display: grid;
@@ -470,45 +539,20 @@ h1 {
     color: #ffffff;
 }
 .toggle-box.breaker[data-state="1"] {
-    background: rgba(255, 68, 68, 0.15);
-    border-color: #ff4444;
+    background: rgba(50, 205, 50, 0.15);
+    border-color: #32cd32;
 }
 .toggle-box.breaker[data-state="1"]::after {
-    content: "TURNS OFF";
-    color: #ff8888;
+    content: "CAN INTERACT";
+    color: #32cd32;
 }
 .toggle-box.breaker[data-state="2"] {
-    background: rgba(78, 205, 196, 0.15);
-    border-color: #4ecdc4;
+    background: rgba(163, 154, 230, 0.15);
+    border-color: #a39ae6;
 }
 .toggle-box.breaker[data-state="2"]::after {
-    content: "TURNS ON";
-    color: #4ecdc4;
-}
-.toggle-box.breaker[data-state="3"] {
-    background: rgba(188, 19, 254, 0.15);
-    border-color: #bc13fe;
-}
-.toggle-box.breaker[data-state="3"]::after {
-    content: "BOTH";
-    color: #d39cff;
-}
-.toggle-box.breaker[data-state="4"] {
-    background: rgba(128, 128, 128, 0.15);
-    border-color: #888;
-}
-.toggle-box.breaker[data-state="4"]::after {
     content: "CANNOT INTERACT";
-    color: #bbbbbb;
-}
-#btn-breaker[data-state="1"]::after {
-    content: "DIRECT OFF";
-}
-#btn-breaker[data-state="2"]::after {
-    content: "DIRECT ON";
-}
-#btn-breaker[data-state="3"]::after {
-    content: "DIRECT BOTH";
+    color: #c5bff5;
 }
 .toggle-box.candle[data-state="1"] {
     background: rgba(255, 68, 68, 0.15);
@@ -727,6 +771,14 @@ h1 {
 .toggle-box.losspeed[data-state="4"]::after {
     content: "FAST (3.10m/s)";
     color: #ff8888;
+}
+.toggle-box.losspeed[data-state="5"] {
+    background: rgba(187, 134, 252, 0.15);
+    border-color: #bb86fc;
+}
+.toggle-box.losspeed[data-state="5"]::after {
+    content: "VARIABLE";
+    color: #d4b3ff;
 }
 .toggle-box.losrange[data-state="1"] {
     background: rgba(50, 205, 50, 0.15);
@@ -2814,27 +2866,86 @@ These rules intentionally appear later so they can override base rules.
                     </div>
                     <div id="activeFilterSummary" class="active-filter-summary" hidden></div>
                     <div class="behavior-grid">
-                        <button type="button" class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Main Breaker: Cleared"><span class="toggle-label">Main Breaker</span></button>
-                        <button type="button" class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Doors: Cleared"><span class="toggle-label">Doors</span></button>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Main Breaker</div>
+                            <button type="button" class="toggle-box action breaker" id="btn-breaker" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Main Breaker: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Doors</div>
+                            <button type="button" class="toggle-box action doors" id="btn-doors" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Doors: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
 
-                        <button type="button" class="toggle-box action breaker" id="btn-indbreaker" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Individual Breakers: Cleared"><span class="toggle-label">Individual Breakers</span></button>
-                        <button type="button" class="toggle-box holy" id="btn-holy" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Holy Water: Cleared"><span class="toggle-label">Holy Water</span></button>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label"><span>Individual Breakers</span><span class="behavior-direction">Turn On</span></div>
+                            <button type="button" class="toggle-box split-capability" id="btn-indbreakerOn" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Individual Breakers On: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label"><span>Individual Breakers</span><span class="behavior-direction">Turn Off</span></div>
+                            <button type="button" class="toggle-box split-capability" id="btn-indbreakerOff" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Individual Breakers Off: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
 
-                        <button type="button" class="toggle-box lights" id="btn-lights" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Lights: Cleared"><span class="toggle-label">Lights</span></button>
-                        <button type="button" class="toggle-box cooldown" id="btn-cooldown" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Hunt Cooldown: Cleared"><span class="toggle-label">Hunt Cooldown</span></button>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Lights On</div>
+                            <button type="button" class="toggle-box split-capability" id="btn-lightsOn" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Lights On: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Lights Off</div>
+                            <button type="button" class="toggle-box split-capability" id="btn-lightsOff" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Lights Off: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
 
-                        <button type="button" class="toggle-box huntthreshold" id="btn-huntthreshold" data-state="0" data-max="2" onclick="cycleState(this)" aria-label="Early Hunt: Cleared"><span class="toggle-label">Early Hunt</span></button>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Radio On</div>
+                            <button type="button" class="toggle-box split-capability" id="btn-radioOn" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Radio On: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Radio Off</div>
+                            <button type="button" class="toggle-box split-capability" id="btn-radioOff" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Radio Off: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
 
-                        <button type="button" class="toggle-box radio" id="btn-radio" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="Radio: Cleared"><span class="toggle-label">Radio</span></button>
-                        <button type="button" class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="LOS Range: Cleared"><span class="toggle-label">LOS Range</span></button>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label"><span>Candle</span><span class="behavior-direction">Light</span></div>
+                            <button type="button" class="toggle-box split-capability" id="btn-candleLight" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Candle Light: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label"><span>Candle</span><span class="behavior-direction">Extinguish</span></div>
+                            <button type="button" class="toggle-box split-capability" id="btn-candleExtinguish" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Candle Extinguish: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
 
-                        <button type="button" class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="FLX-POD: Cleared"><span class="toggle-label">FLX-POD</span></button>
-                        <button type="button" class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="5" onclick="cycleState(this)" aria-label="LOS Speed: Cleared"><span class="toggle-label">LOS Speed</span></button>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Holy Water</div>
+                            <button type="button" class="toggle-box holy" id="btn-holy" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Holy Water: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Hunt Cooldown</div>
+                            <button type="button" class="toggle-box cooldown" id="btn-cooldown" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Hunt Cooldown: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
 
-                        <button type="button" class="toggle-box candle" id="btn-candle" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Candle: Cleared"><span class="toggle-label">Candle</span></button>
-                        <button type="button" class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Base Speed: Cleared"><span class="toggle-label">Base Speed</span></button>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Early Hunt</div>
+                            <button type="button" class="toggle-box huntthreshold" id="btn-huntthreshold" data-state="0" data-max="2" onclick="cycleState(this)" aria-label="Early Hunt: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">LOS Range</div>
+                            <button type="button" class="toggle-box losrange" id="btn-losrange" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="LOS Range: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
 
-                        <button type="button" class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Manifest: Cleared"><span class="toggle-label">Manifest</span></button>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">LOS Speed</div>
+                            <button type="button" class="toggle-box losspeed" id="btn-losspeed" data-state="0" data-max="6" onclick="cycleState(this)" aria-label="LOS Speed: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Base Speed</div>
+                            <button type="button" class="toggle-box bspeed" id="btn-bspeed" data-state="0" data-max="4" onclick="cycleState(this)" aria-label="Base Speed: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">FLX-POD</div>
+                            <button type="button" class="toggle-box action flx" id="btn-flx" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="FLX-POD: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
+                        <div class="behavior-control">
+                            <div class="behavior-control-label">Manifest</div>
+                            <button type="button" class="toggle-box action manifest" id="btn-manifest" data-state="0" data-max="3" onclick="cycleState(this)" aria-label="Manifest: Cleared"><span class="toggle-label">Clear</span></button>
+                        </div>
                     </div>
 
                     <div class="timer-container">
@@ -2928,7 +3039,8 @@ These rules intentionally appear later so they can override base rules.
                                 <span class="behavior-point"><strong>Stamina:</strong> a full stamina sprint is about 11 steps. Avoid draining the bar completely because regeneration takes longer. A useful rhythm is roughly 10 steps, stop for 3–4 seconds, then sprint again. Revenant permanently reduces a targeted player's stamina by half for the remainder of the contract.</span>
                                 <span class="behavior-point"><strong>Electronics during hunts:</strong> the cellphone, including its flashlight, can safely be used during a hunt. Turn off or drop other electronics you are carrying.</span>
                                 <span class="behavior-point"><strong>Favorite room:</strong> ghosts have a favorite room, but evidence can appear elsewhere inside the location. The Infrasound Receiver must be in the favorite room to capture Audio evidence.</span>
-                                <span class="behavior-point"><strong>Sanctified Cross:</strong> can only be flipped in the ghost's favorite room.</span>
+                                <span class="behavior-point"><strong>Cross:</strong> must be in the ghost's favorite room for it to interact with it.</span>
+                                <span class="behavior-point"><strong>Desecration:</strong> desecrating the Cross can upset the ghost.</span>
                                 <span class="behavior-point"><strong>Hunt heart-rate threshold:</strong> most ghosts can normally hunt at a 100 BPM average team heart rate. Demon, Hupia, and Wiederganger can hunt as early as 77 BPM. The threshold uses the average BPM of players inside the location.</span>
                                 <span class="behavior-point"><strong>Holy Water hunt blocks:</strong> special ghosts may temporarily replace their normal hunt cooldown after being sprayed. Demon and Wisp are blocked for 2 minutes; Tariaksuq is blocked for 90 seconds. Puca can imitate the Holy Water Effectiveness of the ghost it is copying during a hunt, so Holy Water Effectiveness alone does not rule Puca out. Check the ghost's Unique Behaviors for special Holy Water or cooldown rules.</span>
                                 <span class="behavior-point"><strong>Real vs Diminishing Evidence:</strong> real evidence reappears several times at full strength. Diminishing evidence may first appear at full strength a couple of times, then appears weaker over time. Freezing can never be Diminishing.</span>
@@ -2938,8 +3050,8 @@ These rules intentionally appear later so they can override base rules.
                                 <span class="behavior-point"><strong>0-evidence behavior tells:</strong> Bhoot can still cause its pre-hunt freezing-temperature behavior and Sluagh can still show Ghost Orbs on 0 Real Evidence runs. Treat those as special ghost behaviors rather than ordinary Real Evidence.</span>
                                 <span class="behavior-point"><strong>Ghost Orbs:</strong> normally require infrared vision to see, but an orb can also be photographed using the cellphone camera flash. Sluagh can produce Orbs on 0 Real Evidence runs and has a 33% chance to show a cluster of 4 when displaying them.</span>
                                 <span class="behavior-point"><strong>Puca:</strong> imitates the full hunt behavior of another ghost, never passive behaviors. This includes Base Speed, LOS Speed, and Holy Water Effectiveness. Hunt LOS Range and Hunt Cooldown stay locked to Puca's own values. Forced-hunt behavior and Wiederganger's nearby anxiety-rate effect are not copied, and Puca cannot imitate the same ghost type back-to-back.</span>
-                                <span class="behavior-point"><strong>Candles:</strong> Can Light is a specific identifying behavior for ghosts whose Notes list it. Puca cannot extinguish candles and is not a Can Light ghost, so observing either Can Extinguish or Can Light rules Puca out.</span>
-                                <span class="behavior-point"><strong>Main Breaker:</strong> this is the main switch that controls the entire breaker box. Treat Direct Off/On/Both as direct ghost interaction only. Echo, Wewe Gombel, and Wisp cannot directly use the main breaker normally. The automatic end-of-hunt breaker trigger shared by all ghosts is not identifying. If the power goes out, check the light-switch positions before recording Direct Off or Direct Both: an overload from too many active lights can trip the breaker without the ghost directly using it. If all light switches have reset to OFF, treat an overload as possible and do not use that event to rule out ghosts that cannot use the main breaker.</span>
+                                <span class="behavior-point"><strong>Candles:</strong> Can Light is a specific identifying behavior for Marid, Sluagh, Strigoi, and Wisp. Ghosts without that listed ability are treated as Cannot Light. Extinguishing remains an independent capability with its confirmed exception list.</span>
+                                <span class="behavior-point"><strong>Main Breaker:</strong> Echo, Wewe Gombel, and Wisp cannot directly interact with it normally. Post-hunt breaker changes do not count. If too many lights overload the breaker, do not record that as ghost interaction.</span>
                                 <span class="behavior-point"><strong>Individual Breakers:</strong> these are the room-specific switches inside the breaker box. Wisp cannot interact with individual breakers. Echo and Wewe Gombel can only turn individual breakers off; every other ghost can turn individual breakers both on and off.</span>
                                 <span class="behavior-point"><strong>Radio interactions:</strong> TVs and alarm clocks do not count as Radio interactions. The Old Tape Recorder and Gramophone do count as Radio interactions.</span>
                                 <span class="behavior-point"><strong>Lights:</strong> a light exploding counts as the ghost turning a light off. Wisp can turn lights on but cannot turn them off. Players can also turn lights on, and too many active lights can trip/overload the main breaker; that resulting power loss is not a direct main-breaker interaction. Player illumination is dynamic, so being closer to active light sources provides more protection from anxiety than simply standing somewhere in a lit room.</span>
@@ -3110,7 +3222,7 @@ These rules intentionally appear later so they can override base rules.
 
     <script>
         /*
-         * P.M.S. Tracker 2.2.0
+         * P.M.S. Tracker 2.3.0
          * Structured source edition
          *
          * Game rules, ghost data, filtering behavior, storage keys, PWA paths,
@@ -3123,9 +3235,9 @@ These rules intentionally appear later so they can override base rules.
         const INTERIM_EVIDENCE_ONLY = false;
         const DATA_SCHEMA_VERSION = 2;
         const BUILD_INFO = Object.freeze({
-            version: '2.2.0',
+            version: '2.3.0',
             channel: 'stable',
-            baseline: '2.2.0-alpha.1',
+            baseline: '2.2.0',
             schema: DATA_SCHEMA_VERSION
         });
 
@@ -4477,23 +4589,29 @@ These rules intentionally appear later so they can override base rules.
         // ============================================================================
         const BEHAVIOR_STATE_LABELS = Object.freeze({
             bspeed: { 1: 'Slow', 2: 'Medium', 3: 'Fast' },
-            breaker: { 1: 'Can directly turn off', 2: 'Can directly turn on', 3: 'Can directly turn on / off', 4: 'Cannot directly interact' },
-            indbreaker: { 1: 'Can turn off', 2: 'Can turn on', 3: 'Can turn on / off', 4: 'Cannot interact' },
-            candle: { 1: 'Can extinguish', 2: 'Cannot extinguish', 3: 'Can light' },
+            breaker: { 1: 'Can directly interact', 2: 'Cannot directly interact' },
+            indbreakerOn: { 1: 'Can turn on', 2: 'Cannot turn on' },
+            indbreakerOff: { 1: 'Can turn off', 2: 'Cannot turn off' },
+            candleLight: { 1: 'Can light', 2: 'Cannot light' },
+            candleExtinguish: { 1: 'Can extinguish', 2: 'Cannot extinguish' },
             doors: { 1: 'Can close / lock', 2: 'Cannot close / lock' },
             flx: { 1: 'Can deactivate', 2: 'Cannot deactivate' },
             holy: { 1: 'None', 2: 'Low (3s)', 3: 'High (5s)' },
             cooldown: { 1: 'Short (40s)', 2: 'Medium (60s)', 3: 'Long (90s)' },
             huntthreshold: { 1: 'Early Hunt (<100 BPM)' },
-            lights: { 1: 'Can turn off', 2: 'Can turn on', 3: 'Can turn on / off', 4: 'Cannot interact' },
+            lightsOn: { 1: 'Can turn on', 2: 'Cannot turn on' },
+            lightsOff: { 1: 'Can turn off', 2: 'Cannot turn off' },
             losrange: { 1: 'Near (15 m)', 2: 'Far (45 m)' },
-            losspeed: { 1: 'Very Slow', 2: 'Slow', 3: 'Medium', 4: 'Fast' },
+            losspeed: { 1: 'Very Slow', 2: 'Slow', 3: 'Medium', 4: 'Fast', 5: 'Variable' },
             manifest: { 1: 'Full form possible', 2: 'Shadow only' },
-            radio: { 1: 'Can turn off', 2: 'Can turn on', 3: 'Can turn on / off', 4: 'Cannot interact' }
+            radioOn: { 1: 'Can turn on', 2: 'Cannot turn on' },
+            radioOff: { 1: 'Can turn off', 2: 'Cannot turn off' }
         });
         const BEHAVIOR_DISPLAY_NAMES = Object.freeze({
             bspeed:'Base Speed', breaker:'Main Breaker', indbreaker:'Individual Breakers', candle:'Candle', doors:'Doors', flx:'FLX-POD', holy:'Holy Water',
-            cooldown:'Hunt Cooldown', huntthreshold:'Early Hunt', lights:'Lights', losrange:'LOS Range', losspeed:'LOS Speed', manifest:'Manifest', radio:'Radio'
+            cooldown:'Hunt Cooldown', huntthreshold:'Early Hunt', lights:'Lights', losrange:'LOS Range', losspeed:'LOS Speed', manifest:'Manifest', radio:'Radio',
+            indbreakerOn:'Individual Breakers On', indbreakerOff:'Individual Breakers Off', candleLight:'Candle Light', candleExtinguish:'Candle Extinguish',
+            lightsOn:'Lights On', lightsOff:'Lights Off', radioOn:'Radio On', radioOff:'Radio Off'
         });
 
         // Ghost cards show unique tells first, then only the interaction behaviors.
@@ -4513,18 +4631,30 @@ These rules intentionally appear later so they can override base rules.
             bspeed: { property: 'speed', states: { 1: ['Slow'], 2: ['Medium'], 3: ['Fast'] } },
             cooldown: { property: 'cooldown', states: { 1: ['Short'], 2: ['Medium'], 3: ['Long'] } },
             huntthreshold: { states: { 1: { earlyHunt: true } } },
-            losspeed: { property: 'losspeed', states: { 1: ['Very Slow'], 2: ['Slow'], 3: ['Medium'], 4: ['Fast'] } },
+            losspeed: { property: 'losspeed', states: { 1: ['Very Slow'], 2: ['Slow'], 3: ['Medium'], 4: ['Fast'], 5: { variableLos: true } } },
             losrange: { property: 'los', states: { 1: ['Near'], 2: ['Far'] } },
             holy: { property: 'hw', states: { 1: ['None'], 2: ['Low'], 3: ['High'] } },
-            candle: { states: { 1: { noTags: ['no-extinguish'] }, 2: { allTags: ['no-extinguish'] }, 3: { allTags: ['can-light-candle'] } } },
-            lights: { states: { 1: { allTags: ['lights-off'] }, 2: { allTags: ['lights-on'] }, 3: { allTags: ['lights-on', 'lights-off'] }, 4: { allTags: ['lights-ignore'] } } },
-            radio: { states: { 1: { allTags: ['radio-off'] }, 2: { allTags: ['radio-on'] }, 3: { allTags: ['radio-on', 'radio-off'] }, 4: { allTags: ['radio-ignore'] } } },
+            candleLight: { states: { 1: { allTags: ['can-light-candle'] }, 2: { noTags: ['can-light-candle'] } } },
+            candleExtinguish: { states: { 1: { noTags: ['no-extinguish'] }, 2: { allTags: ['no-extinguish'] } } },
+            lightsOn: { states: { 1: { allTags: ['lights-on'] }, 2: { noTags: ['lights-on'] } } },
+            lightsOff: { states: { 1: { allTags: ['lights-off'] }, 2: { noTags: ['lights-off'] } } },
+            radioOn: { states: { 1: { allTags: ['radio-on'] }, 2: { noTags: ['radio-on'] } } },
+            radioOff: { states: { 1: { allTags: ['radio-off'] }, 2: { noTags: ['radio-off'] } } },
             doors: { states: { 1: { noTags: ['no-doors'] }, 2: { allTags: ['no-doors'] } } },
             flx: { states: { 1: { noTags: ['flx-ignore'] }, 2: { allTags: ['flx-ignore'] } } },
-            breaker: { states: { 1: { noTags: ['no-breaker'] }, 2: { noTags: ['no-breaker'] }, 3: { noTags: ['no-breaker'] }, 4: { allTags: ['no-breaker'] } } },
-            indbreaker: { property: 'individualBreaker', states: { 1: ['Off', 'Both'], 2: ['On', 'Both'], 3: ['Both'], 4: ['None'] } },
+            breaker: { states: { 1: { noTags: ['no-breaker'] }, 2: { allTags: ['no-breaker'] } } },
+            indbreakerOn: { property: 'individualBreaker', states: { 1: ['On', 'Both'], 2: ['Off', 'None'] } },
+            indbreakerOff: { property: 'individualBreaker', states: { 1: ['Off', 'Both'], 2: ['On', 'None'] } },
             manifest: { states: { 1: { noTags: ['shadow-only'] }, 2: { allTags: ['shadow-only'] } } }
         };
+
+        // Variable LOS means the ghost's LOS speed can change under confirmed conditions.
+        // The normal LOS category remains active as its baseline classification.
+        const VARIABLE_LOS_GHOSTS = new Set(['Ataphoi', 'Nasnas', 'Puca', 'Skia', 'Tariaksuq', 'Wisp', 'Wraith']);
+
+        function hasVariableLosBehavior(ghost) {
+            return VARIABLE_LOS_GHOSTS.has(ghost.name);
+        }
 
         // Puca imitates hunt behavior. LOS Range and Hunt Cooldown remain locked to Puca's own values.
         const HUNT_MIMIC_BEHAVIOR_KEYS = Object.freeze(['bspeed', 'losspeed', 'holy']);
@@ -4770,7 +4900,7 @@ These rules intentionally appear later so they can override base rules.
             const enabledEvidence = new Set(evidenceTypes);
             const names = new Set();
             const requiredGhostFields = ['name', 'ev', 'speed', 'losspeed', 'los', 'hw', 'cooldown', 'desc', 'tags'];
-            const recognizedTags = new Set();
+            const recognizedTags = new Set(['lights-ignore', 'radio-ignore']);
             const acceptedPropertyValues = {};
 
             Object.values(behaviorFilters).forEach(filter => {
@@ -4973,6 +5103,7 @@ These rules intentionally appear later so they can override base rules.
             if (!rule) return true;
             if (rule.neutral) return true;
             if (rule.earlyHunt) return getHuntThresholdBpm(ghost) < GAME_RULES.heartRate.allGhostThreshold;
+            if (rule.variableLos) return hasVariableLosBehavior(ghost);
             if (filter.property) {
                 const conditionalCategories = key === 'losspeed' && Array.isArray(ghost.speedProfile?.los?.categories)
                     ? ghost.speedProfile.los.categories
@@ -5537,7 +5668,23 @@ These rules intentionally appear later so they can override base rules.
                 case 'huntthreshold':
                     return getHuntThresholdDisplay(ghost);
                 case 'breaker':
-                    return ghost.tags.includes('no-breaker') ? 'Cannot directly interact' : 'Can directly turn on / off';
+                    return ghost.tags.includes('no-breaker') ? 'Cannot directly interact' : 'Can directly interact';
+                case 'indbreakerOn':
+                    return ghost.individualBreaker === 'On' || ghost.individualBreaker === 'Both' ? 'Can turn on' : 'Cannot turn on';
+                case 'indbreakerOff':
+                    return ghost.individualBreaker === 'Off' || ghost.individualBreaker === 'Both' ? 'Can turn off' : 'Cannot turn off';
+                case 'lightsOn':
+                    return ghost.tags.includes('lights-on') ? 'Can turn on' : 'Cannot turn on';
+                case 'lightsOff':
+                    return ghost.tags.includes('lights-off') ? 'Can turn off' : 'Cannot turn off';
+                case 'radioOn':
+                    return ghost.tags.includes('radio-on') ? 'Can turn on' : 'Cannot turn on';
+                case 'radioOff':
+                    return ghost.tags.includes('radio-off') ? 'Can turn off' : 'Cannot turn off';
+                case 'candleLight':
+                    return ghost.tags.includes('can-light-candle') ? 'Can light' : 'Cannot light';
+                case 'candleExtinguish':
+                    return ghost.tags.includes('no-extinguish') ? 'Cannot extinguish' : 'Can extinguish';
                 case 'indbreaker':
                     if (ghost.individualBreaker === 'None') return 'Cannot interact';
                     if (ghost.individualBreaker === 'Off') return 'Can turn off';
@@ -6083,6 +6230,21 @@ These rules intentionally appear later so they can override base rules.
             if (key === 'huntthreshold') syncHuntRecordUI();
         }
 
+        function setBehaviorPairStates(label, updates) {
+            const changes = updates
+                .map(([id, state]) => [document.getElementById(id), Number(state)])
+                .filter(([btn, state]) => btn && Number(btn.dataset.state || 0) !== state);
+            if (!changes.length) return;
+            recordInvestigationAction(`${label} (voice)`);
+            changes.forEach(([btn, state]) => {
+                const key = btn.id.replace('btn-', '');
+                const stateLabel = state ? getBehaviorStateLabel(key, state) : 'Cleared';
+                btn.dataset.state = String(state);
+                btn.setAttribute('aria-label', `${BEHAVIOR_DISPLAY_NAMES[key] || key}: ${stateLabel}`);
+            });
+            filterGhosts();
+        }
+
         function parseVoiceCommand(text) {
             if (/\bundo\b/.test(text) || text.includes("go back")) { undoLastAction(); return; }
             if (text.includes("show possible") || text.includes("possible only")) { if (!showPossibleOnly) togglePossibleOnly(); return; }
@@ -6195,12 +6357,12 @@ These rules intentionally appear later so they can override base rules.
 
             // Individual breaker switches (room-specific switches inside the breaker box)
             if (text.includes("individual breaker") || text.includes("individual switch") || text.includes("room breaker") || text.includes("room switch")) {
-                if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-indbreaker", 0);
-                else if (text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("no interact")) setBehaviorState("btn-indbreaker", 4);
-                else if (text.includes("both") || text.includes("on and off") || text.includes("off and on")) setBehaviorState("btn-indbreaker", 3);
-                else if (text.includes("turn on") || text.includes("turned on") || text.includes("switch on") || text.includes("switched on") || text.includes("breaker on")) setBehaviorState("btn-indbreaker", 2);
-                else if (text.includes("turn off") || text.includes("turned off") || text.includes("switch off") || text.includes("switched off") || text.includes("breaker off")) setBehaviorState("btn-indbreaker", 1);
-                else cycleState(document.getElementById("btn-indbreaker"));
+                const negative = text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("no interact") || text.includes("ignore");
+                if (text.includes("clear") || text.includes("reset")) setBehaviorPairStates("Individual Breakers: Cleared", [["btn-indbreakerOn", 0], ["btn-indbreakerOff", 0]]);
+                else if (text.includes("both") || text.includes("on and off") || text.includes("off and on") || text.includes("cannot interact") || text.includes("can't interact") || text.includes("no interact") || text.includes("ignore")) setBehaviorPairStates(negative ? "Individual Breakers: Cannot interact" : "Individual Breakers: Can turn on / off", [["btn-indbreakerOn", negative ? 2 : 1], ["btn-indbreakerOff", negative ? 2 : 1]]);
+                else if (text.includes("turn on") || text.includes("turned on") || text.includes("switch on") || text.includes("switched on") || text.includes("breaker on")) setBehaviorState("btn-indbreakerOn", negative ? 2 : 1);
+                else if (text.includes("turn off") || text.includes("turned off") || text.includes("switch off") || text.includes("switched off") || text.includes("breaker off")) setBehaviorState("btn-indbreakerOff", negative ? 2 : 1);
+                else showVoiceStatus("Say individual breaker on, individual breaker off, both, or cannot interact.");
                 return;
             }
 
@@ -6209,29 +6371,36 @@ These rules intentionally appear later so they can override base rules.
                 (text.includes("trip") || text.includes("tripped") || text.includes("overload") || text.includes("too many lights")) &&
                 (text.includes("breaker") || text.includes("power") || text.includes("light"))
             ) {
-                showVoiceStatus("Breaker trip/overload is not an identifying Main Breaker state. Check light-switch positions before recording Direct Off.");
+                showVoiceStatus("Breaker trip/overload is not an identifying Main Breaker interaction.");
                 return;
             }
 
             // A generic "breaker" voice command continues to mean the main breaker.
             if (text.includes("main breaker") || text.includes("main switch") || text.includes("breaker") || text.includes("fuse")) {
                 if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-breaker", 0);
-                else if (text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("ignore") || text.includes("no interact")) setBehaviorState("btn-breaker", 4);
-                else if (text.includes("both") || text.includes("on and off") || text.includes("off and on") || text.includes("can use") || text.includes("can interact")) setBehaviorState("btn-breaker", 3);
-                else if (text.includes("turn on") || text.includes("turned on") || text.includes("switch on") || text.includes("switched on") || text.includes("breaker on") || text.includes("fuse on")) setBehaviorState("btn-breaker", 2);
-                else if (text.includes("turn off") || text.includes("turned off") || text.includes("switch off") || text.includes("switched off") || text.includes("breaker off") || text.includes("fuse off")) setBehaviorState("btn-breaker", 1);
+                else if (text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("ignore") || text.includes("no interact")) setBehaviorState("btn-breaker", 2);
+                else if (text.includes("can use") || text.includes("can interact") || text.includes("turn on") || text.includes("turned on") || text.includes("turn off") || text.includes("turned off") || text.includes("switch on") || text.includes("switch off") || text.includes("breaker on") || text.includes("breaker off") || text.includes("fuse on") || text.includes("fuse off")) setBehaviorState("btn-breaker", 1);
                 else cycleState(document.getElementById("btn-breaker"));
                 return;
             }
 
-            // Candle
+            // Candles: lighting and extinguishing are independent capabilities.
+            // Ghosts without the explicit Can Light behavior are treated as Cannot Light.
             if (text.includes("candle")) {
-                if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-candle", 0);
-                else if ((text.includes("cannot") || text.includes("can't") || text.includes("never")) && (text.includes("light") || text.includes("relight"))) { showVoiceStatus("No current ghost has a confirmed cannot-light-candles restriction."); return; }
-                else if ((text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("ignore")) && (text.includes("extinguish") || text.includes("blow") || text.includes("snuff"))) setBehaviorState("btn-candle", 2);
-                else if (text.includes("light") || text.includes("relight")) setBehaviorState("btn-candle", 3);
-                else if (text.includes("extinguish") || text.includes("blow") || text.includes("snuff")) setBehaviorState("btn-candle", 1);
-                else cycleState(document.getElementById("btn-candle"));
+                const negative = text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("ignore") || text.includes("no interact");
+                if (text.includes("clear") || text.includes("reset")) {
+                    setBehaviorPairStates("Candles: Cleared", [["btn-candleLight", 0], ["btn-candleExtinguish", 0]]);
+                } else if (text.includes("both") && !negative) {
+                    setBehaviorPairStates("Candles: Can light and extinguish", [["btn-candleLight", 1], ["btn-candleExtinguish", 1]]);
+                } else if (text.includes("light") || text.includes("relight")) {
+                    setBehaviorState("btn-candleLight", negative ? 2 : 1);
+                } else if (text.includes("extinguish") || text.includes("blow") || text.includes("snuff") || text.includes("out")) {
+                    setBehaviorState("btn-candleExtinguish", negative ? 2 : 1);
+                } else if (negative) {
+                    showVoiceStatus("Say candle cannot light or candle cannot extinguish to record the specific restriction.");
+                } else {
+                    showVoiceStatus("Say candle light, candle extinguish, both, or clear candles.");
+                }
                 return;
             }
 
@@ -6280,31 +6449,33 @@ These rules intentionally appear later so they can override base rules.
                 return;
             }
 
-            // Lights
+            // Lights: ON and OFF are independent capabilities. Flickering is not an ON/OFF interaction.
             if (text.includes("light") || text.includes("lights")) {
-                if (text.includes("cannot") || text.includes("can't") || text.includes("ignore")) setBehaviorState("btn-lights", 4);
-                else if (text.includes("both") || (text.includes("on") && text.includes("off"))) setBehaviorState("btn-lights", 3);
-                else if (text.includes("on")) setBehaviorState("btn-lights", 2);
-                else if (text.includes("off")) setBehaviorState("btn-lights", 1);
-                else if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-lights", 0);
-                else cycleState(document.getElementById("btn-lights"));
+                const negative = text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("ignore") || text.includes("no interact");
+                if (text.includes("flicker")) { showVoiceStatus("Light flickering does not count as the ghost turning a light on or off."); return; }
+                if (text.includes("clear") || text.includes("reset")) setBehaviorPairStates("Lights: Cleared", [["btn-lightsOn", 0], ["btn-lightsOff", 0]]);
+                else if (text.includes("both") || (text.includes("on") && text.includes("off")) || text.includes("no interact") || text.includes("ignore")) setBehaviorPairStates(negative ? "Lights: Cannot interact" : "Lights: Can turn on / off", [["btn-lightsOn", negative ? 2 : 1], ["btn-lightsOff", negative ? 2 : 1]]);
+                else if (text.includes("on")) setBehaviorState("btn-lightsOn", negative ? 2 : 1);
+                else if (text.includes("off")) setBehaviorState("btn-lightsOff", negative ? 2 : 1);
+                else showVoiceStatus("Say lights on, lights off, both, cannot interact, or clear lights.");
                 return;
             }
 
-            // Radio
+            // Radio: ON and OFF are independent capabilities.
             if (text.includes("radio")) {
-                if (text.includes("cannot") || text.includes("can't") || text.includes("ignore")) setBehaviorState("btn-radio", 4);
-                else if (text.includes("both") || (text.includes("on") && text.includes("off"))) setBehaviorState("btn-radio", 3);
-                else if (text.includes("on")) setBehaviorState("btn-radio", 2);
-                else if (text.includes("off")) setBehaviorState("btn-radio", 1);
-                else if (text.includes("clear") || text.includes("reset")) setBehaviorState("btn-radio", 0);
-                else cycleState(document.getElementById("btn-radio"));
+                const negative = text.includes("cannot") || text.includes("can't") || text.includes("never") || text.includes("ignore") || text.includes("no interact");
+                if (text.includes("clear") || text.includes("reset")) setBehaviorPairStates("Radio: Cleared", [["btn-radioOn", 0], ["btn-radioOff", 0]]);
+                else if (text.includes("both") || (text.includes("on") && text.includes("off")) || text.includes("no interact") || text.includes("ignore")) setBehaviorPairStates(negative ? "Radio: Cannot interact" : "Radio: Can turn on / off", [["btn-radioOn", negative ? 2 : 1], ["btn-radioOff", negative ? 2 : 1]]);
+                else if (text.includes("on")) setBehaviorState("btn-radioOn", negative ? 2 : 1);
+                else if (text.includes("off")) setBehaviorState("btn-radioOff", negative ? 2 : 1);
+                else showVoiceStatus("Say radio on, radio off, both, cannot interact, or clear radio.");
                 return;
             }
 
             // Line of Sight Speed
             if (text.includes("line of sight speed") || text.includes("los speed") || text.includes("chase speed")) {
-                if (text.includes("very slow")) setBehaviorState("btn-losspeed", 1);
+                if (text.includes("variable") || text.includes("changes speed") || text.includes("speed changes")) setBehaviorState("btn-losspeed", 5);
+                else if (text.includes("very slow")) setBehaviorState("btn-losspeed", 1);
                 else if (text.includes("fast")) setBehaviorState("btn-losspeed", 4);
                 else if (text.includes("medium")) setBehaviorState("btn-losspeed", 3);
                 else if (text.includes("slow")) setBehaviorState("btn-losspeed", 2);
