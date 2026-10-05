@@ -3,7 +3,7 @@
 <head>
 
 <!--
-P.M.S. Tracker 2.3.0
+P.M.S. Tracker 2.3.1
 Structured source edition
 
 Source map
@@ -3018,7 +3018,9 @@ These rules intentionally appear later so they can override base rules.
                     <div class="tabs-nav">
                         <span class="tab-group-label">Gameplay</span>
                         <button class="tab-btn active" data-tab-id="notes" onclick="switchTab('notes')">Notes</button>
+                        <!-- TEMPORARILY HIDDEN: CheatSheet is awaiting an updated reference image.
                         <button class="tab-btn" data-tab-id="cheatsheet" onclick="switchTab('cheatsheet')">CheatSheet</button>
+                        -->
                         <button class="tab-btn" data-tab-id="heart-rate" onclick="switchTab('heart-rate')">Heart Rate Calculator</button>
                         <button class="tab-btn" data-tab-id="spirit-box" onclick="switchTab('spirit-box')">Spirit Box Phrases</button>
                         <button class="tab-btn" data-tab-id="skia-audio" onclick="switchTab('skia-audio')">Skia Unique Audio</button>
@@ -3059,6 +3061,7 @@ These rules intentionally appear later so they can override base rules.
                             </div>
                         </div>
 
+                        <!-- TEMPORARILY HIDDEN: CheatSheet is awaiting an updated reference image.
                         <div class="ghost-card ref-card-cheatsheet" data-tab-panel="cheatsheet">
                             <div class="ghost-header">
                                 <div class="ghost-name" style="color: var(--accent);">CheatSheet</div>
@@ -3068,6 +3071,7 @@ These rules intentionally appear later so they can override base rules.
                                 <img class="cheatsheet-image" src="./TOS_Cheat_Sheet_QB.png" alt="The Other Side ghost identification cheat sheet provided by Quibble_Bibble" loading="lazy">
                             </a>
                         </div>
+                        -->
 
                         <div class="ghost-card ref-card-hr" data-tab-panel="heart-rate">
                             <div class="ghost-header">
@@ -3222,7 +3226,7 @@ These rules intentionally appear later so they can override base rules.
 
     <script>
         /*
-         * P.M.S. Tracker 2.3.0
+         * P.M.S. Tracker 2.3.1
          * Structured source edition
          *
          * Game rules, ghost data, filtering behavior, storage keys, PWA paths,
@@ -3235,9 +3239,9 @@ These rules intentionally appear later so they can override base rules.
         const INTERIM_EVIDENCE_ONLY = false;
         const DATA_SCHEMA_VERSION = 2;
         const BUILD_INFO = Object.freeze({
-            version: '2.3.0',
+            version: '2.3.1',
             channel: 'stable',
-            baseline: '2.2.0',
+            baseline: '2.3.0',
             schema: DATA_SCHEMA_VERSION
         });
 

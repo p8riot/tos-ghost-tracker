@@ -1,40 +1,28 @@
-# P.M.S. Tracker 2.3.0 Build Handoff
+# P.M.S. Tracker 2.3.1 Build Handoff
 
 Product: P.M.S. Tracker - The Other Side
-Version: 2.3.0
+Version: 2.3.1
 Release status: Stable
-Release class: MINOR
-Baseline: 2.2.0
+Release class: PATCH
+Baseline: 2.3.0
 Schema compatibility: unchanged, DATA_SCHEMA_VERSION 2
 
 ## Release scope
 
-This release upgrades the Behavior filtering system and its mobile UI without changing the persistent data schema.
+Temporarily removes the CheatSheet from the user-visible Reference Resources navigation and panels while preserving its implementation for later restoration.
 
-Primary changes:
+## Preserved behavior
 
-- Uniform half-width bordered Behavior controls.
-- Independent Lights On/Off, Radio On/Off, Individual Breakers On/Off, Candle Light/Extinguish controls.
-- Simplified Main Breaker filter.
-- Candle Cannot Light filtering added using the user-approved Ghost Information interpretation.
-- Variable LOS category added while retaining normal LOS categories.
-- Mobile touch targets increased to 44 CSS px minimum.
-- Cross / Desecration notes added in compact form.
-
-## Compatibility
-
-- Existing evidence system preserved.
-- Existing storage schema preserved.
-- Puca mimic exceptions preserved.
-- Existing service-worker scope and PWA paths preserved.
-- Service-worker cache identity bumped for this release.
+- CheatSheet source code remains in `Index.html` inside clearly marked HTML comments.
+- CheatSheet CSS remains unchanged.
+- `TOS_Cheat_Sheet_QB.png` remains packaged and cached.
+- Existing `switchTab()` fallback behavior sends an unavailable/saved CheatSheet selection to Notes.
+- All other Reference Resources, tracker logic, ghost data, evidence/behavior filtering, storage, and PWA structure remain unchanged.
 
 ## Validation status
 
-Application logic, behavior truth tables, voice commands, responsive layout, syntax, manifest, icon, and app-shell integrity passed.
+Static package, HTML structure, JavaScript syntax, manifest JSON, service-worker app-shell paths, version metadata, and Reference Resources tab/panel consistency were checked for this patch. No live installed-PWA/device validation was performed in this execution environment.
 
-Installed/offline PWA behavior is NOT TESTED live in the execution environment because Chromium is prevented from navigating to localhost/file origins. See QA_REPORT.md.
+## Restoration
 
-## Deployment
-
-Follow DEPLOYMENT.txt. Upload the complete package without changing relative paths unless the corresponding HTML, manifest, and service-worker paths are updated together.
+When the CheatSheet is ready to return, remove the two `TEMPORARILY HIDDEN` HTML comment wrappers around its tab button and panel. Replace the PNG if needed, then bump the product/cache version for the new release.

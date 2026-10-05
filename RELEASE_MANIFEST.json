@@ -1,36 +1,36 @@
 {
   "product": "P.M.S. Tracker - The Other Side",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "release_status": "stable",
-  "release_class": "MINOR",
-  "baseline": "2.2.0",
+  "release_class": "PATCH",
+  "baseline": "2.3.0",
   "schema_version": 2,
-  "generated_date": "2026-09-30",
+  "generated_date": "2026-10-04",
   "files": [
     {
       "path": "BUILD_HANDOFF.md",
-      "size_bytes": 1578,
-      "sha256": "704546bf676f1d6b7fdb959cb35e91add7af17806ff2fe8d33cd4eed00e652e7"
+      "size_bytes": 1354,
+      "sha256": "c1cc3a557ed238e7e12148f9578c65744c06f21b506ca8ac469dcc1eb7a8c18d"
     },
     {
       "path": "DEPLOYMENT.txt",
       "size_bytes": 1253,
-      "sha256": "40e64c0774081cf15eb16def0a2652ea7d696c5595eccb6facce98c93f93402a"
+      "sha256": "4ed9f9a7beb508cb9ba16ec66865f0e98ef2d60a64a13dc1066b4c0cc44fef38"
     },
     {
       "path": "Index.html",
-      "size_bytes": 647031,
-      "sha256": "5421cc1ba43a99e3094469d3cfb1d6209ce714bb3cda8ced4cf0cbc6c9dc2ce9"
+      "size_bytes": 647287,
+      "sha256": "2a784dcde440dac9d6f84ab25a0deb784c0fe8552c531090eda0c725083042b5"
     },
     {
       "path": "QA_REPORT.md",
-      "size_bytes": 4283,
-      "sha256": "706f60211d8055755fc04b13f299eaa2bd26d418e64077974fd112dd7b5edb09"
+      "size_bytes": 1109,
+      "sha256": "a1d94090f711ce0675cf1e09fd9b490c13693aabe1db9c918e0968d4a252d87a"
     },
     {
       "path": "RELEASE_NOTES.md",
-      "size_bytes": 2033,
-      "sha256": "a09287f8ae77c9bad5c101c3d4e7bc093b1ff1dd22cb8372437f70b9722b1f45"
+      "size_bytes": 884,
+      "sha256": "80e4be84c5632cd3e8717160948cfef45db282a80dd5065744848d01220e275e"
     },
     {
       "path": "TOS_Cheat_Sheet_QB.png",
@@ -60,7 +60,7 @@
     {
       "path": "service-worker.js",
       "size_bytes": 1738,
-      "sha256": "61dfa253363dda3ef547e7c1b0c8c22cf4c966821c78c9738029d3231463558f"
+      "sha256": "ab9af8e65e4194bfc8774e6b886f8e6b6e89f3f175f2f8ec7fb1dd6f3a2cce25"
     }
   ]
 }
